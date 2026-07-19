@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Profile {
+  id                 String   @id @default(uuid())
+  phone              String?
+  email              String?
+  address            String?
+  linkedinUrl        String?
+  instagramUrl       String?
+  githubUrl          String?
+  twitterUrl         String?
+  lanyardImageUrl    String?
+  shortDescriptionEn String?  @db.Text
+  shortDescriptionId String?  @db.Text
+  fullBiographyEn    String?  @db.Text
+  fullBiographyId    String?  @db.Text
+  cvFileUrl          String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+enum TimelineType {
+  EDUCATION
+  EXPERIENCE
+}
+
+model TimelineEntry {
+  id            String       @id @default(uuid())
+  type          TimelineType
+  categoryEn    String
+  categoryId    String
+  titleEn       String
+  titleId       String
+  descriptionEn String?      @db.Text
+  descriptionId String?      @db.Text
+  order         Int          @default(0)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+enum SkillCategory {
+  FRONTEND
+  BACKEND
+  DATABASE_ORM
+  BAHASA_LAINNYA
+  VERSION_CONTROL
+  CLOUD_DEPLOYMENT
+  DESIGN_PROTOTYPING
+  SISTEM_OPERASI
+}
+
+model Skill {
+  id        String        @id @default(uuid())
+  category  SkillCategory
+  title     String
+  logoUrl   String?
+  order     Int           @default(0)
+  projects  Project[]     @relation("ProjectSkills")
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model Project {
+  id            String   @id @default(uuid())
+  categoryEn    String
+  categoryId    String
+  titleEn       String
+  titleId       String
+  descriptionEn String?  @db.Text
+  descriptionId String?  @db.Text
+  roleEn        String?
+  roleId        String?
+  isDeploy      Boolean  @default(false)
+  liveUrl       String?
+  sourceCodeUrl String?
+  imageUrl      String?
+  order         Int      @default(0)
+  techStack     Skill[]  @relation("ProjectSkills")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Achievement {
+  id            String   @id @default(uuid())
+  titleEn       String
+  titleId       String
+  statusEn      String
+  statusId      String
+  descriptionEn String?  @db.Text
+  descriptionId String?  @db.Text
+  date          DateTime
+  imageUrl      String?
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

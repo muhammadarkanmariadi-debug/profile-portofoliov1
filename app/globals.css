@@ -1,0 +1,101 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-foreground: var(--text-primary);
+  --color-ring: var(--primary);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: #0B0B12;
+  --surface: #14141F;
+  --border: rgba(255,255,255,0.08);
+  --primary: #6C63FF;
+  --secondary: #00D9C0;
+  --text-primary: #F5F5F7;
+  --text-muted: #9A9AB0;
+  --glass-bg: rgba(20, 20, 31, 0.65);
+  --glass-hover-border: rgba(108, 99, 255, 0.3);
+  --glass-hover-shadow: rgba(108, 99, 255, 0.15);
+}
+
+.light {
+  --background: #F8F9FA;
+  --surface: #FFFFFF;
+  --border: rgba(0,0,0,0.1);
+  --primary: #5B4FE8;
+  --secondary: #00A896;
+  --text-primary: #1F2937;
+  --text-muted: #6B7280;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-hover-border: rgba(91, 79, 232, 0.3);
+  --glass-hover-shadow: rgba(91, 79, 232, 0.15);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-text-primary font-sans;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+  }
+  .glass-card:hover {
+    border-color: var(--glass-hover-border);
+    box-shadow: 0 0 30px -5px var(--glass-hover-shadow);
+  }
+  .grid-texture {
+    background-image: radial-gradient(rgba(108, 99, 255, 0.05) 1px, transparent 0);
+    background-size: 24px 24px;
+  }
+  .text-glow {
+    text-shadow: 0 0 20px rgba(108, 99, 255, 0.4);
+  }
+  .timeline-line {
+    background: linear-gradient(to bottom, var(--primary) 0%, transparent 100%);
+  }
+  .skill-badge {
+    background: rgba(0, 217, 192, 0.05);
+    border: 1px solid rgba(0, 217, 192, 0.15);
+    transition: all 0.3s ease;
+  }
+  .skill-badge:hover {
+    background: rgba(0, 217, 192, 0.1);
+    border-color: var(--secondary);
+    color: var(--secondary);
+  }
+}
+
