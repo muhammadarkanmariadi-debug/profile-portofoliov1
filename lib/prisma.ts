@@ -1,14 +1,19 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
 
-const adapter = new PrismaMariaDb({
+// Membuat connection pool native untuk PostgreSQL
+const pool = new Pool({
   host: process.env.DATABASE_HOST,
-  port: Number(process.env.DATABASE_PORT ?? 3306),
+  port: Number(process.env.DATABASE_PORT ?? 5432), // Default port Postgres adalah 5432
   user: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
-  connectionLimit: 5,
+  max: 5, // Menggantikan connectionLimit pada MariaDB
 });
+
+// Membungkus pool menggunakan adapter Prisma Postgres
+const adapter = new PrismaPg(pool);
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;

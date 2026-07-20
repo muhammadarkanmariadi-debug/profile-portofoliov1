@@ -57,7 +57,7 @@ export default function AdminDashboard() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
-          <p className="text-gray-400">Overview of your portfolio's content and activity.</p>
+          <p className="text-gray-400">Overview of your portfolio&apos;s content and activity.</p>
         </div>
         <button 
           onClick={handleLogout}

@@ -122,7 +122,7 @@ export default function ProjectsClient({ initialProjects }: ProjectsClientProps)
         ))}
         {filteredProjects.length === 0 && (
           <div className="col-span-full py-20 text-center text-on-surface-variant font-mono">
-            {t.projects.notFound} "{searchQuery}"
+            {t.projects.notFound} &quot;{searchQuery}&quot;
           </div>
         )}
       </div>
