@@ -2,11 +2,11 @@ import React from 'react'
 import ThemeParticles from './components/ThemeParticles'
 import Hero from './components/Hero'
 import Aboutme from './components/Aboutme'
-import Timeline from './components/Timeline'
+
 import Projects from './components/Projects'
 import Skills from './components/Skills'
 import Achievements from './components/Achievements'
-import Anchor from './components/Anchor'
+
 
 import { getProfile } from '@/lib/services/profile.service'
 import { getTimeline } from '@/lib/services/timeline.service'

@@ -7,10 +7,7 @@ export const achievementSchema = z.object({
   statusId: z.string().min(1, 'Status (ID) is required'),
   descriptionEn: z.string().optional().nullable(),
   descriptionId: z.string().optional().nullable(),
-  date: z.coerce.date({
-    required_error: 'Date is required',
-    invalid_type_error: 'That is not a valid date',
-  }),
+  date: z.coerce.date({ message: 'Invalid date' }),
   imageUrl: z.string().url('Invalid URL').optional().nullable().or(z.literal('')),
   order: z.number().int().default(0),
 });

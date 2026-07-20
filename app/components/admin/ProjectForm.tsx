@@ -34,7 +34,7 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
     watch,
     formState: { errors },
   } = useForm<ProjectFormValues>({
-    resolver: zodResolver(projectSchema),
+    resolver: zodResolver(projectSchema) as any,
     defaultValues: initialData ? {
       categoryEn: initialData.categoryEn,
       categoryId: initialData.categoryId,

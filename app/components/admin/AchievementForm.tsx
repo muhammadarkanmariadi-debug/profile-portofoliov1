@@ -32,7 +32,7 @@ export default function AchievementForm({ initialData }: { initialData?: Achieve
     watch,
     formState: { errors },
   } = useForm<AchievementFormValues>({
-    resolver: zodResolver(achievementSchema),
+    resolver: zodResolver(achievementSchema) as any,
     defaultValues: initialData ? {
       titleEn: initialData.titleEn,
       titleId: initialData.titleId,

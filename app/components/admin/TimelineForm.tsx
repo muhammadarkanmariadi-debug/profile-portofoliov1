@@ -22,7 +22,7 @@ export default function TimelineForm({ initialData }: { initialData?: TimelineEn
     handleSubmit,
     formState: { errors },
   } = useForm<TimelineFormValues>({
-    resolver: zodResolver(timelineSchema),
+    resolver: zodResolver(timelineSchema) as any,
     defaultValues: initialData ? {
       type: initialData.type,
       categoryEn: initialData.categoryEn,

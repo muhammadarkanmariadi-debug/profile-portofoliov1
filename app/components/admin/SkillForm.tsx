@@ -36,7 +36,7 @@ export default function SkillForm({ initialData }: { initialData?: Skill }) {
     watch,
     formState: { errors },
   } = useForm<SkillFormValues>({
-    resolver: zodResolver(skillSchema),
+    resolver: zodResolver(skillSchema) as any,
     defaultValues: initialData ? {
       category: initialData.category as any,
       title: initialData.title,
