@@ -14,7 +14,12 @@ export default function SkillsAdminPage() {
     try {
       const res = await fetch('/api/public/skills');
       const data = await res.json();
-      setSkills(data);
+      if (Array.isArray(data)) {
+        setSkills(data);
+      } else {
+        console.error('API Error:', data);
+        setSkills([]);
+      }
     } catch (error) {
       console.error('Error fetching skills:', error);
     } finally {

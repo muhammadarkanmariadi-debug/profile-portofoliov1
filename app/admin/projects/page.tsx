@@ -16,7 +16,12 @@ export default function ProjectsAdminPage() {
     try {
       const res = await fetch('/api/public/projects');
       const data = await res.json();
-      setProjects(data);
+      if (Array.isArray(data)) {
+        setProjects(data);
+      } else {
+        console.error('API Error:', data);
+        setProjects([]);
+      }
     } catch (error) {
       console.error('Error fetching projects:', error);
     } finally {

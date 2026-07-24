@@ -14,7 +14,12 @@ export default function AchievementsAdminPage() {
     try {
       const res = await fetch('/api/public/achievements');
       const data = await res.json();
-      setAchievements(data);
+      if (Array.isArray(data)) {
+        setAchievements(data);
+      } else {
+        console.error('API Error:', data);
+        setAchievements([]);
+      }
     } catch (error) {
       console.error('Error fetching achievements:', error);
     } finally {

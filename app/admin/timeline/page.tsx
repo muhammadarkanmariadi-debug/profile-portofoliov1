@@ -14,7 +14,12 @@ export default function TimelineAdminPage() {
     try {
       const res = await fetch('/api/public/timeline');
       const data = await res.json();
-      setEntries(data);
+      if (Array.isArray(data)) {
+        setEntries(data);
+      } else {
+        console.error('API Error:', data);
+        setEntries([]);
+      }
     } catch (error) {
       console.error('Error fetching timeline:', error);
     } finally {

@@ -13,7 +13,12 @@ export default function MessagesAdminPage() {
     try {
       const res = await fetch('/api/admin/messages');
       const data = await res.json();
-      setMessages(data);
+      if (Array.isArray(data)) {
+        setMessages(data);
+      } else {
+        console.error('API Error:', data);
+        setMessages([]);
+      }
     } catch (error) {
       console.error('Error fetching messages:', error);
     } finally {
