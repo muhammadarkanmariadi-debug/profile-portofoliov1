@@ -91,11 +91,6 @@ const Achievements = ({ achievements }: AchievementsProps) => {
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {achievements.map((item, idx) => {
-              // Cycle colors for design
-              const colors = ['primary', 'secondary', 'indigo-500'];
-              const color = colors[idx % colors.length];
-              const borderColor = color === 'primary' ? 'rgba(108, 99, 255, 0.5)' : color === 'secondary' ? 'rgba(0, 217, 192, 0.5)' : 'rgba(99, 102, 241, 0.5)';
-              
               return (
                 <motion.div 
                   key={item.id}
@@ -103,20 +98,17 @@ const Achievements = ({ achievements }: AchievementsProps) => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.1 }}
                   viewport={{ once: true }}
-                  className="w-[85vw] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex-none snap-center glass-card p-5 rounded-2xl flex flex-col items-center text-center space-y-3 border-b-4 hover:-translate-y-1 transition-transform cursor-target"
-                  style={{ borderBottomColor: borderColor }}
+                  className="w-[85vw] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex-none snap-center glass-card p-5 rounded-2xl flex flex-col items-center text-center space-y-3 border-b-2 border-border hover:border-primary hover:-translate-y-1 transition-all cursor-target"
                 >
-                  <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 border border-border bg-black/20 shrink-0">
+                  <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 border border-border bg-surface shrink-0">
                     <img 
                       src={item.imageUrl || 'https://images.unsplash.com/photo-1590402494682-bf34f5ce8c50?w=800&auto=format&fit=crop&q=60'} 
                       alt={`Certificate for ${lang === 'id' ? item.titleId : item.titleEn}`} 
-                      className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity hover:scale-105 duration-500"
+                      className="w-full h-full object-contain opacity-90 hover:opacity-100 transition-opacity hover:scale-105 duration-500"
                     />
                   </div>
                   <h4 className="font-heading text-xl font-bold text-on-surface">{lang === 'id' ? item.titleId : item.titleEn}</h4>
-                  <p className={`font-mono text-xs uppercase font-semibold ${
-                    color === 'primary' ? 'text-primary' : color === 'secondary' ? 'text-secondary' : 'text-indigo-400'
-                  }`}>
+                  <p className="font-mono text-xs uppercase font-semibold text-primary">
                     {lang === 'id' ? item.statusId : item.statusEn}
                   </p>
                   <p className="text-on-surface-variant text-sm leading-relaxed flex-grow line-clamp-3">{lang === 'id' ? item.descriptionId : item.descriptionEn}</p>
