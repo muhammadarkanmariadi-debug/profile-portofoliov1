@@ -72,14 +72,14 @@ const Achievements = ({ achievements }: AchievementsProps) => {
           {/* Scroll Buttons */}
           <button 
             onClick={scrollLeft}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-6 z-20 w-12 h-12 bg-surface/80 backdrop-blur border border-border text-on-surface rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:text-primary hover:border-primary shadow-xl cursor-target hidden md:flex"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-6 z-20 w-10 h-10 md:w-12 md:h-12 bg-surface/80 backdrop-blur border border-border text-on-surface rounded-full flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity hover:text-primary hover:border-primary shadow-xl cursor-target"
           >
             <ChevronLeft size={24} />
           </button>
           
           <button 
             onClick={scrollRight}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-6 z-20 w-12 h-12 bg-surface/80 backdrop-blur border border-border text-on-surface rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:text-primary hover:border-primary shadow-xl cursor-target hidden md:flex"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-6 z-20 w-10 h-10 md:w-12 md:h-12 bg-surface/80 backdrop-blur border border-border text-on-surface rounded-full flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity hover:text-primary hover:border-primary shadow-xl cursor-target"
           >
             <ChevronRight size={24} />
           </button>
@@ -87,7 +87,7 @@ const Achievements = ({ achievements }: AchievementsProps) => {
           {/* Carousel Container */}
           <div 
             ref={scrollRef}
-            className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 scrollbar-hide scroll-smooth items-stretch"
+            className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 scrollbar-hide scroll-smooth items-stretch touch-pan-x"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {achievements.map((item, idx) => {
