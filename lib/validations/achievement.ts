@@ -8,6 +8,6 @@ export const achievementSchema = z.object({
   descriptionEn: z.string().optional().nullable(),
   descriptionId: z.string().optional().nullable(),
   date: z.coerce.date({ message: 'Invalid date' }),
-  imageUrl: z.string().url('Invalid URL').optional().nullable().or(z.literal('')),
+  imageUrl: z.string().optional().nullable().or(z.literal('')),
   order: z.number().int().default(0),
 });

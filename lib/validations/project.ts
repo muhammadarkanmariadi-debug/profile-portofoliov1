@@ -10,9 +10,9 @@ export const projectSchema = z.object({
   roleEn: z.string().optional().nullable(),
   roleId: z.string().optional().nullable(),
   isDeploy: z.boolean().default(false),
-  liveUrl: z.string().url('Invalid URL').optional().nullable().or(z.literal('')),
-  sourceCodeUrl: z.string().url('Invalid URL').optional().nullable().or(z.literal('')),
-  imageUrl: z.string().url('Invalid URL').optional().nullable().or(z.literal('')),
+  liveUrl: z.string().optional().nullable().or(z.literal('')),
+  sourceCodeUrl: z.string().optional().nullable().or(z.literal('')),
+  imageUrl: z.string().optional().nullable().or(z.literal('')),
   order: z.number().int().default(0),
   techStackIds: z.array(z.string()).default([]), // Array of Skill IDs
 });
