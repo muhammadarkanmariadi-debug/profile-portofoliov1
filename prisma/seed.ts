@@ -91,15 +91,15 @@ async function main() {
     { title: 'Tailwind CSS', category: 'FRONTEND' as const, logoUrl: 'https://img.icons8.com/color/512/tailwindcss.png', order: 3 },
     { title: 'Bootstrap', category: 'FRONTEND' as const, logoUrl: 'https://img.icons8.com/color/512/bootstrap.png', order: 4 },
     { title: 'Flutter', category: 'FRONTEND' as const, logoUrl: 'https://img.icons8.com/color/512/flutter.png', order: 5 },
-    
+
     { title: 'Nest.js', category: 'BACKEND' as const, logoUrl: 'https://img.icons8.com/color/512/nestjs.png', order: 6 },
     { title: 'Laravel', category: 'BACKEND' as const, logoUrl: 'https://img.icons8.com/color/512/laravel.png', order: 7 },
     { title: 'Golang', category: 'BACKEND' as const, logoUrl: 'https://img.icons8.com/color/512/golang.png', order: 8 },
-    
+
     { title: 'MySQL', category: 'DATABASE_ORM' as const, logoUrl: 'https://img.icons8.com/color/512/mysql-logo.png', order: 9 },
     { title: 'PostgreSQL', category: 'DATABASE_ORM' as const, logoUrl: 'https://img.icons8.com/color/512/postgreesql.png', order: 10 },
     { title: 'Prisma', category: 'DATABASE_ORM' as const, logoUrl: 'https://github.com/prisma/presskit/raw/main/Assets/Prisma-LightLogo.png', order: 11 },
-    
+
     { title: 'Git', category: 'VERSION_CONTROL' as const, logoUrl: 'https://img.icons8.com/color/512/git.png', order: 12 },
     { title: 'Docker', category: 'CLOUD_DEPLOYMENT' as const, logoUrl: 'https://img.icons8.com/color/512/docker.png', order: 13 },
 
@@ -247,7 +247,7 @@ async function main() {
       descriptionEn: 'Jagoan Hosting Infra Competition (JHIC) 2025. Demonstrated backend & infrastructure capabilities.',
       descriptionId: 'Jagoan Hosting Infra Competition (JHIC) 2025. Mendemonstrasikan kemampuan backend & infrastruktur.',
       date: new Date('2025-11-01'),
-      imageUrl: 'https://images.unsplash.com/photo-1590402494682-bf34f5ce8c50?w=800&auto=format&fit=crop&q=60',
+      imageUrl: '/certificates/80jt4mcd-767ba5d9-b1e1-4779-81b3-83d36d39a2be.png',
       order: 1
     },
     {
@@ -259,70 +259,59 @@ async function main() {
       descriptionId: 'Hackathon Nasional "CodeCollab: Solving Today\'s Challenges Together", HMSE Telkom University Purwokerto.',
       date: new Date('2024-12-01'),
       imageUrl: 'https://images.unsplash.com/photo-1590402494610-2c378a9114c6?w=800&auto=format&fit=crop&q=60',
-      order: 2
-    },
+      order: 4    },
     {
-      titleEn: 'BIONIX',
-      titleId: 'BIONIX',
+      titleEn: 'BIONIX ISE! 2025',
+      titleId: 'BIONIX ISE! 2025',
       statusEn: 'Participant',
       statusId: 'Peserta',
       descriptionEn: 'BIONIX Competition, Information Systems Expo (ISE!) 2025, Institut Teknologi Sepuluh Nopember.',
       descriptionId: 'Kompetisi BIONIX, Information Systems Expo (ISE!) 2025, Institut Teknologi Sepuluh Nopember.',
       date: new Date('2025-09-01'),
       imageUrl: '/certificates/sertifikat-bionix-muhammad-arkan-mariadi.png',
-      order: 3
+      order: 2
     },
     {
-      titleEn: 'OISN2 PCF II 2024',
-      titleId: 'OISN2 PCF II 2024',
-      statusEn: 'Participant',
-      statusId: 'Peserta',
-      descriptionEn: 'OISN2 PCF II 2024 Participant',
-      descriptionId: 'Peserta OISN2 PCF II 2024',
+      titleEn: 'OISN 2 (Olimpiade Ilmu Sosial Nasional)',
+      titleId: 'OISN 2 (Olimpiade Ilmu Sosial Nasional)',
+      statusEn: 'National Silver Medalist',
+      statusId: 'Peraih Medali Perak Nasional',
+      descriptionEn: 'English category at the SMP/MTs/Equivalent level.',
+      descriptionId: 'Bidang Bahasa Inggris Tingkat SMP/MTs/Sederajat.',
       date: new Date('2024-01-01'),
       imageUrl: '/certificates/0340168-anoisn2pcfii2024-muhammad-arkan-mariadi.png',
-      order: 4
+      order: 5
     },
     {
-      titleEn: 'FOBN PCF II 2024',
-      titleId: 'FOBN PCF II 2024',
-      statusEn: 'Participant',
-      statusId: 'Peserta',
-      descriptionEn: 'FOBN PCF II 2024 Participant',
-      descriptionId: 'Peserta FOBN PCF II 2024',
+      titleEn: 'FOBN (Festival Olimpiade Bahasa Nasional)',
+      titleId: 'FOBN (Festival Olimpiade Bahasa Nasional)',
+      statusEn: 'National Gold Medalist',
+      statusId: 'Peraih Medali Emas Nasional',
+      descriptionEn: 'English category at the SMP/MTs/Equivalent level.',
+      descriptionId: 'Bidang Bahasa Inggris Tingkat SMP/MTs/Sederajat.',
       date: new Date('2024-01-02'),
       imageUrl: '/certificates/0350264-anfobnpcfii2024-muhammad-arkan-mariadi-.png',
       order: 5
     },
     {
-      titleEn: 'SPTN OISN2 PCF II 2024',
-      titleId: 'SPTN OISN2 PCF II 2024',
+      titleEn: 'SPTN OISN 2',
+      titleId: 'SPTN OISN 2',
       statusEn: 'Participant',
       statusId: 'Peserta',
-      descriptionEn: 'SPTN OISN2 PCF II 2024 Participant',
-      descriptionId: 'Peserta SPTN OISN2 PCF II 2024',
+      descriptionEn: 'Participant in the English category at the SMP/MTs/Equivalent level.',
+      descriptionId: 'Peserta Bidang Bahasa Inggris Tingkat SMP/MTs/Sederajat.',
       date: new Date('2024-01-03'),
       imageUrl: '/certificates/1736-sptnoisn2pcfii2024-muhammad-arkan-mariadi.png',
       order: 6
     },
+
     {
-      titleEn: 'Certificate',
-      titleId: 'Sertifikat',
-      statusEn: 'Participant',
-      statusId: 'Peserta',
-      descriptionEn: 'Certificate Participant',
-      descriptionId: 'Peserta Sertifikat',
-      date: new Date('2024-01-04'),
-      imageUrl: '/certificates/80jt4mcd-767ba5d9-b1e1-4779-81b3-83d36d39a2be.png',
-      order: 7
-    },
-    {
-      titleEn: 'Attendance Cyber Security Training',
+      titleEn: 'Cyber Security Training Attendance',
       titleId: 'Kehadiran Pelatihan Cyber Security',
       statusEn: 'Participant',
       statusId: 'Peserta',
-      descriptionEn: 'Cyber Security Training Attendance',
-      descriptionId: 'Kehadiran Pelatihan Cyber Security',
+      descriptionEn: 'Certificate of attendance for Cyber Security Training.',
+      descriptionId: 'Sertifikat kehadiran pelatihan Cyber Security.',
       date: new Date('2024-01-05'),
       imageUrl: '/certificates/sertifikat-attendance-pelatihan-cyber-security.png',
       order: 8
@@ -332,31 +321,31 @@ async function main() {
       titleId: 'IS Class',
       statusEn: 'Participant',
       statusId: 'Peserta',
-      descriptionEn: 'IS Class Participant',
-      descriptionId: 'Peserta IS Class',
-      date: new Date('2024-01-06'),
+      descriptionEn: 'Information Systems Class Participant, Institut Teknologi Sepuluh Nopember 2025.',
+      descriptionId: 'Peserta Information Systems Class, Institut Teknologi Sepuluh Nopember 2025.',
+      date: new Date('2025-08-01'),
       imageUrl: '/certificates/sertifikat-is-class_muhammad-arkan-mariadi.png',
       order: 9
     },
     {
       titleEn: 'Cyber Security Training Graduation',
       titleId: 'Kelulusan Pelatihan Cyber Security',
-      statusEn: 'Graduate',
-      statusId: 'Lulusan',
-      descriptionEn: 'Graduated from Cyber Security Training at SMK Telkom Malang',
-      descriptionId: 'Lulus dari Pelatihan Cyber Security di SMK Telkom Malang',
+      statusEn: 'Graduated with Distinction',
+      statusId: 'Lulus dengan Sangat Baik',
+      descriptionEn: 'Graduated from Cyber Security Training at SMK Telkom Malang with "Sangat Baik" distinction.',
+      descriptionId: 'Sertifikat Kelulusan Pelatihan Cyber Security di SMK Telkom Malang dengan predikat "Sangat Baik".',
       date: new Date('2024-01-07'),
       imageUrl: '/certificates/sertifikat-kelulusan-pelatihan-cyber-security-smk-telkom-malang.png',
       order: 10
     },
     {
-      titleEn: 'SMK Telkom Malang Certificate',
-      titleId: 'Sertifikat SMK Telkom Malang',
+      titleEn: 'SMK Telkom Malang Event',
+      titleId: 'Event SMK Telkom Malang',
       statusEn: 'Participant',
       statusId: 'Peserta',
-      descriptionEn: 'SMK Telkom Malang Certificate',
-      descriptionId: 'Sertifikat SMK Telkom Malang',
-      date: new Date('2024-01-08'),
+      descriptionEn: 'Participant in the event on September 27, 2024, at SMK Telkom Malang.',
+      descriptionId: 'Peserta event pada tanggal 27 September 2024 di SMK Telkom Malang.',
+      date: new Date('2024-09-27'),
       imageUrl: '/certificates/sertifikat-smk-telkom-malang-muhammad-arkan-mariadi.png',
       order: 11
     }

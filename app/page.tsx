@@ -14,6 +14,8 @@ import { getSkills } from '@/lib/services/skill.service'
 import { getProjects } from '@/lib/services/project.service'
 import { getAchievements } from '@/lib/services/achievement.service'
 
+export const revalidate = 0;
+
 const Page = async () => {
   // Fetch all data server-side
   const [profile, timeline, skills, projects, achievements] = await Promise.all([
