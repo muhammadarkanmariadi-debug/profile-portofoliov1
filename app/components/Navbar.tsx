@@ -29,7 +29,7 @@ const Navbar = () => {
       <header className=" fixed top-0 left-0 right-0 z-50 flex justify-center items-center w-full">
         <nav className="bg-surface/65 backdrop-blur-xl border border-border rounded-full mt-6 mx-auto w-fit px-6 py-3 shadow-xl shadow-primary/5 flex items-center gap-8 transition-all duration-300">
           <Link href="/" className="  font-heading text-lg font-bold text-on-surface tracking-tight hover:text-primary transition-colors">
-            ARKAN.DEV
+            4RK4N.DEV
           </Link>
 
           <div className="hidden md:flex items-center gap-6">

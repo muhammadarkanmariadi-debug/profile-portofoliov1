@@ -19,7 +19,7 @@ async function main() {
       shortDescriptionId: 'Junior Full-Stack Developer dengan lebih dari 1 tahun pengalaman membangun aplikasi web yang scalable menggunakan Next.js, React, Nest.js, dan Laravel.',
       fullBiographyEn: 'I am a Junior Full-Stack Developer currently studying Software Engineering at SMK Telkom Malang. I have 1+ years of experience building dynamic web applications using Next.js, React, Nest.js, and Laravel.\n\nI believe that code is a medium for craftsmanship. Accustomed to integrating REST APIs, implementing CI/CD with Docker & GitHub Actions, and collaborating in cross-functional teams, I focus on building scalable web apps that perform seamlessly and efficiently.\n\nTo date, I have delivered 5 full-stack projects, including systems deployed for real-world events. Beyond programming, I maintain a balanced life through music, badminton, and fishing, which helps me cultivate focus and consistency in my development process.',
       fullBiographyId: 'Saya adalah Junior Full-Stack Developer yang saat ini sedang menempuh pendidikan Rekayasa Perangkat Lunak di SMK Telkom Malang. Saya memiliki pengalaman 1+ tahun dalam membangun aplikasi web dinamis menggunakan Next.js, React, Nest.js, dan Laravel.\n\nSaya percaya bahwa kode adalah media untuk berkarya. Terbiasa mengintegrasikan REST API, mengimplementasikan CI/CD dengan Docker & GitHub Actions, dan berkolaborasi dalam tim lintas fungsi, saya fokus pada membangun aplikasi web scalable yang beroperasi dengan mulus dan efisien.\n\nHingga saat ini, saya telah menyelesaikan 5 proyek full-stack, termasuk sistem yang dideploy untuk acara dunia nyata. Di luar pemrograman, saya menjaga keseimbangan hidup melalui musik, bulu tangkis, dan memancing, yang membantu saya memupuk fokus dan konsistensi dalam proses pengembangan saya.',
-      cvFileUrl: '/assets/CV_Muhammad_Arkan_Mariadi (1) - Google Docs.pdf'
+      cvFileUrl: '/assets/CV_Muhammad_Arkan_Mariadi.pdf'
     }
   })
   console.log('Profile created.')
@@ -269,8 +269,96 @@ async function main() {
       descriptionEn: 'BIONIX Competition, Information Systems Expo (ISE!) 2025, Institut Teknologi Sepuluh Nopember.',
       descriptionId: 'Kompetisi BIONIX, Information Systems Expo (ISE!) 2025, Institut Teknologi Sepuluh Nopember.',
       date: new Date('2025-09-01'),
-      imageUrl: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&auto=format&fit=crop&q=60',
+      imageUrl: '/certificates/sertifikat-bionix-muhammad-arkan-mariadi.png',
       order: 3
+    },
+    {
+      titleEn: 'OISN2 PCF II 2024',
+      titleId: 'OISN2 PCF II 2024',
+      statusEn: 'Participant',
+      statusId: 'Peserta',
+      descriptionEn: 'OISN2 PCF II 2024 Participant',
+      descriptionId: 'Peserta OISN2 PCF II 2024',
+      date: new Date('2024-01-01'),
+      imageUrl: '/certificates/0340168-anoisn2pcfii2024-muhammad-arkan-mariadi.png',
+      order: 4
+    },
+    {
+      titleEn: 'FOBN PCF II 2024',
+      titleId: 'FOBN PCF II 2024',
+      statusEn: 'Participant',
+      statusId: 'Peserta',
+      descriptionEn: 'FOBN PCF II 2024 Participant',
+      descriptionId: 'Peserta FOBN PCF II 2024',
+      date: new Date('2024-01-02'),
+      imageUrl: '/certificates/0350264-anfobnpcfii2024-muhammad-arkan-mariadi-.png',
+      order: 5
+    },
+    {
+      titleEn: 'SPTN OISN2 PCF II 2024',
+      titleId: 'SPTN OISN2 PCF II 2024',
+      statusEn: 'Participant',
+      statusId: 'Peserta',
+      descriptionEn: 'SPTN OISN2 PCF II 2024 Participant',
+      descriptionId: 'Peserta SPTN OISN2 PCF II 2024',
+      date: new Date('2024-01-03'),
+      imageUrl: '/certificates/1736-sptnoisn2pcfii2024-muhammad-arkan-mariadi.png',
+      order: 6
+    },
+    {
+      titleEn: 'Certificate',
+      titleId: 'Sertifikat',
+      statusEn: 'Participant',
+      statusId: 'Peserta',
+      descriptionEn: 'Certificate Participant',
+      descriptionId: 'Peserta Sertifikat',
+      date: new Date('2024-01-04'),
+      imageUrl: '/certificates/80jt4mcd-767ba5d9-b1e1-4779-81b3-83d36d39a2be.png',
+      order: 7
+    },
+    {
+      titleEn: 'Attendance Cyber Security Training',
+      titleId: 'Kehadiran Pelatihan Cyber Security',
+      statusEn: 'Participant',
+      statusId: 'Peserta',
+      descriptionEn: 'Cyber Security Training Attendance',
+      descriptionId: 'Kehadiran Pelatihan Cyber Security',
+      date: new Date('2024-01-05'),
+      imageUrl: '/certificates/sertifikat-attendance-pelatihan-cyber-security.png',
+      order: 8
+    },
+    {
+      titleEn: 'IS Class',
+      titleId: 'IS Class',
+      statusEn: 'Participant',
+      statusId: 'Peserta',
+      descriptionEn: 'IS Class Participant',
+      descriptionId: 'Peserta IS Class',
+      date: new Date('2024-01-06'),
+      imageUrl: '/certificates/sertifikat-is-class_muhammad-arkan-mariadi.png',
+      order: 9
+    },
+    {
+      titleEn: 'Cyber Security Training Graduation',
+      titleId: 'Kelulusan Pelatihan Cyber Security',
+      statusEn: 'Graduate',
+      statusId: 'Lulusan',
+      descriptionEn: 'Graduated from Cyber Security Training at SMK Telkom Malang',
+      descriptionId: 'Lulus dari Pelatihan Cyber Security di SMK Telkom Malang',
+      date: new Date('2024-01-07'),
+      imageUrl: '/certificates/sertifikat-kelulusan-pelatihan-cyber-security-smk-telkom-malang.png',
+      order: 10
+    },
+    {
+      titleEn: 'SMK Telkom Malang Certificate',
+      titleId: 'Sertifikat SMK Telkom Malang',
+      statusEn: 'Participant',
+      statusId: 'Peserta',
+      descriptionEn: 'SMK Telkom Malang Certificate',
+      descriptionId: 'Sertifikat SMK Telkom Malang',
+      date: new Date('2024-01-08'),
+      imageUrl: '/certificates/sertifikat-smk-telkom-malang-muhammad-arkan-mariadi.png',
+      order: 11
     }
   ]
   for (const a of achievementsData) {
