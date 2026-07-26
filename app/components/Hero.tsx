@@ -19,10 +19,10 @@ const Hero = ({ profile }: HeroProps) => {
 
   return (
     <div className='flex flex-col lg:flex-row justify-between items-center gap-16 mx-6 md:mx-10 xl:mx-auto max-w-7xl min-h-[90vh] pt-32 pb-10 overflow-hidden' id='hero'>
-      
+
       {/* Left Content */}
       <div className='z-10 relative flex flex-col justify-center items-center lg:items-start gap-6 text-center lg:text-left w-full lg:w-1/2'>
-        
+
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -40,7 +40,7 @@ const Hero = ({ profile }: HeroProps) => {
           className="flex flex-col gap-2"
         >
           <h1 className='font-bold text-on-surface text-5xl md:text-6xl tracking-tight leading-tight mt-2'>
-            {t.hero.titleStart} <br/> <ScrambleText text="ARKAN MARIADI" className="text-primary text-glow" />
+            {t.hero.titleStart} <br /> <ScrambleText text="ARKAN MARIADI" className="text-primary text-glow" />
           </h1>
         </motion.div>
 
@@ -54,7 +54,7 @@ const Hero = ({ profile }: HeroProps) => {
         </motion.p>
 
         {/* Buttons */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -74,7 +74,7 @@ const Hero = ({ profile }: HeroProps) => {
         </motion.div>
 
         {/* Socials */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
