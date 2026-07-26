@@ -10,6 +10,27 @@ type ProjectWithTech = Project & { techStack: Skill[] };
 export default function ProjectsAdminPage() {
   const [projects, setProjects] = useState<ProjectWithTech[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const handleSyncGithub = async () => {
+    setIsSyncing(true);
+    try {
+      const res = await fetch('/api/admin/projects/sync', { method: 'POST' });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        alert(`Successfully synced ${data.reposSynced} repositories from GitHub!`);
+        fetchProjects();
+      } else {
+        alert(`Sync finished with issues: ${data.details || JSON.stringify(data.errors || 'Unknown error')}`);
+        fetchProjects();
+      }
+    } catch (error) {
+      console.error('Error syncing:', error);
+      alert('Failed to trigger GitHub sync.');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
 
   const fetchProjects = async () => {
     setIsLoading(true);
@@ -101,13 +122,23 @@ export default function ProjectsAdminPage() {
     <div>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Projects Management</h1>
-        <Link 
-          href="/admin/projects/create"
-          className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-xl transition-colors font-medium"
-        >
-          <Plus size={20} />
-          Add Project
-        </Link>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={handleSyncGithub}
+            disabled={isSyncing}
+            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 text-white px-4 py-2 rounded-xl transition-colors font-medium cursor-target"
+          >
+            {isSyncing ? <Loader2 size={20} className="animate-spin" /> : <Github size={20} />}
+            {isSyncing ? 'Syncing...' : 'Sync GitHub'}
+          </button>
+          <Link 
+            href="/admin/projects/create"
+            className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-xl transition-colors font-medium cursor-target"
+          >
+            <Plus size={20} />
+            Add Project
+          </Link>
+        </div>
       </div>
 
       <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">

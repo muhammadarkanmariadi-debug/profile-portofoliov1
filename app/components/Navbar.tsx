@@ -19,7 +19,7 @@ const Navbar = () => {
   const links = [
     { name: t.navbar.home, href: '/' },
     { name: t.navbar.skills, href: '/#skills' },
-    { name: t.navbar.achievements, href: '/#achievements' },
+    { name: t.navbar.achievements, href: '/achievements' },
     { name: t.navbar.projects, href: '/projects' },
     { name: t.navbar.contact, href: '/contact' }
   ]

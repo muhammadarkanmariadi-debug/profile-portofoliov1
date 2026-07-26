@@ -40,7 +40,14 @@ export const translations = {
     },
     achievements: {
       badge: "03. Credentials",
-      title: "Certificates & Awards"
+      title: "Certificates & Awards",
+      pageTitle: "Validating ",
+      pageTitleHighlight: "expertise.",
+      searchPlaceholder: "Search certificates by name or status...",
+      showItems: "Show:",
+      items: "Items",
+      notFound: "No certificates found matching",
+      cardView: "View Certificate"
     },
     projects: {
       badge: "Portfolio",
@@ -121,7 +128,14 @@ export const translations = {
     },
     achievements: {
       badge: "03. Kredensial",
-      title: "Sertifikat & Penghargaan"
+      title: "Sertifikat & Penghargaan",
+      pageTitle: "Validasi ",
+      pageTitleHighlight: "keahlian.",
+      searchPlaceholder: "Cari sertifikat berdasarkan nama atau status...",
+      showItems: "Tampilkan:",
+      items: "Item",
+      notFound: "Tidak ada sertifikat yang sesuai dengan",
+      cardView: "Lihat Sertifikat"
     },
     projects: {
       badge: "Portofolio",

@@ -1,7 +1,7 @@
 'use client'
 import React, { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
 import { useLanguage } from '../providers'
 import type { Achievement } from '@prisma/client'
 
@@ -112,9 +112,18 @@ const Achievements = ({ achievements }: AchievementsProps) => {
                     {lang === 'id' ? item.statusId : item.statusEn}
                   </p>
                   <p className="text-on-surface-variant text-sm leading-relaxed flex-grow line-clamp-3">{lang === 'id' ? item.descriptionId : item.descriptionEn}</p>
-                  <p className="font-mono text-[10px] text-on-surface-variant/50 mt-auto pt-4">
-                    {new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                  <p className="font-mono text-[10px] text-on-surface-variant/50 mt-auto pt-4 mb-3">
+                    {new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                   </p>
+                  <a 
+                    href={item.imageUrl || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex justify-center items-center gap-2 border border-primary text-primary py-2.5 rounded-lg text-xs font-semibold hover:bg-primary hover:text-white transition-all cursor-target"
+                  >
+                    {t.achievements.cardView}
+                    <ExternalLink size={14} />
+                  </a>
                 </motion.div>
               );
             })}

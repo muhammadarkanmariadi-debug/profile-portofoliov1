@@ -9,6 +9,7 @@ const pool = new Pool({
   user: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
+  ssl: { rejectUnauthorized: false },
   max: 1, // Kurangi pool size agar Vercel (serverless/build) tidak melampaui limit koneksi Supabase
 });
 

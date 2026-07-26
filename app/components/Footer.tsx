@@ -47,9 +47,9 @@ const Footer = ({ profile }: FooterProps) => {
               <div className="w-12 h-12 rounded-full border border-gray-600 flex items-center justify-center text-white group-hover:border-white transition-colors">
                 <Mail size={20} />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col cursor-target">
                 <span className="text-gray-400 text-sm font-sans mb-1">{t.contact.email}</span>
-                <span className="text-white font-medium font-sans">{profile.email || 'email@example.com'}</span>
+                <span className="text-white font-medium font-sans break-all ">{profile.email || 'email@example.com'}</span>
               </div>
             </div>
 
