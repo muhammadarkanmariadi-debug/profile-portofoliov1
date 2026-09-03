@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Search, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
-import AchievementCard from '@/app/components/AchievementCard'
+import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Search, ChevronLeft, ChevronRight, ChevronDown, Award, ExternalLink, X, ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '@/app/providers'
 import type { Achievement } from '@prisma/client'
 
@@ -10,9 +10,17 @@ interface AchievementsClientProps {
   initialAchievements: Achievement[]
 }
 
+const frameThemes = [
+  'bg-[#DCE7EB] border-[#C2D4DC]', // Ice Blue tint
+  'bg-[#E5DFEC] border-[#D0C5DB]', // Soft Purple tint
+  'bg-[#DBECE6] border-[#C3DDD4]', // Sage Mint tint
+  'bg-[#EFE5DC] border-[#DFCFBF]', // Sand Coral tint
+]
+
 export default function AchievementsClient({ initialAchievements }: AchievementsClientProps) {
-  const { t, lang } = useLanguage()
+  const { lang } = useLanguage()
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
   
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1)
@@ -41,121 +49,272 @@ export default function AchievementsClient({ initialAchievements }: Achievements
   }, [searchQuery, itemsPerPage])
 
   return (
-    <main className="max-w-[1200px] mx-auto px-6 md:px-10 pt-40 pb-32 min-h-screen">
-      {/* Background Element */}
-      <div className="fixed inset-0 grid-texture pointer-events-none -z-10 opacity-30"></div>
-
-      <header className="mb-16">
-        <div className="flex items-center gap-2 mb-4">
-          <span className="w-8 h-[1px] bg-secondary"></span>
-          <span className="font-mono text-xs text-secondary uppercase tracking-widest">{t.achievements.badge}</span>
-        </div>
-        <h1 className="font-heading text-5xl md:text-6xl text-on-surface max-w-2xl font-bold leading-tight mb-12">
-          {t.achievements.pageTitle} <span className="text-primary italic font-serif">{t.achievements.pageTitleHighlight}</span>
-        </h1>
-
-        <div className="flex flex-col md:flex-row gap-4 items-center max-w-4xl">
-          <div className="relative group w-full flex-grow">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/70 group-focus-within:text-secondary transition-colors" size={20} />
-            <input 
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-surface/65 backdrop-blur-xl border border-border rounded-xl py-4 pl-12 pr-4 text-on-surface font-sans focus:outline-none focus:border-secondary/50 transition-all placeholder:text-on-surface-variant/50 cursor-target"
-              placeholder={t.achievements.searchPlaceholder}
-            />
-          </div>
-          
-          <div className="relative w-1/2">
-            <button 
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="w-full md:w-auto flex items-center justify-between gap-4 bg-surface/65 backdrop-blur-xl border border-border rounded-xl px-5 py-4 text-on-surface font-sans hover:border-secondary/50 transition-all cursor-target"
-            >
-              <span>{t.achievements.showItems} {itemsPerPage}</span>
-              <ChevronDown size={18} className={`transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-            
-            {isDropdownOpen && (
-              <div className="absolute top-full right-0 mt-2 w-full md:w-auto min-w-[120px] bg-surface border border-border rounded-xl shadow-xl overflow-hidden z-20">
-                {[3, 6, 9, 12, 15].map(num => (
-                  <button
-                    key={num}
-                    onClick={() => {
-                      setItemsPerPage(num)
-                      setIsDropdownOpen(false)
-                    }}
-                    className="w-full text-left px-5 py-3 hover:bg-primary/20 hover:text-primary transition-colors text-on-surface cursor-target"
-                  >
-                    {num} {t.achievements.items}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {currentAchievements.map((achievement, index) => (
-          <motion.div
-            key={achievement.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-          >
-            <AchievementCard
-              id={achievement.id}
-              title={lang === 'id' ? (achievement.titleId || '') : (achievement.titleEn || '')}
-              description={lang === 'id' ? (achievement.descriptionId || '') : (achievement.descriptionEn || '')}
-              imageUrl={achievement.imageUrl || ''}
-              status={lang === 'id' ? (achievement.statusId || '') : (achievement.statusEn || '')}
-              date={achievement.date}
-            />
-          </motion.div>
-        ))}
-        {filteredAchievements.length === 0 && (
-          <div className="col-span-full py-20 text-center text-on-surface-variant font-mono">
-            {t.achievements.notFound} &quot;{searchQuery}&quot;
-          </div>
-        )}
+    <main className="w-full bg-[#EBEBEF] text-[#121217] pt-28 pb-32 min-h-screen px-6 sm:px-10 relative overflow-hidden select-none border-b border-[#D8D8E0]">
+      
+      {/* Background Watermark 04 */}
+      <div className="absolute top-20 right-0 font-heading font-black text-[25vw] leading-none text-[#121217] opacity-[0.04] pointer-events-none -z-0">
+        04
       </div>
 
-      {/* Pagination Controls */}
-      {totalPages > 1 && (
-        <div className="mt-16 flex items-center justify-center gap-4">
-          <button 
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-            className="w-10 h-10 rounded-full flex items-center justify-center border border-border text-on-surface hover:bg-primary hover:text-white disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-on-surface transition-colors cursor-target"
-          >
-            <ChevronLeft size={20} />
-          </button>
+      <div className="max-w-[1400px] mx-auto relative z-10">
+        
+        {/* Editorial Top Section Header */}
+        <header className="mb-16 border-b border-[#D8D8E0] pb-10">
           
-          <div className="flex items-center gap-2 font-mono text-sm">
-            {Array.from({ length: totalPages }).map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-target ${
-                  currentPage === i + 1 
-                    ? 'bg-primary text-white font-bold' 
-                    : 'hover:bg-surface border border-transparent hover:border-border text-on-surface-variant'
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
+          {/* Index & Breadcrumb */}
+          <div className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.25em] text-[#707080] mb-6">
+            <div className="flex items-center gap-3">
+              <span className="font-bold text-[#121217]">04</span>
+              <span>CREDENTIALS ARCHIVE</span>
+            </div>
+            <span>VERIFIED HONORS & AWARDS</span>
           </div>
 
-          <button 
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-            className="w-10 h-10 rounded-full flex items-center justify-center border border-border text-on-surface hover:bg-primary hover:text-white disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-on-surface transition-colors cursor-target"
-          >
-            <ChevronRight size={20} />
-          </button>
+          {/* Giant Typography with Hairline Ticks */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-10">
+            <h1 className="font-heading font-black text-5xl sm:text-7xl lg:text-[6.5vw] tracking-tighter text-[#121217] leading-[0.92]">
+              Honors & <br />
+              <span className="text-[#707080]">Credentials</span>
+            </h1>
+
+            <p className="max-w-md font-sans text-sm sm:text-base text-[#555566] leading-relaxed">
+              Official records of hackathon triumphs, software engineering certifications, and academic recognitions.
+            </p>
+          </div>
+
+          {/* Search & Filter Bar */}
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between pt-6 border-t border-[#D8D8E0]">
+            <div className="relative group w-full sm:max-w-md">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#707080] group-focus-within:text-[#121217] transition-colors" size={16} />
+              <input 
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-[#FFFFFF] border border-[#D5D5DF] rounded-full py-3 pl-11 pr-4 text-[#121217] font-mono text-xs focus:outline-none focus:border-[#121217] transition-all placeholder:text-[#9090A0]"
+                placeholder="Filter by competition, cert, or year..."
+              />
+            </div>
+            
+            <div className="relative self-end sm:self-auto">
+              <button 
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center justify-between gap-3 px-5 py-2.5 rounded-full bg-[#FFFFFF] border border-[#D5D5DF] text-[#121217] font-mono text-xs uppercase tracking-wider hover:border-[#121217] transition-all font-bold"
+              >
+                <span>SHOW {itemsPerPage} PER PAGE</span>
+                <ChevronDown size={14} className={`transform transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-[#FFFFFF] border border-[#D5D5DF] rounded-2xl shadow-xl z-30 overflow-hidden font-mono text-xs">
+                  {[3, 6, 9, 12].map((num) => (
+                    <button
+                      key={num}
+                      onClick={() => {
+                        setItemsPerPage(num)
+                        setIsDropdownOpen(false)
+                      }}
+                      className={`w-full text-left px-4 py-2.5 hover:bg-[#F0F0F5] transition-colors ${itemsPerPage === num ? 'text-[#121217] font-bold bg-[#EAEAEF]' : 'text-[#707080]'}`}
+                    >
+                      {num} ITEMS
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </header>
+
+        {/* Dynamic & Asymmetrical Creative Layout */}
+        <div className="space-y-12">
+          {currentAchievements.map((item, index) => {
+            const themeClass = frameThemes[index % frameThemes.length];
+            const isFeaturedHero = index === 0;
+            const isAlternate = index % 2 === 1;
+
+            if (isFeaturedHero) {
+              // 1. Featured Lead Hero Card (Full Width Split Layout)
+              return (
+                <motion.article
+                  key={item.id}
+                  initial={{ opacity: 0, y: 25 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`w-full rounded-3xl p-8 sm:p-12 ${themeClass} border shadow-sm flex flex-col lg:flex-row items-center gap-8 lg:gap-12 relative overflow-hidden group`}
+                >
+                  <div className="w-full lg:w-1/2 space-y-6">
+                    <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-wider text-[#444455]">
+                      <span className="px-3 py-1 rounded-full bg-[#121217] text-white font-bold text-[10px]">
+                        ★ HIGHLIGHTED
+                      </span>
+                      <span>{new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</span>
+                    </div>
+
+                    <Link href={`/achievements/${item.slug || item.id}`} className="group/title">
+                      <h2 className="font-heading font-black text-3xl sm:text-5xl text-[#121217] leading-[1.05] group-hover/title:text-[#707080] transition-colors">
+                        {lang === 'id' ? item.titleId : item.titleEn}
+                      </h2>
+                    </Link>
+
+                    <p className="text-base text-[#333344] font-sans leading-relaxed">
+                      {lang === 'id' ? item.descriptionId : item.descriptionEn}
+                    </p>
+
+                    <div className="pt-4 flex flex-wrap items-center gap-4">
+                      <Link
+                        href={`/achievements/${item.slug || item.id}`}
+                        className="px-6 py-3 rounded-full bg-[#121217] text-white font-mono text-xs uppercase tracking-wider font-bold hover:bg-[#333344] transition-all flex items-center gap-2 cursor-target"
+                      >
+                        <span>VIEW FULL RECORD</span>
+                        <ArrowUpRight size={14} />
+                      </Link>
+
+                      {item.imageUrl && (
+                        <button
+                          onClick={() => setSelectedImage(item.imageUrl)}
+                          className="px-5 py-3 rounded-full bg-white/70 border border-black/10 text-[#121217] font-mono text-xs uppercase tracking-wider font-bold hover:bg-white transition-all flex items-center gap-1.5 cursor-target"
+                        >
+                          <span>QUICK PREVIEW</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {item.imageUrl && (
+                    <Link 
+                      href={`/achievements/${item.slug || item.id}`}
+                      className="w-full lg:w-1/2 aspect-[16/10] rounded-2xl overflow-hidden bg-white/60 border border-black/10 shadow-lg cursor-pointer group-hover:scale-[1.02] transition-transform duration-500 relative block"
+                    >
+                      <img 
+                        src={item.imageUrl} 
+                        alt={item.titleEn} 
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center font-mono text-xs uppercase font-bold text-white backdrop-blur-xs">
+                        VIEW FULL DETAILS ↗
+                      </div>
+                    </Link>
+                  )}
+                </motion.article>
+              );
+            }
+
+            // 2. Alternating Editorial Split Rows
+            return (
+              <motion.article
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.08 }}
+                className={`w-full rounded-3xl p-6 sm:p-8 ${themeClass} border shadow-sm flex flex-col ${
+                  isAlternate ? 'lg:flex-row-reverse' : 'lg:flex-row'
+                } items-center gap-8 relative overflow-hidden group`}
+              >
+                <div className="w-full lg:w-3/5 space-y-4">
+                  <div className="flex items-center justify-between font-mono text-xs uppercase tracking-wider text-[#555566]">
+                    <span className="font-bold text-[#121217] flex items-center gap-1.5">
+                      <Award size={14} />
+                      <span>{lang === 'id' ? item.statusId : item.statusEn}</span>
+                    </span>
+                    <span>{new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}</span>
+                  </div>
+
+                  <Link href={`/achievements/${item.slug || item.id}`} className="group/title block">
+                    <h3 className="font-heading font-black text-2xl sm:text-3xl text-[#121217] leading-tight group-hover/title:text-[#707080] transition-colors">
+                      {lang === 'id' ? item.titleId : item.titleEn}
+                    </h3>
+                  </Link>
+
+                  <p className="text-sm text-[#444455] font-sans leading-relaxed">
+                    {lang === 'id' ? item.descriptionId : item.descriptionEn}
+                  </p>
+
+                  <div className="pt-2 flex items-center gap-4">
+                    <Link 
+                      href={`/achievements/${item.slug || item.id}`}
+                      className="font-mono text-xs uppercase tracking-wider font-bold text-[#121217] hover:underline flex items-center gap-1 cursor-target"
+                    >
+                      <span>VIEW FULL DETAILS</span>
+                      <ArrowUpRight size={13} />
+                    </Link>
+                  </div>
+                </div>
+
+                {item.imageUrl && (
+                  <Link 
+                    href={`/achievements/${item.slug || item.id}`}
+                    className="w-full lg:w-2/5 aspect-[16/10] rounded-2xl overflow-hidden bg-white/70 border border-black/10 shadow-md cursor-pointer group-hover:scale-[1.02] transition-transform duration-500 relative block"
+                  >
+                    <img 
+                      src={item.imageUrl} 
+                      alt={item.titleEn} 
+                      className="w-full h-full object-cover"
+                    />
+                  </Link>
+                )}
+              </motion.article>
+            );
+          })}
+
+          {filteredAchievements.length === 0 && (
+            <div className="py-24 text-center text-[#707080] font-mono text-sm">
+              No credentials found matching &quot;{searchQuery}&quot;
+            </div>
+          )}
         </div>
-      )}
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-3 mt-20 pt-8 border-t border-[#D8D8E0] font-mono text-xs">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="p-3 rounded-full border border-[#D5D5DF] bg-white text-[#121217] disabled:opacity-30 hover:border-[#121217] transition-colors"
+            >
+              <ChevronLeft size={16} />
+            </button>
+
+            <span className="px-4 text-[#707080] font-bold">
+              PAGE {currentPage} OF {totalPages}
+            </span>
+
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="p-3 rounded-full border border-[#D5D5DF] bg-white text-[#121217] disabled:opacity-30 hover:border-[#121217] transition-colors"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
+
+      </div>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 cursor-pointer"
+          >
+            <div className="relative max-w-4xl max-h-[90vh] w-full" onClick={(e) => e.stopPropagation()}>
+              <button 
+                onClick={() => setSelectedImage(null)}
+                className="absolute -top-10 right-0 text-white/80 hover:text-white font-mono text-xs uppercase flex items-center gap-1"
+              >
+                <span>CLOSE [ESC]</span>
+                <X size={16} />
+              </button>
+              <img 
+                src={selectedImage} 
+                alt="Document Preview" 
+                className="w-full h-auto max-h-[85vh] object-contain rounded-2xl border border-white/20 shadow-2xl"
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   )
 }

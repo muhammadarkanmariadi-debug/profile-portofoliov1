@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { achievementSchema } from '@/lib/validations/achievement';
 
+import { slugify } from '@/lib/utils/slug';
+
 export async function PUT(
   request: Request,
   props: { params: Promise<{ id: string }> }
@@ -11,9 +13,16 @@ export async function PUT(
     const body = await request.json();
     const validatedData = achievementSchema.parse(body);
 
+    const finalSlug = validatedData.slug && validatedData.slug.trim() !== '' 
+      ? slugify(validatedData.slug) 
+      : slugify(validatedData.titleEn);
+
     const updatedAchievement = await prisma.achievement.update({
       where: { id: params.id },
-      data: validatedData,
+      data: {
+        ...validatedData,
+        slug: finalSlug,
+      },
     });
 
     return NextResponse.json(updatedAchievement);

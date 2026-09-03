@@ -1,133 +1,128 @@
 'use client'
 import React from 'react'
-import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { Download, Github, Linkedin, Instagram, Twitter } from 'lucide-react'
-import ScrambleText from './ScrambleText'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { useLanguage } from '../providers'
 import type { Profile } from '@prisma/client'
 
-const Lanyard = dynamic(() => import('@/components/lanyard'), { ssr: false })
+const ChromeTorus = dynamic(() => import('@/components/ChromeTorus'), { 
+  ssr: false,
+  loading: () => <div className="w-full h-full" />
+})
 
 interface HeroProps {
-  profile: Profile;
+  profile?: Profile | null;
 }
 
-const Hero = ({ profile }: HeroProps) => {
-  const { t, lang } = useLanguage()
+export default function Hero({ profile: _profile }: HeroProps) {
+  const { lang } = useLanguage()
+  const sectionRef = React.useRef<HTMLElement>(null)
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start']
+  })
+
+  const yText = useTransform(scrollYProgress, [0, 1], ['0%', '22%'])
+  const opacityText = useTransform(scrollYProgress, [0, 0.8], [1, 0.2])
+  const scaleTorus = useTransform(scrollYProgress, [0, 1], [1, 0.85])
 
   return (
-    <div className='flex flex-col lg:flex-row justify-between items-center gap-16 mx-6 md:mx-10 xl:mx-auto max-w-7xl min-h-[90vh] pt-32 pb-10 overflow-hidden' id='hero'>
+    <section 
+      id="home"
+      ref={sectionRef}
+      className="relative w-full min-h-screen bg-[#EBEBEF] text-[#121217] flex flex-col justify-between p-6 sm:p-10 select-none overflow-hidden border-b border-[#D8D8E0]"
+    >
+      {/* Top Navigation & Meta Bar */}
+      <header className="w-full flex items-center justify-between z-30 font-mono text-xs uppercase tracking-[0.2em]">
+        <Link href="#home" className="font-bold flex items-center gap-2 group cursor-target">
+          <span className="w-7 h-7 rounded border border-[#121217] flex items-center justify-center text-[10px] font-black group-hover:bg-[#121217] group-hover:text-white transition-colors">
+            4R
+          </span>
+          <span className="hidden sm:inline font-extrabold tracking-wider">4RK4N.DEV</span>
+        </Link>
 
-      {/* Left Content */}
-      <div className='z-10 relative flex flex-col justify-center items-center lg:items-start gap-6 text-center lg:text-left w-full lg:w-1/2'>
-
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-secondary/30 bg-secondary/10 text-secondary font-mono text-xs uppercase cursor-target"
-        >
-          <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
-          {t.hero.available}
-        </motion.div>
-
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="flex flex-col gap-2"
-        >
-          <h1 className='font-bold text-on-surface text-5xl md:text-6xl tracking-tight leading-tight mt-2'>
-            {t.hero.titleStart} <br /> <ScrambleText text="ARKAN MARIADI" className="text-primary text-glow" />
-          </h1>
-        </motion.div>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className='text-on-surface-variant text-lg font-sans max-w-xl leading-relaxed mt-2'
-        >
-          {lang === 'id' ? profile.shortDescriptionId : profile.shortDescriptionEn}
-        </motion.p>
-
-        {/* Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mt-4"
-        >
-          <Link href="#work" className="flex items-center justify-center gap-2 px-8 py-4 bg-primary text-white rounded-xl font-mono text-sm uppercase font-bold tracking-widest hover:shadow-[0_0_30px_rgba(108,99,255,0.3)] transition-all cursor-target">
-            {t.hero.viewProjects}
+        <nav className="flex items-center gap-4 sm:gap-8 md:gap-10 text-[#555566] text-[11px] sm:text-xs">
+          <Link href="#work" className="hover:text-[#121217] transition-colors cursor-target font-medium">
+            WORK
           </Link>
-          <Link href="/contact" className="flex items-center justify-center gap-2 px-8 py-4 border border-border hover:border-primary/50 text-on-surface rounded-xl font-mono text-sm uppercase font-bold tracking-widest transition-all cursor-target">
-            {t.hero.getInTouch}
+          <Link href="#about" className="hover:text-[#121217] transition-colors cursor-target font-medium">
+            ABOUT
           </Link>
-          {profile.cvFileUrl && (
-            <a href={profile.cvFileUrl} target="_blank" rel="noopener noreferrer" download="CV.pdf" className="flex items-center justify-center gap-2 px-8 py-4 border border-border hover:border-primary/50 text-on-surface rounded-xl font-mono text-sm uppercase font-bold tracking-widest transition-all cursor-target">
-              <Download size={18} /> CV
-            </a>
-          )}
-        </motion.div>
+          <Link href="#skills" className="hover:text-[#121217] transition-colors cursor-target font-medium">
+            SKILLS
+          </Link>
+          <Link href="#achievements" className="hidden sm:inline-block hover:text-[#121217] transition-colors cursor-target font-medium">
+            CREDENTIALS
+          </Link>
+          <Link href="#contact" className="hover:text-[#121217] transition-colors cursor-target font-medium">
+            CONTACT
+          </Link>
+        </nav>
+      </header>
 
-        {/* Socials */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex items-center gap-6 mt-12"
-        >
-          <span className="text-on-surface-variant font-mono text-sm">{t.hero.availableOn}</span>
-          <div className="flex items-center gap-4">
-            {profile.githubUrl && (
-              <Link href={profile.githubUrl} target="_blank" className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-lg border border-border">
-                <Github size={18} />
-              </Link>
-            )}
-            {profile.linkedinUrl && (
-              <Link href={profile.linkedinUrl} target="_blank" className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-lg border border-border">
-                <Linkedin size={18} />
-              </Link>
-            )}
-            {profile.instagramUrl && (
-              <Link href={profile.instagramUrl} target="_blank" className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-lg border border-border">
-                <Instagram size={18} />
-              </Link>
-            )}
-            {profile.twitterUrl && (
-              <Link href={profile.twitterUrl} target="_blank" className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-lg border border-border">
-                <Twitter size={18} />
-              </Link>
-            )}
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Right Visual (Lanyard) */}
-      <motion.div
-        initial={{ x: 50, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 1 }}
-        className='w-full lg:w-1/2 flex justify-center items-center h-[50vh] xl:h-[80vh] relative'
+      {/* Centerpiece: Huge Typography + 3D Chrome Torus + Hairline Ticks */}
+      <motion.div 
+        style={{ y: yText, opacity: opacityText }}
+        className="relative w-full flex-grow flex items-center justify-center my-auto py-8 transform-gpu"
       >
-        {/* Abstract Glow Background */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[400px] bg-primary/20 blur-[100px] rounded-full z-0 pointer-events-none"></div>
-        <div className="z-10 w-full h-full flex items-center justify-center">
-          <React.Suspense fallback={
-            <div className="flex flex-col items-center justify-center gap-4 text-primary font-mono animate-pulse">
-              <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
-              <span>{t.hero.loading3d}</span>
-            </div>
-          }>
-            <Lanyard position={[0, 0, 20]} />
-          </React.Suspense>
+        
+        {/* Horizontal Hairline & Ticks */}
+        <div className="absolute top-1/2 left-0 w-full -translate-y-1/2 flex items-center justify-between pointer-events-none z-0 px-4 opacity-70">
+          <div className="w-1/4 h-[1px] bg-[#C8C8D2]"></div>
+          <div className="flex gap-2 text-[#A0A0B0] font-mono text-[9px]">
+            <span>+</span>
+            <span>-</span>
+            <span>+</span>
+          </div>
+          <div className="w-1/3 h-[1px] bg-[#C8C8D2]"></div>
+          <div className="flex gap-2 text-[#A0A0B0] font-mono text-[9px]">
+            <span>+</span>
+            <span>-</span>
+            <span>+</span>
+          </div>
+          <div className="w-1/4 h-[1px] bg-[#C8C8D2]"></div>
         </div>
+
+        {/* 3-Row Giant Typography */}
+        <div className="relative z-10 text-center flex flex-col items-center justify-center pointer-events-none w-full max-w-[1400px]">
+          <motion.h1 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="font-heading font-black tracking-tighter leading-[0.88] text-[#121217] uppercase w-full flex flex-col items-center justify-center select-none"
+          >
+            <span className="text-[13vw] sm:text-[12vw] lg:text-[15vw] leading-none block">
+              {lang === 'id' ? 'DIGITAL' : 'DIGITAL'}
+            </span>
+            <span className="text-[13vw] sm:text-[12vw] lg:text-[15vw] leading-none block">
+              {lang === 'id' ? 'DESIGN' : 'DESIGN'}
+            </span>
+            <span className="text-[8.2vw] sm:text-[7.2vw] lg:text-[9.2vw] leading-none block">
+              {lang === 'id' ? 'EXPERIENCE' : 'EXPERIENCE'}
+            </span>
+          </motion.h1>
+        </div>
+
+        {/* 3D Chrome Torus Knot Layered in the Center */}
+        <motion.div 
+          style={{ scale: scaleTorus }}
+          className="absolute z-20 w-[90px] h-[90px] sm:w-[150px] sm:h-[150px] lg:w-[600px] lg:h-[600px] pointer-events-none flex items-center justify-center overflow-visible transform-gpu"
+        >
+          <ChromeTorus />
+        </motion.div>
+
       </motion.div>
-    </div>
+
+      {/* Bottom Meta Bar */}
+      <footer className="w-full flex items-center justify-between z-30 font-mono text-xs uppercase tracking-[0.2em] text-[#707080] pt-4">
+        <span>4RK4N.DEV</span>
+        <Link href="#about" className="flex items-center gap-1.5 hover:text-[#121217] transition-colors cursor-target font-semibold">
+          <span>SCROLL TO EXPLORE</span>
+          <span>↓</span>
+        </Link>
+      </footer>
+    </section>
   )
 }
-
-export default Hero

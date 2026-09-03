@@ -36,6 +36,7 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
   } = useForm<ProjectFormValues>({
     resolver: zodResolver(projectSchema) as any,
     defaultValues: initialData ? {
+      slug: initialData.slug || '',
       categoryEn: initialData.categoryEn,
       categoryId: initialData.categoryId,
       titleEn: initialData.titleEn,
@@ -51,6 +52,7 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
       order: initialData.order,
       techStackIds: initialData.techStack.map(t => t.id),
     } : {
+      slug: '',
       order: 0,
       isDeploy: false,
       techStackIds: [],
@@ -163,6 +165,16 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
               className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
             />
             {errors.titleId && <p className="text-red-500 text-xs">{errors.titleId.message}</p>}
+          </div>
+
+          <div className="space-y-2 md:col-span-2">
+            <label className="text-sm text-gray-400">Custom URL Slug (optional, auto-generated from Title EN if blank)</label>
+            <input 
+              {...register('slug')} 
+              placeholder="e.g. gigtix-ticketing-app"
+              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white font-mono text-sm focus:border-primary outline-none transition-colors"
+            />
+            {errors.slug && <p className="text-red-500 text-xs">{errors.slug.message}</p>}
           </div>
           
           <div className="space-y-2">

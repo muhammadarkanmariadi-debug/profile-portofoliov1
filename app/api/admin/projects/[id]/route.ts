@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { projectSchema } from '@/lib/validations/project';
 
+import { slugify } from '@/lib/utils/slug';
+
 export async function PUT(
   request: Request,
   props: { params: Promise<{ id: string }> }
@@ -12,11 +14,15 @@ export async function PUT(
     const validatedData = projectSchema.parse(body);
 
     const { techStackIds, ...projectData } = validatedData;
+    const finalSlug = projectData.slug && projectData.slug.trim() !== '' 
+      ? slugify(projectData.slug) 
+      : slugify(projectData.titleEn);
 
     const updatedProject = await prisma.project.update({
       where: { id: params.id },
       data: {
         ...projectData,
+        slug: finalSlug,
         techStack: {
           set: techStackIds.map((id) => ({ id })),
         },

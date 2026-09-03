@@ -22,7 +22,8 @@ const LanguageContext = createContext<{
 
 export const useLanguage = () => useContext(LanguageContext)
 
-// --- Providers Wrapper ---
+import { SmoothScrollProvider } from './providers/SmoothScrollProvider'
+
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>('dark')
   const [lang, setLang] = useState<Language>('id')
@@ -70,7 +71,9 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <ThemeContext.Provider value={{theme, toggleTheme}}>
       <LanguageContext.Provider value={{ lang, t: translations[lang], toggleLanguage }}>
-        {children}
+        <SmoothScrollProvider>
+          {children}
+        </SmoothScrollProvider>
       </LanguageContext.Provider>
     </ThemeContext.Provider>
   )

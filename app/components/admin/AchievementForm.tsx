@@ -34,6 +34,7 @@ export default function AchievementForm({ initialData }: { initialData?: Achieve
   } = useForm<AchievementFormValues>({
     resolver: zodResolver(achievementSchema) as any,
     defaultValues: initialData ? {
+      slug: initialData.slug || '',
       titleEn: initialData.titleEn,
       titleId: initialData.titleId,
       statusEn: initialData.statusEn,
@@ -44,6 +45,7 @@ export default function AchievementForm({ initialData }: { initialData?: Achieve
       imageUrl: initialData.imageUrl,
       order: initialData.order,
     } : {
+      slug: '',
       order: 0,
       date: new Date(),
     }
@@ -114,6 +116,16 @@ export default function AchievementForm({ initialData }: { initialData?: Achieve
               className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
             />
             {errors.titleId && <p className="text-red-500 text-xs">{errors.titleId.message}</p>}
+          </div>
+
+          <div className="space-y-2 md:col-span-2">
+            <label className="text-sm text-gray-400">Custom URL Slug (optional, auto-generated from Title EN if blank)</label>
+            <input 
+              {...register('slug')} 
+              placeholder="e.g. 1st-place-national-hackathon"
+              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white font-mono text-sm focus:border-primary outline-none transition-colors"
+            />
+            {errors.slug && <p className="text-red-500 text-xs">{errors.slug.message}</p>}
           </div>
         </div>
 

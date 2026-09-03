@@ -16,13 +16,22 @@ export async function GET() {
   }
 }
 
+import { slugify } from '@/lib/utils/slug';
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const validatedData = achievementSchema.parse(body);
 
+    const finalSlug = validatedData.slug && validatedData.slug.trim() !== '' 
+      ? slugify(validatedData.slug) 
+      : slugify(validatedData.titleEn);
+
     const newAchievement = await prisma.achievement.create({
-      data: validatedData,
+      data: {
+        ...validatedData,
+        slug: finalSlug,
+      },
     });
 
     return NextResponse.json(newAchievement, { status: 201 });

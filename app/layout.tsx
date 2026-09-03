@@ -3,7 +3,7 @@ import { Inter, Plus_Jakarta_Sans, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-import TargetCursor from '@/components/TargetCursor'
+import { SmoothCursor } from '@/components/ui/smooth-cursor'
 import { Providers } from './providers'
 import { getProfile } from '@/lib/services/profile.service'
 
@@ -23,8 +23,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Portfolio - Arkan Mariadi',
-  description: 'Junior Fullstack Web Developer Portfolio'
+  title: 'Muhammad Arkan Mariadi — Full-Stack Developer (4RK4N.DEV)',
+  description: 'Full-stack developer building production web applications with Next.js, React, Nest.js, and Laravel.'
 }
 
 export default async function RootLayout({
@@ -38,8 +38,9 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${plusJakartaSans.variable} ${geistMono.variable} font-sans overflow-x-hidden antialiased bg-background text-text-primary min-h-screen flex flex-col`}>
         <Providers>
+          <SmoothCursor />
           <Navbar />
-          <TargetCursor targetSelector=".cursor-target, .admin-panel h1, .admin-panel h2, .admin-panel h3, .admin-panel p, .admin-panel a, .admin-panel button, .admin-panel span, .admin-panel label, .admin-panel th, .admin-panel td" />
+         
           {children}
           <Footer profile={profile} />
         </Providers>

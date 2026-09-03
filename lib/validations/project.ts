@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const projectSchema = z.object({
+  slug: z.string().optional().nullable().or(z.literal('')),
   categoryEn: z.string().min(1, 'Category (EN) is required'),
   categoryId: z.string().min(1, 'Category (ID) is required'),
   titleEn: z.string().min(1, 'Title (EN) is required'),

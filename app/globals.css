@@ -67,35 +67,83 @@
 }
 
 @layer utilities {
-  .glass-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
+  .editorial-card {
+    background: var(--surface);
     border: 1px solid var(--border);
-    transition: all 0.3s ease;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+  }
+  .editorial-card:hover {
+    border-color: rgba(108, 99, 255, 0.4);
+  }
+  .glass-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: all 0.25s ease;
   }
   .glass-card:hover {
-    border-color: var(--glass-hover-border);
-    box-shadow: 0 0 30px -5px var(--glass-hover-shadow);
-  }
-  .grid-texture {
-    background-image: radial-gradient(rgba(108, 99, 255, 0.05) 1px, transparent 0);
-    background-size: 24px 24px;
-  }
-  .text-glow {
-    text-shadow: 0 0 20px rgba(108, 99, 255, 0.4);
-  }
-  .timeline-line {
-    background: linear-gradient(to bottom, var(--primary) 0%, transparent 100%);
+    border-color: rgba(108, 99, 255, 0.4);
   }
   .skill-badge {
-    background: rgba(0, 217, 192, 0.05);
-    border: 1px solid rgba(0, 217, 192, 0.15);
-    transition: all 0.3s ease;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
   }
   .skill-badge:hover {
-    background: rgba(0, 217, 192, 0.1);
-    border-color: var(--secondary);
-    color: var(--secondary);
+    border-color: var(--primary);
+    color: var(--primary);
   }
+  .timeline-line {
+    background: var(--border);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom Minimalist Studio Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #EBEBEF;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #B4B4C2;
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #121217;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #B4B4C2 #EBEBEF;
+}
+
+/* High-contrast editorial text selection */
+::selection {
+  background-color: #121217;
+  color: #FAFAFC;
+}
+
+::-moz-selection {
+  background-color: #121217;
+  color: #FAFAFC;
 }
 

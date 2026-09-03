@@ -19,16 +19,22 @@ export async function GET() {
   }
 }
 
+import { slugify } from '@/lib/utils/slug';
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const validatedData = projectSchema.parse(body);
 
     const { techStackIds, ...projectData } = validatedData;
+    const finalSlug = projectData.slug && projectData.slug.trim() !== '' 
+      ? slugify(projectData.slug) 
+      : slugify(projectData.titleEn);
 
     const newProject = await prisma.project.create({
       data: {
         ...projectData,
+        slug: finalSlug,
         techStack: {
           connect: techStackIds.map((id) => ({ id })),
         },
