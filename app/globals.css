@@ -66,6 +66,28 @@
   }
 }
 
+/* Completely hide default cursor across all elements on devices with a mouse/fine pointer */
+@media (pointer: fine) {
+  *,
+  *::before,
+  *::after,
+  html,
+  body,
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  label,
+  [role="button"],
+  [role="link"],
+  .cursor-pointer,
+  .cursor-text,
+  .cursor-default {
+    cursor: none !important;
+  }
+}
+
 @layer utilities {
   .editorial-card {
     background: var(--surface);

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
 import type { Skill } from '@prisma/client'
+import { usePathname } from 'next/navigation'
 
 interface ProjectCardProps {
   id: string
@@ -28,6 +29,7 @@ const themeColors = [
   'bg-[#A3C4BC]'  // Cool teal
 ]
 
+
 export default function ProjectCard({
   id,
   slug,
@@ -43,18 +45,18 @@ export default function ProjectCard({
   const displayDomain = liveUrl ? liveUrl.replace(/^https?:\/\//, '').replace(/\/$/, '') : '4rkan.dev/project'
   const bgClass = colorTheme || themeColors[parseInt(index, 10) % themeColors.length] || 'bg-[#9CC5D8]'
   const projectHref = `/projects/${slug || id}`
-
+  const pathname = usePathname()
   return (
     <article className="w-full text-[#FAFAFC] pt-12 pb-20 border-b border-[#22222D]">
-      
+
       {/* Topline: Index + Domain */}
       <div className="w-full flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-[#8E8E9F] mb-6">
         <span>{index}</span>
         {liveUrl && (
-          <a 
-            href={liveUrl} 
-            target="_blank" 
-            rel="noopener noreferrer" 
+          <a
+            href={liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="hover:text-white transition-colors flex items-center gap-1 cursor-target"
           >
             <span>{displayDomain}</span>
@@ -66,7 +68,7 @@ export default function ProjectCard({
       {/* Heading: Big Title (Left) + Summary (Right) */}
       <div className="w-full flex flex-col md:flex-row md:items-start justify-between gap-6 mb-10">
         <Link href={projectHref} className="group/title">
-          <h3 className="font-heading font-extrabold text-4xl sm:text-6xl lg:text-7xl tracking-tighter text-[#FAFAFC] group-hover/title:text-[#82D8CE] transition-colors">
+          <h3 className={`font-heading font-extrabold text-4xl sm:text-6xl lg:text-7xl tracking-tighter ${pathname === "/projects" ? 'text-black' : 'text-[#FAFAFC]'} group-hover/title:text-[#82D8CE] transition-colors`}>
             {title}
           </h3>
         </Link>
@@ -81,13 +83,13 @@ export default function ProjectCard({
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
         className="w-full"
       >
-        <Link 
+        <Link
           href={projectHref}
           className={`block w-full ${bgClass} rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-12 cursor-target group relative overflow-hidden transform-gpu shadow-lg hover:shadow-2xl transition-shadow duration-500`}
         >
           {/* Desktop Browser Window */}
           <div className="w-full bg-[#1A1A22] rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden border border-[#2D2D3A]">
-            
+
             {/* Browser Bar */}
             <div className="w-full bg-[#121217] px-4 py-3 flex items-center justify-between border-b border-[#22222D]">
               {/* 3 Window Control Dots */}
@@ -140,7 +142,7 @@ export default function ProjectCard({
           )}
         </div>
 
-        <Link 
+        <Link
           href={projectHref}
           className="text-[#8E8E9F] hover:text-white transition-colors uppercase flex items-center gap-1 font-bold cursor-target"
         >
