@@ -76,12 +76,12 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
   const onSubmit = async (data: ProjectFormValues) => {
     setIsSaving(true);
     setError('');
-    
+
     try {
-      const url = initialData 
-        ? `/api/admin/projects/${initialData.id}` 
+      const url = initialData
+        ? `/api/admin/projects/${initialData.id}`
         : '/api/admin/projects';
-        
+
       const res = await fetch(url, {
         method: initialData ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -113,7 +113,7 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
   return (
     <div>
       <div className="flex items-center gap-4 mb-8">
-        <Link 
+        <Link
           href="/admin/projects"
           className="p-2 bg-white/5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors"
         >
@@ -125,12 +125,12 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 max-w-4xl">
-        
+
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Category (EN) *</label>
-            <input 
-              {...register('categoryEn')} 
+            <input
+              {...register('categoryEn')}
               placeholder="e.g. Web App, Mobile App, UI/UX"
               className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
             />
@@ -139,8 +139,8 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
 
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Category (ID) *</label>
-            <input 
-              {...register('categoryId')} 
+            <input
+              {...register('categoryId')}
               placeholder="e.g. Aplikasi Web, Aplikasi Mobile"
               className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
             />
@@ -149,8 +149,8 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
 
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Title / Name (EN) *</label>
-            <input 
-              {...register('titleEn')} 
+            <input
+              {...register('titleEn')}
               placeholder="e.g. GigTix - Ticketing App"
               className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
             />
@@ -159,8 +159,8 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
 
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Title / Name (ID) *</label>
-            <input 
-              {...register('titleId')} 
+            <input
+              {...register('titleId')}
               placeholder="e.g. GigTix - Aplikasi Tiket"
               className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
             />
@@ -169,18 +169,18 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
 
           <div className="space-y-2 md:col-span-2">
             <label className="text-sm text-gray-400">Custom URL Slug (optional, auto-generated from Title EN if blank)</label>
-            <input 
-              {...register('slug')} 
+            <input
+              {...register('slug')}
               placeholder="e.g. gigtix-ticketing-app"
               className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white font-mono text-sm focus:border-primary outline-none transition-colors"
             />
             {errors.slug && <p className="text-red-500 text-xs">{errors.slug.message}</p>}
           </div>
-          
+
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Your Role (EN)</label>
-            <input 
-              {...register('roleEn')} 
+            <input
+              {...register('roleEn')}
               placeholder="e.g. Fullstack Developer"
               className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
             />
@@ -188,17 +188,17 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
 
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Your Role (ID)</label>
-            <input 
-              {...register('roleId')} 
+            <input
+              {...register('roleId')}
               placeholder="e.g. Pengembang Fullstack"
               className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
             />
           </div>
-          
+
           <div className="space-y-2 pt-8 md:col-span-2">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input 
-                type="checkbox" 
+            <label className="flex items-center gap-3 ">
+              <input
+                type="checkbox"
                 {...register('isDeploy')}
                 className="w-5 h-5 accent-primary rounded bg-black/50 border-white/10"
               />
@@ -210,8 +210,8 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
         <div className="grid md:grid-cols-2 gap-6 border-t border-white/10 pt-6">
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Description (EN)</label>
-            <textarea 
-              {...register('descriptionEn')} 
+            <textarea
+              {...register('descriptionEn')}
               rows={5}
               className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors resize-none"
               placeholder="Describe the project, its goals, and what you built..."
@@ -219,8 +219,8 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
           </div>
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Description (ID)</label>
-            <textarea 
-              {...register('descriptionId')} 
+            <textarea
+              {...register('descriptionId')}
               rows={5}
               className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors resize-none"
               placeholder="Jelaskan proyek ini, tujuannya, dan apa yang kamu bangun..."
@@ -231,8 +231,8 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
         <div className="grid md:grid-cols-2 gap-6 border-t border-white/10 pt-6">
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Live URL {isDeploy && '*'}</label>
-            <input 
-              {...register('liveUrl')} 
+            <input
+              {...register('liveUrl')}
               placeholder="https://..."
               className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
             />
@@ -240,8 +240,8 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
           </div>
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Source Code (GitHub) URL</label>
-            <input 
-              {...register('sourceCodeUrl')} 
+            <input
+              {...register('sourceCodeUrl')}
               placeholder="https://github.com/..."
               className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
             />
@@ -251,8 +251,8 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
 
         <div className="border-t border-white/10 pt-6">
           <label className="text-sm text-gray-400 block mb-4">Project Image Thumbnail</label>
-          <FileUpload 
-            value={imageUrl || ''} 
+          <FileUpload
+            value={imageUrl || ''}
             onChange={(url) => setValue('imageUrl', url)}
             label="Upload Thumbnail"
             folder="portfolio/projects"
@@ -262,7 +262,7 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
         {/* Tech Stack Selection */}
         <div className="border-t border-white/10 pt-6">
           <label className="text-sm text-gray-400 block mb-4">Select Tech Stack</label>
-          
+
           {Object.keys(groupedSkills).length === 0 ? (
             <div className="text-sm text-gray-500 italic bg-white/5 p-4 rounded-lg">
               No skills found. Please add skills first before assigning them to projects.
@@ -275,7 +275,7 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
                     {category.replace(/_/g, ' ')}
                   </h4>
                   <div className="flex flex-wrap gap-2">
-                    {groupedSkills[category].sort((a,b) => a.order - b.order).map(skill => {
+                    {groupedSkills[category].sort((a, b) => a.order - b.order).map(skill => {
                       const isSelected = techStackIds.includes(skill.id);
                       return (
                         <button
@@ -284,8 +284,8 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
                           onClick={() => toggleSkill(skill.id)}
                           className={`
                             flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium border transition-all
-                            ${isSelected 
-                              ? 'bg-primary/20 border-primary text-primary' 
+                            ${isSelected
+                              ? 'bg-primary/20 border-primary text-primary'
                               : 'bg-white/5 border-white/10 text-gray-400 hover:border-white/30 hover:text-white'
                             }
                           `}

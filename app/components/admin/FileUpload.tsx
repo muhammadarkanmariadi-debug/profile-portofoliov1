@@ -11,10 +11,10 @@ interface FileUploadProps {
   folder?: string;
 }
 
-export default function FileUpload({ 
-  value, 
-  onChange, 
-  accept = "image/*", 
+export default function FileUpload({
+  value,
+  onChange,
+  accept = "image/*",
   label = "Upload file",
   folder = "portfolio"
 }: FileUploadProps) {
@@ -48,7 +48,7 @@ export default function FileUpload({
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Upload failed');
-      
+
       onChange(data.secure_url);
     } catch (err: any) {
       setError(err.message);
@@ -70,7 +70,7 @@ export default function FileUpload({
                 <span className="text-sm truncate text-gray-300">{value.split('/').pop()}</span>
               </div>
             )}
-            
+
             <button
               type="button"
               onClick={() => onChange('')}
@@ -80,7 +80,7 @@ export default function FileUpload({
             </button>
           </div>
         ) : (
-          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/20 rounded-xl hover:border-primary/50 hover:bg-white/5 transition-all cursor-pointer">
+          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/20 rounded-xl hover:border-primary/50 hover:bg-white/5 transition-all ">
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               {isUploading ? (
                 <Loader2 className="w-8 h-8 text-primary animate-spin mb-2" />
@@ -91,16 +91,16 @@ export default function FileUpload({
                 {isUploading ? 'Uploading...' : <><span className="font-semibold text-primary">{label}</span> or drag and drop</>}
               </p>
             </div>
-            <input 
-              type="file" 
-              className="hidden" 
+            <input
+              type="file"
+              className="hidden"
               accept={accept}
               onChange={handleUpload}
               disabled={isUploading}
             />
           </label>
         )}
-        
+
         {error && <p className="text-sm text-red-500">{error}</p>}
       </div>
     </div>

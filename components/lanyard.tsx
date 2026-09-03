@@ -58,10 +58,10 @@ export default function Lanyard({
   if (isMobile) {
     return (
       <div className="z-0 relative flex justify-center items-center w-full h-[400px]">
-        <div className="w-64 h-[350px] bg-gradient-to-b from-primary to-secondary p-[2px] rounded-2xl shadow-xl transition-all duration-300 hover:rotate-3 hover:scale-105 hover:shadow-primary/50 cursor-pointer">
+        <div className="w-64 h-[350px] bg-gradient-to-b from-primary to-secondary p-[2px] rounded-2xl shadow-xl transition-all duration-300 hover:rotate-3 hover:scale-105 hover:shadow-primary/50 ">
           <div className="w-full h-full bg-surface rounded-2xl flex flex-col items-center justify-center p-6 gap-4">
             <div className="w-24 h-24 rounded-full bg-slate-800 border-4 border-surface shadow-inner overflow-hidden">
-               <div className="w-full h-full bg-gradient-to-tr from-primary to-secondary opacity-50"></div>
+              <div className="w-full h-full bg-gradient-to-tr from-primary to-secondary opacity-50"></div>
             </div>
             <div className="text-center">
               <h3 className="text-text-primary font-bold text-xl">Arkan Mariadi</h3>

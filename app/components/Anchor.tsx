@@ -33,7 +33,7 @@ const Anchor = () => {
         >
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className='bg-white shadow-md p-2 rounded-full text-black transition cursor-pointer'
+            className='bg-white shadow-md p-2 rounded-full text-black transition '
           >
             <Image
               src='/assets/images/rocket.png'

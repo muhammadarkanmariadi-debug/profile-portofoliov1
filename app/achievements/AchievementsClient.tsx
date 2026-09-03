@@ -21,7 +21,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
   const { lang } = useLanguage()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  
+
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(6)
@@ -30,13 +30,13 @@ export default function AchievementsClient({ initialAchievements }: Achievements
   const filteredAchievements = initialAchievements.filter(achievement => {
     const title = lang === 'id' ? achievement.titleId : achievement.titleEn
     const status = lang === 'id' ? achievement.statusId : achievement.statusEn
-    
-    return title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-           status?.toLowerCase().includes(searchQuery.toLowerCase())
+
+    return title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      status?.toLowerCase().includes(searchQuery.toLowerCase())
   })
 
   const totalPages = Math.ceil(filteredAchievements.length / itemsPerPage)
-  
+
   // Slice for current page
   const currentAchievements = filteredAchievements.slice(
     (currentPage - 1) * itemsPerPage,
@@ -50,17 +50,17 @@ export default function AchievementsClient({ initialAchievements }: Achievements
 
   return (
     <main className="w-full bg-[#EBEBEF] text-[#121217] pt-28 pb-32 min-h-screen px-6 sm:px-10 relative overflow-hidden select-none border-b border-[#D8D8E0]">
-      
+
       {/* Background Watermark 04 */}
       <div className="absolute top-20 right-0 font-heading font-black text-[25vw] leading-none text-[#121217] opacity-[0.04] pointer-events-none -z-0">
         04
       </div>
 
       <div className="max-w-[1400px] mx-auto relative z-10">
-        
+
         {/* Editorial Top Section Header */}
         <header className="mb-16 border-b border-[#D8D8E0] pb-10">
-          
+
           {/* Index & Breadcrumb */}
           <div className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.25em] text-[#707080] mb-6">
             <div className="flex items-center gap-3">
@@ -86,7 +86,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-between pt-6 border-t border-[#D8D8E0]">
             <div className="relative group w-full sm:max-w-md">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#707080] group-focus-within:text-[#121217] transition-colors" size={16} />
-              <input 
+              <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -94,9 +94,9 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                 placeholder="Filter by competition, cert, or year..."
               />
             </div>
-            
+
             <div className="relative self-end sm:self-auto">
-              <button 
+              <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="flex items-center justify-between gap-3 px-5 py-2.5 rounded-full bg-[#FFFFFF] border border-[#D5D5DF] text-[#121217] font-mono text-xs uppercase tracking-wider hover:border-[#121217] transition-all font-bold"
               >
@@ -179,13 +179,13 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                   </div>
 
                   {item.imageUrl && (
-                    <Link 
+                    <Link
                       href={`/achievements/${item.slug || item.id}`}
-                      className="w-full lg:w-1/2 aspect-[16/10] rounded-2xl overflow-hidden bg-white/60 border border-black/10 shadow-lg cursor-pointer group-hover:scale-[1.02] transition-transform duration-500 relative block"
+                      className="w-full lg:w-1/2 aspect-[16/10] rounded-2xl overflow-hidden bg-white/60 border border-black/10 shadow-lg  group-hover:scale-[1.02] transition-transform duration-500 relative block"
                     >
-                      <img 
-                        src={item.imageUrl} 
-                        alt={item.titleEn} 
+                      <img
+                        src={item.imageUrl}
+                        alt={item.titleEn}
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center font-mono text-xs uppercase font-bold text-white backdrop-blur-xs">
@@ -204,9 +204,8 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.08 }}
-                className={`w-full rounded-3xl p-6 sm:p-8 ${themeClass} border shadow-sm flex flex-col ${
-                  isAlternate ? 'lg:flex-row-reverse' : 'lg:flex-row'
-                } items-center gap-8 relative overflow-hidden group`}
+                className={`w-full rounded-3xl p-6 sm:p-8 ${themeClass} border shadow-sm flex flex-col ${isAlternate ? 'lg:flex-row-reverse' : 'lg:flex-row'
+                  } items-center gap-8 relative overflow-hidden group`}
               >
                 <div className="w-full lg:w-3/5 space-y-4">
                   <div className="flex items-center justify-between font-mono text-xs uppercase tracking-wider text-[#555566]">
@@ -228,7 +227,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                   </p>
 
                   <div className="pt-2 flex items-center gap-4">
-                    <Link 
+                    <Link
                       href={`/achievements/${item.slug || item.id}`}
                       className="font-mono text-xs uppercase tracking-wider font-bold text-[#121217] hover:underline flex items-center gap-1 cursor-target"
                     >
@@ -239,13 +238,13 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                 </div>
 
                 {item.imageUrl && (
-                  <Link 
+                  <Link
                     href={`/achievements/${item.slug || item.id}`}
-                    className="w-full lg:w-2/5 aspect-[16/10] rounded-2xl overflow-hidden bg-white/70 border border-black/10 shadow-md cursor-pointer group-hover:scale-[1.02] transition-transform duration-500 relative block"
+                    className="w-full lg:w-2/5 aspect-[16/10] rounded-2xl overflow-hidden bg-white/70 border border-black/10 shadow-md  group-hover:scale-[1.02] transition-transform duration-500 relative block"
                   >
-                    <img 
-                      src={item.imageUrl} 
-                      alt={item.titleEn} 
+                    <img
+                      src={item.imageUrl}
+                      alt={item.titleEn}
                       className="w-full h-full object-cover"
                     />
                   </Link>
@@ -291,24 +290,24 @@ export default function AchievementsClient({ initialAchievements }: Achievements
       {/* Lightbox Modal */}
       <AnimatePresence>
         {selectedImage && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedImage(null)}
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 cursor-pointer"
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 "
           >
             <div className="relative max-w-4xl max-h-[90vh] w-full" onClick={(e) => e.stopPropagation()}>
-              <button 
+              <button
                 onClick={() => setSelectedImage(null)}
                 className="absolute -top-10 right-0 text-white/80 hover:text-white font-mono text-xs uppercase flex items-center gap-1"
               >
                 <span>CLOSE [ESC]</span>
                 <X size={16} />
               </button>
-              <img 
-                src={selectedImage} 
-                alt="Document Preview" 
+              <img
+                src={selectedImage}
+                alt="Document Preview"
                 className="w-full h-auto max-h-[85vh] object-contain rounded-2xl border border-white/20 shadow-2xl"
               />
             </div>

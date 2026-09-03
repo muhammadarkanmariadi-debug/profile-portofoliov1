@@ -26,7 +26,6 @@ export default function Hero({ profile: _profile }: HeroProps) {
 
   const yText = useTransform(scrollYProgress, [0, 1], ['0%', '22%'])
   const opacityText = useTransform(scrollYProgress, [0, 0.8], [1, 0.2])
-  const scaleTorus = useTransform(scrollYProgress, [0, 1], [1, 0.85])
 
   return (
     <section 
@@ -105,13 +104,10 @@ export default function Hero({ profile: _profile }: HeroProps) {
           </motion.h1>
         </div>
 
-        {/* 3D Chrome Torus Knot Layered in the Center */}
-        <motion.div 
-          style={{ scale: scaleTorus }}
-          className="absolute z-20 w-[90px] h-[90px] sm:w-[150px] sm:h-[150px] lg:w-[600px] lg:h-[600px] pointer-events-none flex items-center justify-center overflow-visible transform-gpu"
-        >
+        {/* 3D Chrome Torus Knot Layered in the Center — Perfectly Stable & Centered */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none z-20 flex items-center justify-center overflow-visible">
           <ChromeTorus />
-        </motion.div>
+        </div>
 
       </motion.div>
 
