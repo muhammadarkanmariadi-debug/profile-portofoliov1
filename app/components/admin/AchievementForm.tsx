@@ -34,17 +34,17 @@ export default function AchievementForm({ initialData }: { initialData?: Achieve
     resolver: zodResolver(achievementSchema) as any,
     defaultValues: initialData ? {
       slug: initialData.slug || '',
-      titleEn: initialData.titleEn,
-      titleId: initialData.titleId,
-      statusEn: initialData.statusEn,
-      statusId: initialData.statusId,
-      descriptionEn: initialData.descriptionEn,
-      descriptionId: initialData.descriptionId,
+      title: initialData.title,
+      status: initialData.status,
+      description: initialData.description || '',
       date: initialData.date,
-      imageUrl: initialData.imageUrl,
+      imageUrl: initialData.imageUrl || '',
       order: initialData.order,
     } : {
       slug: '',
+      title: '',
+      status: '',
+      description: '',
       order: 0,
       date: new Date(),
     }
@@ -110,18 +110,18 @@ export default function AchievementForm({ initialData }: { initialData?: Achieve
             <div className="space-y-2">
               <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Award / Honor Title *</label>
               <input 
-                {...register('titleEn')} 
-                placeholder="e.g. 1st Place National Software Engineering Hackathon"
+                {...register('title')} 
+                placeholder="e.g. National Language Olympiad Festival (FOBN)"
                 className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors"
               />
-              {errors.titleEn && <p className="text-rose-500 font-mono text-xs">{errors.titleEn.message}</p>}
+              {errors.title && <p className="text-rose-500 font-mono text-xs">{errors.title.message}</p>}
             </div>
 
             <div className="space-y-2">
               <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Custom URL Slug (Optional)</label>
               <input 
                 {...register('slug')} 
-                placeholder="e.g. 1st-place-national-hackathon"
+                placeholder="e.g. national-language-olympiad-fobn"
                 className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary font-mono text-xs focus:border-primary outline-none transition-colors"
               />
               {errors.slug && <p className="text-rose-500 font-mono text-xs">{errors.slug.message}</p>}
@@ -131,11 +131,11 @@ export default function AchievementForm({ initialData }: { initialData?: Achieve
               <div className="space-y-2">
                 <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Recognition Standing / Status *</label>
                 <input 
-                  {...register('statusEn')} 
-                  placeholder="e.g. 1st Place Winner, Certified Developer"
+                  {...register('status')} 
+                  placeholder="e.g. National Gold Medalist, AWS Certified Completion"
                   className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors"
                 />
-                {errors.statusEn && <p className="text-rose-500 font-mono text-xs">{errors.statusEn.message}</p>}
+                {errors.status && <p className="text-rose-500 font-mono text-xs">{errors.status.message}</p>}
               </div>
 
               <div className="space-y-2">
@@ -153,7 +153,7 @@ export default function AchievementForm({ initialData }: { initialData?: Achieve
             <div className="space-y-2">
               <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Description & Scope</label>
               <textarea 
-                {...register('descriptionEn')} 
+                {...register('description')} 
                 rows={4}
                 className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors resize-none leading-relaxed"
                 placeholder="Details about the competition scope, project presented, and organizing body..."

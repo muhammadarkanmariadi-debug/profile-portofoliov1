@@ -17,16 +17,12 @@ export async function PUT(
     const { techStackIds, ...projectData } = validatedData;
     const finalSlug = projectData.slug && projectData.slug.trim() !== '' 
       ? slugify(projectData.slug) 
-      : slugify(projectData.titleEn);
+      : slugify(projectData.title);
 
     const updatedProject = await prisma.project.update({
       where: { id: params.id },
       data: {
         ...projectData,
-        categoryId: projectData.categoryId || projectData.categoryEn,
-        titleId: projectData.titleId || projectData.titleEn,
-        descriptionId: projectData.descriptionId ?? projectData.descriptionEn,
-        roleId: projectData.roleId ?? projectData.roleEn,
         slug: finalSlug,
         techStack: {
           set: techStackIds.map((id) => ({ id })),
@@ -88,4 +84,3 @@ export async function DELETE(
     return NextResponse.json({ error: 'Failed to delete project' }, { status: 500 });
   }
 }
-

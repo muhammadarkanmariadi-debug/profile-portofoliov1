@@ -28,8 +28,8 @@ export default function AchievementsClient({ initialAchievements }: Achievements
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   const filteredAchievements = initialAchievements.filter(achievement => {
-    const title = (lang === 'id' ? achievement.titleId : achievement.titleEn) || achievement.titleEn || achievement.titleId || ''
-    const status = (lang === 'id' ? achievement.statusId : achievement.statusEn) || achievement.statusEn || achievement.statusId || ''
+    const title = achievement.title || ''
+    const status = achievement.status || ''
 
     return title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       status.toLowerCase().includes(searchQuery.toLowerCase())
@@ -150,12 +150,12 @@ export default function AchievementsClient({ initialAchievements }: Achievements
 
                     <Link href={`/achievements/${item.slug || item.id}`} className="group/title">
                       <h2 className="font-heading font-black text-3xl sm:text-5xl text-[#121217] leading-[1.05] group-hover/title:text-[#707080] transition-colors">
-                        {(lang === 'id' ? item.titleId : item.titleEn) || item.titleEn || item.titleId}
+                        {item.title}
                       </h2>
                     </Link>
 
                     <p className="text-base text-[#333344] font-sans leading-relaxed">
-                      {(lang === 'id' ? item.descriptionId : item.descriptionEn) || item.descriptionEn || item.descriptionId}
+                      {item.description}
                     </p>
 
                     <div className="pt-4 flex flex-wrap items-center gap-4">
@@ -185,7 +185,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                     >
                       <img
                         src={item.imageUrl}
-                        alt={item.titleEn}
+                        alt={item.title}
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center font-mono text-xs uppercase font-bold text-white backdrop-blur-xs">
@@ -211,19 +211,19 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                   <div className="flex items-center justify-between font-mono text-xs uppercase tracking-wider text-[#555566]">
                     <span className="font-bold text-[#121217] flex items-center gap-1.5">
                       <Award size={14} />
-                      <span>{(lang === 'id' ? item.statusId : item.statusEn) || item.statusEn || item.statusId}</span>
+                      <span>{item.status}</span>
                     </span>
                     <span>{new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}</span>
                   </div>
 
                   <Link href={`/achievements/${item.slug || item.id}`} className="group/title block">
                     <h3 className="font-heading font-black text-2xl sm:text-3xl text-[#121217] leading-tight group-hover/title:text-[#707080] transition-colors">
-                      {(lang === 'id' ? item.titleId : item.titleEn) || item.titleEn || item.titleId}
+                      {item.title}
                     </h3>
                   </Link>
 
                   <p className="text-sm text-[#444455] font-sans leading-relaxed">
-                    {(lang === 'id' ? item.descriptionId : item.descriptionEn) || item.descriptionEn || item.descriptionId}
+                    {item.description}
                   </p>
 
                   <div className="pt-2 flex items-center gap-4">
@@ -244,7 +244,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                   >
                     <img
                       src={item.imageUrl}
-                      alt={item.titleEn}
+                      alt={item.title}
                       className="w-full h-full object-cover"
                     />
                   </Link>

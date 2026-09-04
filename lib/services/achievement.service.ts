@@ -5,14 +5,11 @@ import { slugify } from '@/lib/utils/slug';
 const mockAchievements: Achievement[] = [
   {
     id: 'mock-a1',
-    slug: 'outstanding-project-award',
-    titleEn: 'Outstanding Project Award',
-    titleId: 'Penghargaan Proyek Luar Biasa',
-    statusEn: 'Winner',
-    statusId: 'Pemenang',
-    descriptionEn: 'Awarded for the best overall project implementation.',
-    descriptionId: 'Diberikan untuk implementasi proyek terbaik secara keseluruhan.',
-    date: new Date(),
+    slug: 'national-language-olympiad-festival-fobn',
+    title: 'National Language Olympiad Festival (FOBN)',
+    status: 'National Gold Medalist',
+    description: 'Awarded 1st place gold medal in national Indonesian language proficiency and linguistic analysis.',
+    date: new Date('2024-03-03'),
     imageUrl: null,
     order: 1,
     createdAt: new Date(),
@@ -63,20 +60,20 @@ export async function getAchievementBySlug(slugOrId: string): Promise<Achievemen
     const allAchievements = await prisma.achievement.findMany();
     const matching = allAchievements.find(
       a => (a.slug && a.slug === decoded) ||
-           (a.titleEn && slugify(a.titleEn) === decoded) ||
+           (a.title && slugify(a.title) === decoded) ||
            a.id === decoded
     );
     if (matching) return matching;
 
     // 4. Fallback to mock achievements
     const fallback = mockAchievements.find(
-      a => a.slug === decoded || a.id === decoded || (a.titleEn && slugify(a.titleEn) === decoded)
+      a => a.slug === decoded || a.id === decoded || (a.title && slugify(a.title) === decoded)
     );
     return fallback || null;
   } catch (error) {
     console.error('Database error in getAchievementBySlug:', error);
     const fallback = mockAchievements.find(
-      a => a.slug === decoded || a.id === decoded || (a.titleEn && slugify(a.titleEn) === decoded)
+      a => a.slug === decoded || a.id === decoded || (a.title && slugify(a.title) === decoded)
     );
     return fallback || null;
   }

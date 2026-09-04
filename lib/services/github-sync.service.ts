@@ -53,13 +53,10 @@ export async function syncGithubRepos() {
               pushedAt: repo.pushed_at ? new Date(repo.pushed_at) : null,
               lastSyncedAt: new Date(),
               syncSource: 'github',
-              // Initial Draft Values
-              titleEn: repo.name,
-              titleId: repo.name,
-              categoryEn: 'Uncategorized',
-              categoryId: 'Uncategorized',
-              descriptionEn: readmeContent,
-              descriptionId: null,
+              // Initial Values
+              title: repo.name,
+              category: 'Open Source Repository',
+              description: repo.description || 'Open source software engineering repository and architecture.',
               sourceCodeUrl: repo.html_url,
             },
           });
@@ -78,8 +75,8 @@ export async function syncGithubRepos() {
             sourceCodeUrl: repo.html_url,
           };
 
-          if (overwriteDescription) {
-            updateData.descriptionEn = readmeContent;
+          if (overwriteDescription && repo.description) {
+            updateData.description = repo.description;
           }
 
           await prisma.project.update({

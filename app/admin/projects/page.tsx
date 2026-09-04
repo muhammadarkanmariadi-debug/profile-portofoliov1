@@ -197,7 +197,7 @@ export default function ProjectsAdminPage() {
                       {item.imageUrl ? (
                         <img 
                           src={item.imageUrl} 
-                          alt={item.titleEn} 
+                          alt={item.title} 
                           className="w-20 h-14 object-cover rounded-xl border border-border shadow-sm" 
                         />
                       ) : (
@@ -207,8 +207,8 @@ export default function ProjectsAdminPage() {
                       )}
                     </td>
                     <td className="p-4">
-                      <div className="font-bold text-text-primary mb-1">{item.titleEn}</div>
-                      <div className="font-mono text-xs text-primary mb-2">{item.categoryEn}</div>
+                      <div className="font-bold text-text-primary mb-1">{item.title}</div>
+                      <div className="font-mono text-xs text-primary mb-2">{item.category}</div>
                       <div className="flex items-center gap-2">
                         {item.liveUrl && (
                           <a 

@@ -18,21 +18,15 @@ export async function PUT(request: Request) {
 
     const existingProfile = await prisma.profile.findFirst();
 
-    const profileData = {
-      ...validatedData,
-      shortDescriptionId: validatedData.shortDescriptionId ?? validatedData.shortDescriptionEn,
-      fullBiographyId: validatedData.fullBiographyId ?? validatedData.fullBiographyEn,
-    };
-
     let profile;
     if (existingProfile) {
       profile = await prisma.profile.update({
         where: { id: existingProfile.id },
-        data: profileData,
+        data: validatedData,
       });
     } else {
       profile = await prisma.profile.create({
-        data: profileData,
+        data: validatedData,
       });
     }
 

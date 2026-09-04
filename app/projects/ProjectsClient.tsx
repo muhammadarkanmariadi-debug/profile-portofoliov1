@@ -22,8 +22,8 @@ export default function ProjectsClient({ initialProjects }: ProjectsClientProps)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   const filteredProjects = initialProjects.filter(project => {
-    const title = (lang === 'id' ? project.titleId : project.titleEn) || project.titleEn || project.titleId || ''
-    const category = (lang === 'id' ? project.categoryId : project.categoryEn) || project.categoryEn || project.categoryId || ''
+    const title = project.title || ''
+    const category = project.category || ''
     
     return title.toLowerCase().includes(searchQuery.toLowerCase()) || 
            category.toLowerCase().includes(searchQuery.toLowerCase())
@@ -135,12 +135,12 @@ export default function ProjectsClient({ initialProjects }: ProjectsClientProps)
                 id={project.id}
                 slug={project.slug}
                 index={String((currentPage - 1) * itemsPerPage + index + 1).padStart(2, '0')}
-                title={lang === 'id' ? (project.titleId || '') : (project.titleEn || '')}
-                description={lang === 'id' ? (project.descriptionId || '') : (project.descriptionEn || '')}
-                role={lang === 'id' ? project.roleId : project.roleEn}
+                title={project.title}
+                description={project.description || ''}
+                role={project.role}
                 liveUrl={project.liveUrl}
                 imageUrl={project.imageUrl || ''}
-                category={lang === 'id' ? (project.categoryId || '') : (project.categoryEn || '')}
+                category={project.category}
                 techStack={project.techStack}
                 onReadMore={() => setSelectedProjectId(project.id)}
               />

@@ -9,9 +9,7 @@ export const profileSchema = z.object({
   githubUrl: z.string().url('Invalid URL').optional().nullable(),
   twitterUrl: z.string().url('Invalid URL').optional().nullable(),
   lanyardImageUrl: z.string().optional().nullable(),
-  shortDescriptionEn: z.string().optional().nullable(),
-  shortDescriptionId: z.string().optional().nullable(),
-  fullBiographyEn: z.string().optional().nullable(),
-  fullBiographyId: z.string().optional().nullable(),
+  shortDescription: z.string().optional().nullable(),
+  fullBiography: z.string().optional().nullable(),
   cvFileUrl: z.string().optional().nullable(),
 });

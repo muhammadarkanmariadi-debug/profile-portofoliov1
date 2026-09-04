@@ -93,12 +93,12 @@ export default function Projects({ projects, isLanding = false }: ProjectsProps)
               index={String(idx + 1).padStart(2, '0')}
               numericIndex={idx}
               totalProjects={displayProjects.length}
-              title={(lang === 'id' ? project.titleId : project.titleEn) || project.titleEn || project.titleId}
-              description={(lang === 'id' ? project.descriptionId : project.descriptionEn) || project.descriptionEn || project.descriptionId || ''}
-              role={(lang === 'id' ? project.roleId : project.roleEn) || project.roleEn || project.roleId}
+              title={project.title}
+              description={project.description || ''}
+              role={project.role}
               liveUrl={project.liveUrl}
               imageUrl={project.imageUrl}
-              category={(lang === 'id' ? project.categoryId : project.categoryEn) || project.categoryEn || project.categoryId}
+              category={project.category}
               techStack={project.techStack}
               onReadMore={() => setSelectedProjectId(project.id)}
             />

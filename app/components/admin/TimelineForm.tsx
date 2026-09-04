@@ -25,15 +25,15 @@ export default function TimelineForm({ initialData }: { initialData?: TimelineEn
     resolver: zodResolver(timelineSchema) as any,
     defaultValues: initialData ? {
       type: initialData.type,
-      categoryEn: initialData.categoryEn,
-      categoryId: initialData.categoryId,
-      titleEn: initialData.titleEn,
-      titleId: initialData.titleId,
-      descriptionEn: initialData.descriptionEn,
-      descriptionId: initialData.descriptionId,
+      category: initialData.category,
+      title: initialData.title,
+      description: initialData.description || '',
       order: initialData.order,
     } : {
       type: 'EXPERIENCE',
+      category: '',
+      title: '',
+      description: '',
       order: 0,
     }
   });
@@ -107,30 +107,30 @@ export default function TimelineForm({ initialData }: { initialData?: TimelineEn
               </div>
 
               <div className="space-y-2">
-                <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Institution / Company *</label>
+                <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Institution / Period / Category *</label>
                 <input 
-                  {...register('categoryEn')} 
-                  placeholder="e.g. SMK Telkom Malang / Software Studio"
+                  {...register('category')} 
+                  placeholder="e.g. 2024 - Present / SMK Telkom Malang"
                   className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors"
                 />
-                {errors.categoryEn && <p className="text-rose-500 font-mono text-xs">{errors.categoryEn.message}</p>}
+                {errors.category && <p className="text-rose-500 font-mono text-xs">{errors.category.message}</p>}
               </div>
             </div>
 
             <div className="space-y-2">
               <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Role / Degree Title *</label>
               <input 
-                {...register('titleEn')} 
+                {...register('title')} 
                 placeholder="e.g. Software Engineering Lead, Full-Stack Intern"
                 className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors"
               />
-              {errors.titleEn && <p className="text-rose-500 font-mono text-xs">{errors.titleEn.message}</p>}
+              {errors.title && <p className="text-rose-500 font-mono text-xs">{errors.title.message}</p>}
             </div>
 
             <div className="space-y-2">
               <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Description & Responsibilities</label>
               <textarea 
-                {...register('descriptionEn')} 
+                {...register('description')} 
                 rows={4}
                 className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors resize-none leading-relaxed"
                 placeholder="Key responsibilities, architectural focus, achievements..."

@@ -103,15 +103,15 @@ const Achievements = ({ achievements }: AchievementsProps) => {
                   <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 border border-border bg-surface shrink-0">
                     <img 
                       src={item.imageUrl || 'https://images.unsplash.com/photo-1590402494682-bf34f5ce8c50?w=800&auto=format&fit=crop&q=60'} 
-                      alt={`Certificate for ${lang === 'id' ? item.titleId : item.titleEn}`} 
+                      alt={`Certificate for ${item.title}`} 
                       className="w-full h-full object-contain opacity-90 hover:opacity-100 transition-opacity hover:scale-105 duration-500"
                     />
                   </div>
-                  <h4 className="font-heading text-xl font-bold text-on-surface">{lang === 'id' ? item.titleId : item.titleEn}</h4>
+                  <h4 className="font-heading text-xl font-bold text-on-surface">{item.title}</h4>
                   <p className="font-mono text-xs uppercase font-semibold text-primary">
-                    {lang === 'id' ? item.statusId : item.statusEn}
+                    {item.status}
                   </p>
-                  <p className="text-on-surface-variant text-sm leading-relaxed flex-grow line-clamp-3">{lang === 'id' ? item.descriptionId : item.descriptionEn}</p>
+                  <p className="text-on-surface-variant text-sm leading-relaxed flex-grow line-clamp-3">{item.description}</p>
                   <p className="font-mono text-[10px] text-on-surface-variant/50 mt-auto pt-4 mb-3">
                     {new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                   </p>

@@ -53,7 +53,7 @@ const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) => {
             <div className="w-full md:w-1/2 h-64 md:h-auto relative shrink-0">
               <img 
                 src={project.imageUrl || '/images/default-project.jpg'} 
-                alt={lang === 'id' ? (project.titleId || '') : (project.titleEn || '')} 
+                alt={project.title} 
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-surface to-transparent opacity-90 md:opacity-50" />
@@ -63,21 +63,21 @@ const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) => {
             <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-10 overflow-y-auto flex flex-col" data-lenis-prevent>
               <div className="flex items-center gap-2 mb-4">
                 <Tag size={16} className="text-secondary" />
-                <span className="font-mono text-xs uppercase tracking-widest text-secondary">{lang === 'id' ? project.categoryId : project.categoryEn}</span>
+                <span className="font-mono text-xs uppercase tracking-widest text-secondary">{project.category}</span>
               </div>
               
-              <h3 className="font-heading text-3xl sm:text-4xl font-bold text-on-surface mb-2 text-glow">{lang === 'id' ? project.titleId : project.titleEn}</h3>
+              <h3 className="font-heading text-3xl sm:text-4xl font-bold text-on-surface mb-2 text-glow">{project.title}</h3>
               
-              {(project.roleEn || project.roleId) && (
+              {project.role && (
                 <div className="flex items-center gap-2 mb-6">
                   <span className="px-3 py-1 bg-primary/10 border border-primary/20 rounded-full font-mono text-xs text-primary">
-                    {t.projects.modalRole}: {lang === 'id' ? project.roleId : project.roleEn}
+                    {t.projects.modalRole}: {project.role}
                   </span>
                 </div>
               )}
               
               <div className="prose prose-invert prose-p:text-on-surface-variant prose-p:leading-relaxed mb-8">
-                <p>{lang === 'id' ? project.descriptionId : project.descriptionEn}</p>
+                <p>{project.description}</p>
               </div>
 
               {project.techStack && (

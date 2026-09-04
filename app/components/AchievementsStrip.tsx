@@ -133,17 +133,17 @@ export default function AchievementsStrip({ achievements }: AchievementsStripPro
                 <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-wider text-text-muted mb-4">
                   <span className="flex items-center gap-1.5 text-primary font-bold">
                     <Award size={14} />
-                    <span>{lang === 'id' ? item.statusId : item.statusEn}</span>
+                    <span>{item.status}</span>
                   </span>
                   <span>{new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}</span>
                 </div>
 
                 <h4 className="font-heading font-bold text-lg text-text-primary group-hover:text-primary transition-colors mb-2">
-                  {lang === 'id' ? item.titleId : item.titleEn}
+                  {item.title}
                 </h4>
 
                 <p className="text-sm text-text-muted font-sans leading-relaxed line-clamp-2">
-                  {lang === 'id' ? item.descriptionId : item.descriptionEn}
+                  {item.description}
                 </p>
               </div>
 

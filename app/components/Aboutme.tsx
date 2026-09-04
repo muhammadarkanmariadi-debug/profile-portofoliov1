@@ -23,8 +23,7 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
   const timelineRef = useRef<HTMLDivElement>(null)
 
   // Dynamic short statement from backend Profile
-  const shortBio = profile?.shortDescriptionEn || 
-    (lang === 'id' ? profile?.shortDescriptionId : null) || 
+  const shortBio = profile?.shortDescription || 
     "Muhammad Arkan blends full-stack software engineering with cutting-edge digital architecture."
 
   const secondaryBio = "We shape high-performance production web systems through each project we design and ship."
@@ -100,8 +99,7 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
   }, { scope: containerRef, dependencies: [shortBio, secondaryBio] })
 
   // Full biography paragraphs from backend Profile
-  const fullBiography = profile?.fullBiographyEn || 
-    (lang === 'id' ? profile?.fullBiographyId : null) || 
+  const fullBiography = profile?.fullBiography || 
     "I am a Full-Stack Software Engineer currently studying at SMK Telkom Malang. I specialize in designing and shipping production-grade web systems, high-concurrency event platforms, and robust database architectures using Next.js, React, Nest.js, and Laravel."
 
   const biographyParagraphs = fullBiography.split('\n\n')
@@ -230,9 +228,9 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
               <div className="space-y-4 pl-3 border-l border-border">
                 {educationEntries.map(item => (
                   <div key={item.id} className="timeline-item p-3 rounded-xl hover:bg-surface/50 transition-colors">
-                    <h4 className="font-bold text-base text-text-primary">{lang === 'id' ? item.titleId : item.titleEn}</h4>
-                    <p className="text-xs font-mono text-text-muted mt-0.5">{lang === 'id' ? item.categoryId : item.categoryEn}</p>
-                    <p className="text-sm text-text-muted mt-1">{lang === 'id' ? item.descriptionId : item.descriptionEn}</p>
+                    <h4 className="font-bold text-base text-text-primary">{item.title}</h4>
+                    <p className="text-xs font-mono text-text-muted mt-0.5">{item.category}</p>
+                    <p className="text-sm text-text-muted mt-1">{item.description}</p>
                   </div>
                 ))}
               </div>
@@ -247,9 +245,9 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
               <div className="space-y-4 pl-3 border-l border-border">
                 {experienceEntries.map(item => (
                   <div key={item.id} className="timeline-item p-3 rounded-xl hover:bg-surface/50 transition-colors">
-                    <h4 className="font-bold text-base text-text-primary">{lang === 'id' ? item.titleId : item.titleEn}</h4>
-                    <p className="text-xs font-mono text-text-muted mt-0.5">{lang === 'id' ? item.categoryId : item.categoryEn}</p>
-                    <p className="text-sm text-text-muted mt-1">{lang === 'id' ? item.descriptionId : item.descriptionEn}</p>
+                    <h4 className="font-bold text-base text-text-primary">{item.title}</h4>
+                    <p className="text-xs font-mono text-text-muted mt-0.5">{item.category}</p>
+                    <p className="text-sm text-text-muted mt-1">{item.description}</p>
                   </div>
                 ))}
               </div>

@@ -56,18 +56,18 @@ export default async function ProjectDetailPage(props: ProjectPageProps) {
         <header className="mb-14 space-y-6">
           <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-wider text-text-muted">
             <span className="px-3 py-1 rounded-full bg-primary text-background font-bold text-[10px]">
-              {project.categoryEn}
+              {project.category}
             </span>
             <span>·</span>
-            <span>{project.roleEn || 'Full-Stack Software Engineer'}</span>
+            <span>{project.role || 'Full-Stack Software Engineer'}</span>
           </div>
 
           <h1 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.5vw] tracking-tighter text-text-primary leading-[0.95] max-w-5xl">
-            {project.titleEn}
+            {project.title}
           </h1>
 
           <p className="text-lg sm:text-xl text-text-muted font-sans max-w-3xl leading-relaxed">
-            {project.descriptionEn}
+            {project.description}
           </p>
 
           {/* Action CTAs */}
@@ -124,7 +124,7 @@ export default async function ProjectDetailPage(props: ProjectPageProps) {
               {project.imageUrl ? (
                 <img 
                   src={project.imageUrl} 
-                  alt={project.titleEn}
+                  alt={project.title} 
                   className="w-full h-full object-cover object-top" 
                 />
               ) : (
@@ -171,7 +171,7 @@ export default async function ProjectDetailPage(props: ProjectPageProps) {
                 <span>CORE RESPONSIBILITIES</span>
               </h3>
               <p className="text-sm text-text-muted font-sans leading-relaxed">
-                {project.roleEn || 'Full-Stack Software Engineering · Interface Design · API Architecture'}
+                {project.role || 'Full-Stack Software Engineering · Interface Design · API Architecture'}
               </p>
             </div>
 
@@ -194,7 +194,7 @@ export default async function ProjectDetailPage(props: ProjectPageProps) {
               </h3>
               <div className="prose max-w-none text-text-primary font-sans text-base leading-relaxed space-y-4">
                 <p>
-                  {project.descriptionEn}
+                  {project.description}
                 </p>
                 {project.readmeContent && (
                   <div className="mt-8 p-6 rounded-2xl bg-surface border border-border font-mono text-xs overflow-x-auto whitespace-pre-wrap leading-relaxed text-text-primary">
@@ -215,7 +215,7 @@ export default async function ProjectDetailPage(props: ProjectPageProps) {
               href={`/projects/${nextProject.slug || nextProject.id}`}
               className="flex items-center gap-3 text-lg sm:text-2xl font-heading font-black text-text-primary hover:text-primary transition-colors cursor-target"
             >
-              <span>NEXT: {nextProject.titleEn}</span>
+              <span>NEXT: {nextProject.title}</span>
               <ArrowUpRight size={20} />
             </Link>
           </div>

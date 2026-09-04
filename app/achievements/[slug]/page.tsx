@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, ArrowUpRight, Award, Calendar, ExternalLink, ShieldCheck, Sparkles } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, Award, Calendar, ExternalLink, ShieldCheck } from 'lucide-react'
 import { getAchievementBySlug, getAchievements } from '@/lib/services/achievement.service'
 
 export const revalidate = 0;
@@ -53,18 +53,18 @@ export default async function AchievementDetailPage(props: AchievementPageProps)
           <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-wider text-text-muted">
             <span className="px-3 py-1 rounded-full bg-primary text-background font-bold text-[10px] flex items-center gap-1.5">
               <Award size={13} />
-              <span>{achievement.statusEn}</span>
+              <span>{achievement.status}</span>
             </span>
             <span>·</span>
             <span>{new Date(achievement.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
           </div>
 
           <h1 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.5vw] tracking-tighter text-text-primary leading-[0.95] max-w-5xl">
-            {achievement.titleEn}
+            {achievement.title}
           </h1>
 
           <p className="text-lg sm:text-xl text-text-muted font-sans max-w-3xl leading-relaxed">
-            {achievement.descriptionEn}
+            {achievement.description}
           </p>
 
           {/* Direct Document Action */}
@@ -89,7 +89,7 @@ export default async function AchievementDetailPage(props: AchievementPageProps)
             <div className="w-full rounded-2xl overflow-hidden bg-surface-elevated border border-white/10 shadow-2xl flex items-center justify-center p-4 sm:p-8">
               <img 
                 src={achievement.imageUrl} 
-                alt={achievement.titleEn}
+                alt={achievement.title}
                 className="w-full max-h-[75vh] object-contain rounded-xl shadow-md"
               />
             </div>
@@ -126,7 +126,7 @@ export default async function AchievementDetailPage(props: AchievementPageProps)
               ACHIEVEMENT CONTEXT & SUMMARY
             </h3>
             <p className="text-base sm:text-lg text-text-muted font-sans leading-relaxed">
-              {achievement.descriptionEn}
+              {achievement.description}
             </p>
           </div>
 
@@ -140,7 +140,7 @@ export default async function AchievementDetailPage(props: AchievementPageProps)
               href={`/achievements/${nextAchievement.slug || nextAchievement.id}`}
               className="flex items-center gap-3 text-lg sm:text-2xl font-heading font-black text-text-primary hover:text-primary transition-colors cursor-target"
             >
-              <span>NEXT: {nextAchievement.titleEn}</span>
+              <span>NEXT: {nextAchievement.title}</span>
               <ArrowUpRight size={20} />
             </Link>
           </div>

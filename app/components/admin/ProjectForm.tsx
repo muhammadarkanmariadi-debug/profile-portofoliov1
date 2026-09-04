@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { projectSchema } from '@/lib/validations/project';
 import FileUpload from '@/app/components/admin/FileUpload';
-import { Loader2, Save, ArrowLeft, Check, Layers, ExternalLink, Github, Sparkles } from 'lucide-react';
+import { Loader2, Save, ArrowLeft, Check, Layers, ExternalLink, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import type { Project, Skill } from '@prisma/client';
 
@@ -48,18 +48,14 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
     resolver: zodResolver(projectSchema) as any,
     defaultValues: initialData ? {
       slug: initialData.slug || '',
-      categoryEn: initialData.categoryEn,
-      categoryId: initialData.categoryId,
-      titleEn: initialData.titleEn,
-      titleId: initialData.titleId,
-      descriptionEn: initialData.descriptionEn,
-      descriptionId: initialData.descriptionId,
-      roleEn: initialData.roleEn,
-      roleId: initialData.roleId,
+      category: initialData.category,
+      title: initialData.title,
+      description: initialData.description || '',
+      role: initialData.role || '',
       isDeploy: initialData.isDeploy,
-      liveUrl: initialData.liveUrl,
-      sourceCodeUrl: initialData.sourceCodeUrl,
-      imageUrl: initialData.imageUrl,
+      liveUrl: initialData.liveUrl || '',
+      sourceCodeUrl: initialData.sourceCodeUrl || '',
+      imageUrl: initialData.imageUrl || '',
       order: initialData.order,
       techStackIds: initialData.techStack.map(t => t.id),
     } : {
@@ -72,7 +68,6 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
 
   const imageUrl = watch('imageUrl');
   const techStackIds = watch('techStackIds');
-  const isDeploy = watch('isDeploy');
 
   const toggleSkill = (skillId: string) => {
     const current = new Set(techStackIds);
@@ -154,28 +149,28 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
             <div className="space-y-2">
               <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Category / Domain *</label>
               <input
-                {...register('categoryEn')}
-                placeholder="e.g. Real-Time Distributed Systems"
+                {...register('category')}
+                placeholder="e.g. Digital Portfolio & Headless CMS"
                 className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors"
               />
-              {errors.categoryEn && <p className="text-rose-500 font-mono text-xs">{errors.categoryEn.message}</p>}
+              {errors.category && <p className="text-rose-500 font-mono text-xs">{errors.category.message}</p>}
             </div>
 
             <div className="space-y-2">
               <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Project Title *</label>
               <input
-                {...register('titleEn')}
-                placeholder="e.g. GigTix - High-Concurrency Ticketing Platform"
+                {...register('title')}
+                placeholder="e.g. 4RK4N.DEV Portfolio"
                 className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors"
               />
-              {errors.titleEn && <p className="text-rose-500 font-mono text-xs">{errors.titleEn.message}</p>}
+              {errors.title && <p className="text-rose-500 font-mono text-xs">{errors.title.message}</p>}
             </div>
 
             <div className="space-y-2">
               <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Custom URL Slug (Optional)</label>
               <input
                 {...register('slug')}
-                placeholder="e.g. gigtix-platform"
+                placeholder="e.g. profile-portofoliov1"
                 className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary font-mono text-xs focus:border-primary outline-none transition-colors"
               />
               {errors.slug && <p className="text-rose-500 font-mono text-xs">{errors.slug.message}</p>}
@@ -184,8 +179,8 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
             <div className="space-y-2">
               <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Role / Scope of Work</label>
               <input
-                {...register('roleEn')}
-                placeholder="e.g. Lead Full-Stack Architect"
+                {...register('role')}
+                placeholder="e.g. Full-Stack Software Engineer & Creative Developer"
                 className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors"
               />
             </div>
@@ -211,7 +206,7 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
             Architecture Breakdown & System Overview
           </label>
           <textarea
-            {...register('descriptionEn')}
+            {...register('description')}
             rows={5}
             className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors resize-none font-sans text-sm leading-relaxed"
             placeholder="Describe the technical architecture, problem statement, key bottlenecks resolved, and results..."
@@ -230,7 +225,7 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
               <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Live Production URL</label>
               <input
                 {...register('liveUrl')}
-                placeholder="https://app.domain.com"
+                placeholder="https://4rkan.dev"
                 className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors font-mono text-xs"
               />
               {errors.liveUrl && <p className="text-rose-500 font-mono text-xs">{errors.liveUrl.message}</p>}

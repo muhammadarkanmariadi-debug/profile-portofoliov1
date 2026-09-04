@@ -10,24 +10,20 @@ const CACHE_TTL = Number(process.env.REDIS_CACHE_TTL || 3600); // 1 hour
 const mockProjects: ProjectWithTech[] = [
   {
     id: 'mock-p1',
-    slug: 'gigtix-ticketing-app',
-    categoryEn: 'Web App',
-    categoryId: 'Aplikasi Web',
-    titleEn: 'GigTix Ticketing App',
-    titleId: 'Aplikasi Tiket GigTix',
-    descriptionEn: 'A modern ticketing platform for events.',
-    descriptionId: 'Platform pemesanan tiket modern untuk acara.',
-    roleEn: 'Fullstack Developer',
-    roleId: 'Pengembang Fullstack',
-    isDeploy: false,
-    liveUrl: null,
-    sourceCodeUrl: null,
-    imageUrl: null,
+    slug: 'profile-portofoliov1',
+    category: 'Digital Portfolio & Headless CMS',
+    title: '4RK4N.DEV Portfolio',
+    description: 'Awwwards-grade digital portfolio and Headless CMS featuring 3D WebGL physics, kinetic typography, Redis caching, and automated GitHub repository synchronization.',
+    role: 'Full-Stack Software Engineer & Creative Developer',
+    isDeploy: true,
+    liveUrl: 'https://4rkan.dev',
+    sourceCodeUrl: 'https://github.com/muhammadarkanmariadi-debug/profile-portofoliov1',
+    imageUrl: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&auto=format&fit=crop&q=80',
     order: 1,
     githubId: null,
     githubFullName: null,
     readmeContent: null,
-    primaryLanguage: null,
+    primaryLanguage: 'TypeScript',
     starsCount: 0,
     isFork: false,
     isArchived: false,
@@ -41,7 +37,7 @@ const mockProjects: ProjectWithTech[] = [
         id: 'mock-s1',
         category: 'FRONTEND',
         title: 'Next.js',
-        logoUrl: null,
+        logoUrl: 'https://img.icons8.com/color/512/nextjs.png',
         order: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -150,7 +146,7 @@ export async function getProjectBySlug(slugOrId: string): Promise<ProjectWithTec
       
       project = allProjects.find(
         p => (p.slug && p.slug === decoded) ||
-             (p.titleEn && slugify(p.titleEn) === decoded) ||
+             (p.title && slugify(p.title) === decoded) ||
              p.id === decoded
       ) || null;
     }
@@ -158,7 +154,7 @@ export async function getProjectBySlug(slugOrId: string): Promise<ProjectWithTec
     // D. Fallback to mock projects if DB is empty
     if (!project) {
       const fallback = mockProjects.find(
-        p => p.slug === decoded || p.id === decoded || (p.titleEn && slugify(p.titleEn) === decoded)
+        p => p.slug === decoded || p.id === decoded || (p.title && slugify(p.title) === decoded)
       );
       return fallback || null;
     }
@@ -170,7 +166,7 @@ export async function getProjectBySlug(slugOrId: string): Promise<ProjectWithTec
   } catch (error) {
     console.error('Database error in getProjectBySlug:', error);
     const fallback = mockProjects.find(
-      p => p.slug === decoded || p.id === decoded || (p.titleEn && slugify(p.titleEn) === decoded)
+      p => p.slug === decoded || p.id === decoded || (p.title && slugify(p.title) === decoded)
     );
     return fallback || null;
   }

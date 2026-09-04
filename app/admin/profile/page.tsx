@@ -112,7 +112,7 @@ export default function ProfileAdminPage() {
               <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Physical Base / City</label>
               <input 
                 {...register('address')} 
-                placeholder="Jakarta, Indonesia"
+                placeholder="Malang, East Java, Indonesia"
                 className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors"
               />
             </div>
@@ -128,11 +128,11 @@ export default function ProfileAdminPage() {
 
           <div className="space-y-6 font-sans text-sm">
             <div className="space-y-2">
-              <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Short Bio / Hook (Home Section 01)</label>
+              <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Short Bio / Hook (Hero Statement)</label>
               <textarea 
-                {...register('shortDescriptionEn')} 
+                {...register('shortDescription')} 
                 rows={3}
-                placeholder="e.g. Muhammad Arkan blends full-stack software engineering with cutting-edge digital architecture."
+                placeholder="e.g. Full-Stack Developer & Software Engineering Student at SMK Telkom Malang specializing in Next.js, Nest.js, Laravel, and cloud architectures."
                 className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors resize-none leading-relaxed"
               />
             </div>
@@ -140,7 +140,7 @@ export default function ProfileAdminPage() {
             <div className="space-y-2">
               <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Full Biography & Engineering Philosophy</label>
               <textarea 
-                {...register('fullBiographyEn')} 
+                {...register('fullBiography')} 
                 rows={6}
                 placeholder="Detailed engineering background, focus areas, and architectural principles..."
                 className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors resize-none leading-relaxed"

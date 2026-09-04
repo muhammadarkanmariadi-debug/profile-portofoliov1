@@ -30,15 +30,11 @@ export async function POST(request: Request) {
     const { techStackIds, ...projectData } = validatedData;
     const finalSlug = projectData.slug && projectData.slug.trim() !== '' 
       ? slugify(projectData.slug) 
-      : slugify(projectData.titleEn);
+      : slugify(projectData.title);
 
     const newProject = await prisma.project.create({
       data: {
         ...projectData,
-        categoryId: projectData.categoryId || projectData.categoryEn,
-        titleId: projectData.titleId || projectData.titleEn,
-        descriptionId: projectData.descriptionId ?? projectData.descriptionEn,
-        roleId: projectData.roleId ?? projectData.roleEn,
         slug: finalSlug,
         techStack: {
           connect: techStackIds.map((id) => ({ id })),
@@ -64,4 +60,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to create project' }, { status: 500 });
   }
 }
-

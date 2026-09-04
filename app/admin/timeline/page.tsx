@@ -145,10 +145,10 @@ export default function TimelineAdminPage() {
                     </div>
                   </td>
                   <td className="p-4 font-bold text-text-primary">
-                    {item.titleEn}
+                    {item.title}
                   </td>
                   <td className="p-4 font-mono text-xs text-primary">
-                    {item.categoryEn}
+                    {item.category}
                   </td>
                   <td className="p-4 pr-6">
                     <div className="flex justify-end gap-2">

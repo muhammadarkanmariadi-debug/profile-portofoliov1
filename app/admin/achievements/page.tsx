@@ -155,9 +155,9 @@ export default function AchievementsAdminPage() {
                     </td>
                     <td className="p-4">
                       {item.imageUrl ? (
-                        <img 
+                         <img 
                           src={item.imageUrl} 
-                          alt={item.titleEn} 
+                          alt={item.title} 
                           className="w-20 h-14 object-cover rounded-xl border border-border shadow-sm" 
                         />
                       ) : (
@@ -167,10 +167,10 @@ export default function AchievementsAdminPage() {
                       )}
                     </td>
                     <td className="p-4">
-                      <div className="font-bold text-text-primary mb-1">{item.titleEn}</div>
+                      <div className="font-bold text-text-primary mb-1">{item.title}</div>
                       <div className="inline-flex items-center gap-1.5 font-mono text-[11px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
                         <Award size={11} />
-                        <span>{item.statusEn}</span>
+                        <span>{item.status}</span>
                       </div>
                     </td>
                     <td className="p-4 font-mono text-xs text-text-muted">

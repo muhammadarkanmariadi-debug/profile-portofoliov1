@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { achievementSchema } from '@/lib/validations/achievement';
+import { slugify } from '@/lib/utils/slug';
 
 export async function GET() {
   try {
@@ -16,8 +17,6 @@ export async function GET() {
   }
 }
 
-import { slugify } from '@/lib/utils/slug';
-
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -25,14 +24,11 @@ export async function POST(request: Request) {
 
     const finalSlug = validatedData.slug && validatedData.slug.trim() !== '' 
       ? slugify(validatedData.slug) 
-      : slugify(validatedData.titleEn);
+      : slugify(validatedData.title);
 
     const newAchievement = await prisma.achievement.create({
       data: {
         ...validatedData,
-        titleId: validatedData.titleId || validatedData.titleEn,
-        statusId: validatedData.statusId || validatedData.statusEn,
-        descriptionId: validatedData.descriptionId ?? validatedData.descriptionEn,
         slug: finalSlug,
       },
     });
