@@ -4,7 +4,7 @@
 # ==========================================
 
 # 1. Base image
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 WORKDIR /app
 RUN apk add --no-cache libc6-compat openssl
 
@@ -35,7 +35,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV PORT=3000
+ENV PORT=5000
 ENV HOSTNAME="0.0.0.0"
 
 # Create non-root user for security
@@ -62,6 +62,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/node_modules/prisma ./node_module
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 5000
 
 ENTRYPOINT ["./docker-entrypoint.sh"]

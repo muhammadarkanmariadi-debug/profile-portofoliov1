@@ -47,23 +47,27 @@ services:
       DATABASE_SSL: "false"
 
       # Authentication & JWT
-      ADMIN_EMAIL: ${ADMIN_EMAIL}
-      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
-      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-arkan@gmail.com}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-$2a$12$/iw.MaxCyIw2KzCIDwkywO/UJgB7.q6C1vhI/RIyX9qaQrgopMH6u}
+      JWT_SECRET: ${JWT_SECRET:-rahasia}
 
       # Cloudinary Storage
-      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
-      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
-      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-dvpb6z2oj}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-795639345722721}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-XhEZ7PRv0xlESqgBqCkl8R5Edt4}
+
+      # Email Configuration (Nodemailer)
+      EMAIL_USER: ${EMAIL_USER:-muhammadarkanmariadi@gmail.com}
+      EMAIL_PASS: ${EMAIL_PASS:-ebau sviz sicc ljns}
 
       # GitHub Sync Automation
-      GITHUB_USERNAME: ${GITHUB_USERNAME}
-      GITHUB_TOKEN: ${GITHUB_TOKEN}
-      CRON_SECRET: ${CRON_SECRET}
-      SKIP_FORKS: ${SKIP_FORKS:-true}
-      SKIP_ARCHIVED: ${SKIP_ARCHIVED:-true}
+      GITHUB_USERNAME: ${GITHUB_USERNAME:-muhammadarkanmariadi-debug}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-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}
+      CRON_SECRET: ${CRON_SECRET:-4rk4njay}
+      SKIP_FORKS: ${SKIP_FORKS:-false}
+      SKIP_ARCHIVED: ${SKIP_ARCHIVED:-false}
       OVERWRITE_DESCRIPTION_ON_SYNC: ${OVERWRITE_DESCRIPTION_ON_SYNC:-false}
-      SYNC_INTERVAL_CRON: ${SYNC_INTERVAL_CRON:-"0 0 * * *"}
+      SYNC_INTERVAL_CRON: ${SYNC_INTERVAL_CRON:-false}
 
     networks:
       - profile_network

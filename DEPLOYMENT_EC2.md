@@ -18,7 +18,7 @@ Ensure your EC2 Security Group permits the following inbound traffic:
 | **SSH** | `22` | Your IP or `0.0.0.0/0` | SSH Terminal Access |
 | **HTTP** | `80` | `0.0.0.0/0` | Web Traffic (or Nginx reverse proxy) |
 | **HTTPS** | `443` | `0.0.0.0/0` | SSL Encrypted Traffic |
-| **Custom TCP** | `3000` | `0.0.0.0/0` | Direct Next.js Web App Access |
+| **Custom TCP** | `5000` | `0.0.0.0/0` | Direct Next.js Web App Access |
 
 ---
 
@@ -140,7 +140,7 @@ server {
     server_name yourdomain.com www.yourdomain.com;
 
     location / {
-        proxy_pass http://127.0.0.1:3000;
+        proxy_pass http://127.0.0.1:5000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
