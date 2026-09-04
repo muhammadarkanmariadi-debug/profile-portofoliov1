@@ -22,6 +22,10 @@ export async function PUT(
       where: { id: params.id },
       data: {
         ...projectData,
+        categoryId: projectData.categoryId || projectData.categoryEn,
+        titleId: projectData.titleId || projectData.titleEn,
+        descriptionId: projectData.descriptionId ?? projectData.descriptionEn,
+        roleId: projectData.roleId ?? projectData.roleEn,
         slug: finalSlug,
         techStack: {
           set: techStackIds.map((id) => ({ id })),

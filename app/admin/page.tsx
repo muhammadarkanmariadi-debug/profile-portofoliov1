@@ -2,7 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Briefcase, Code2, Award, MessageSquare, Loader2 } from 'lucide-react';
+import { 
+  Briefcase, 
+  Code2, 
+  Award, 
+  MessageSquare, 
+  Loader2, 
+  ArrowUpRight, 
+  User, 
+  History, 
+  Sparkles,
+  Layers,
+  Activity
+} from 'lucide-react';
 import Link from 'next/link';
 
 interface DashboardStats {
@@ -33,75 +45,161 @@ export default function AdminDashboard() {
     fetchStats();
   }, []);
 
-  const handleLogout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    router.push('/admin/login');
-    router.refresh();
-  };
-
   const statCards = [
-    { title: 'Total Projects', value: stats?.totalProjects || 0, icon: <Briefcase className="text-blue-400" size={24} />, href: '/admin/projects' },
-    { title: 'Total Skills', value: stats?.totalSkills || 0, icon: <Code2 className="text-green-400" size={24} />, href: '/admin/skills' },
-    { title: 'Achievements', value: stats?.totalAchievements || 0, icon: <Award className="text-yellow-400" size={24} />, href: '/admin/achievements' },
-    { 
-      title: 'Messages', 
-      value: stats?.totalMessages || 0, 
-      subtitle: stats?.unreadMessages ? `${stats.unreadMessages} unread` : 'All read',
-      icon: <MessageSquare className="text-purple-400" size={24} />, 
-      href: '/admin/messages' 
+    {
+      index: '01',
+      title: 'Active Projects',
+      value: stats?.totalProjects || 0,
+      description: 'Repositories & showcased systems',
+      icon: Briefcase,
+      color: 'text-primary',
+      href: '/admin/projects',
+    },
+    {
+      index: '02',
+      title: 'Technical Skills',
+      value: stats?.totalSkills || 0,
+      description: 'Categorized languages & tools',
+      icon: Code2,
+      color: 'text-emerald-400',
+      href: '/admin/skills',
+    },
+    {
+      index: '03',
+      title: 'Credentials & Honors',
+      value: stats?.totalAchievements || 0,
+      description: 'Verified competitions & certs',
+      icon: Award,
+      color: 'text-amber-400',
+      href: '/admin/achievements',
+    },
+    {
+      index: '04',
+      title: 'Inquiries & Messages',
+      value: stats?.totalMessages || 0,
+      badge: stats?.unreadMessages ? `${stats.unreadMessages} NEW` : 'CLEARED',
+      description: 'Contact form submissions',
+      icon: MessageSquare,
+      color: 'text-secondary',
+      href: '/admin/messages',
     },
   ];
 
+  const quickActions = [
+    { title: 'New Project', href: '/admin/projects/create', icon: Briefcase, desc: 'Add repository or client case' },
+    { title: 'Add Skill', href: '/admin/skills/create', icon: Code2, desc: 'Insert tool into technical matrix' },
+    { title: 'New Credential', href: '/admin/achievements/create', icon: Award, desc: 'Document certificate or award' },
+    { title: 'Edit Bio & CV', href: '/admin/profile', icon: User, desc: 'Update profile and contact links' },
+  ];
+
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
-          <p className="text-gray-400">Overview of your portfolio&apos;s content and activity.</p>
-        </div>
-        <button 
-          onClick={handleLogout}
-          className="px-4 py-2 bg-red-500/10 text-red-500 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-colors font-medium"
-        >
-          Logout
-        </button>
-      </div>
+    <div className="space-y-10">
       
+      {/* Editorial Section Header */}
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-6 font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
+        <div className="flex items-center gap-3">
+          <span className="font-bold text-primary">00</span>
+          <span className="text-text-primary font-bold">SYSTEM DASHBOARD & METRICS</span>
+        </div>
+        <div className="flex items-center gap-2 text-text-muted">
+          <Activity size={14} className="text-emerald-400" />
+          <span>PRODUCTION CLUSTER ONLINE</span>
+        </div>
+      </header>
+
+      {/* Hero Welcome Banner */}
+      <div className="relative rounded-3xl bg-surface border border-border p-8 sm:p-10 overflow-hidden shadow-sm">
+        <div className="absolute top-0 right-0 font-heading font-black text-[16vw] text-text-primary opacity-[0.02] leading-none pointer-events-none">
+          CORE
+        </div>
+
+        <div className="relative z-10 max-w-2xl space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-elevated border border-border text-[11px] font-mono uppercase tracking-wider text-primary font-semibold">
+            <Sparkles size={13} />
+            <span>EXECUTIVE CONSOLE</span>
+          </div>
+          <h1 className="font-heading font-black text-3xl sm:text-5xl text-text-primary tracking-tight">
+            Portfolio Overview
+          </h1>
+          <p className="font-sans text-sm sm:text-base text-text-muted leading-relaxed">
+            Manage your real-time projects, technical stack, verified credentials, and incoming inquiries from a single consolidated terminal.
+          </p>
+        </div>
+      </div>
+
+      {/* Key Metric Cards */}
       {isLoading ? (
-        <div className="flex justify-center items-center h-64">
+        <div className="flex justify-center items-center h-48 bg-surface rounded-3xl border border-border">
           <Loader2 className="animate-spin text-primary w-8 h-8" />
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {statCards.map((card, idx) => (
-            <Link key={idx} href={card.href} className="block group">
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors h-full flex flex-col justify-between">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="p-3 bg-white/5 rounded-xl">
-                    {card.icon}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {statCards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <Link key={card.index} href={card.href} className="group block">
+                <div className="h-full bg-surface border border-border hover:border-primary/50 hover:bg-surface-elevated rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between shadow-sm cursor-target transform-gpu">
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="font-mono text-xs text-text-muted font-bold">[{card.index}]</span>
+                      <div className="w-10 h-10 rounded-2xl bg-surface-elevated border border-border flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Icon size={18} className={card.color} />
+                      </div>
+                    </div>
+
+                    <div className="font-heading font-black text-4xl text-text-primary tracking-tight mb-1">
+                      {card.value}
+                    </div>
+                    <div className="font-sans font-bold text-sm text-text-primary group-hover:text-primary transition-colors">
+                      {card.title}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t border-border/60 flex items-center justify-between text-xs font-mono text-text-muted">
+                    <span className="truncate pr-2">{card.description}</span>
+                    <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform flex-shrink-0" />
                   </div>
                 </div>
-                <div>
-                  <h3 className="text-3xl font-bold text-white mb-1">{card.value}</h3>
-                  <p className="text-gray-400 font-medium">{card.title}</p>
-                  {card.subtitle && (
-                    <p className={`text-sm mt-1 ${stats?.unreadMessages ? 'text-primary' : 'text-gray-500'}`}>
-                      {card.subtitle}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       )}
-      
-      <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
-        <h2 className="text-xl font-bold mb-4">Note on Visitor Statistics</h2>
-        <p className="text-gray-400 leading-relaxed">
-          Currently, there is no built-in database table to track raw website visitors. If you would like to track visitors, it is highly recommended to integrate an analytics service such as <strong>Vercel Analytics</strong> or <strong>Google Analytics</strong>, which provides much more detailed insights (geography, devices, active time) than a simple database counter.
-        </p>
+
+      {/* Quick Launchpad & Shortcuts */}
+      <div className="space-y-4">
+        <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-text-muted font-bold flex items-center gap-2">
+          <Layers size={14} className="text-primary" />
+          <span>QUICK ACTIONS & SHORTCUTS</span>
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {quickActions.map((action, idx) => {
+            const Icon = action.icon;
+            return (
+              <Link
+                key={idx}
+                href={action.href}
+                className="p-5 rounded-2xl bg-surface border border-border hover:border-primary/50 hover:bg-surface-elevated transition-all flex items-start gap-4 cursor-target group"
+              >
+                <div className="p-2.5 rounded-xl bg-surface-elevated border border-border text-primary group-hover:bg-primary group-hover:text-background transition-colors flex-shrink-0">
+                  <Icon size={18} />
+                </div>
+                <div>
+                  <div className="font-sans font-bold text-sm text-text-primary group-hover:text-primary transition-colors flex items-center gap-1.5">
+                    <span>{action.title}</span>
+                    <ArrowUpRight size={13} />
+                  </div>
+                  <p className="font-sans text-xs text-text-muted mt-0.5 leading-snug">
+                    {action.desc}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       </div>
+
     </div>
   );
 }

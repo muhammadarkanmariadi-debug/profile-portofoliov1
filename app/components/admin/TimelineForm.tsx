@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { timelineSchema } from '@/lib/validations/timeline';
-import { Loader2, Save, ArrowLeft } from 'lucide-react';
+import { Loader2, Save, ArrowLeft, History } from 'lucide-react';
 import Link from 'next/link';
 import type { TimelineEntry } from '@prisma/client';
 
@@ -67,112 +67,92 @@ export default function TimelineForm({ initialData }: { initialData?: TimelineEn
   };
 
   return (
-    <div>
-      <div className="flex items-center gap-4 mb-8">
+    <div className="space-y-8 max-w-3xl">
+      <div className="flex items-center gap-4 pb-6 border-b border-border">
         <Link 
           href="/admin/timeline"
-          className="p-2 bg-white/5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors"
+          className="p-2.5 bg-surface hover:bg-surface-elevated border border-border rounded-xl text-text-muted hover:text-text-primary transition-colors cursor-target"
         >
-          <ArrowLeft size={20} />
+          <ArrowLeft size={18} />
         </Link>
-        <h1 className="text-2xl font-bold">
-          {initialData ? 'Edit Timeline Entry' : 'Create Timeline Entry'}
-        </h1>
+        <div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary font-bold">
+            TIMELINE ENGINE // 05
+          </div>
+          <h1 className="font-heading font-black text-2xl sm:text-3xl text-text-primary tracking-tight">
+            {initialData ? 'Edit Career Milestone' : 'Register New Milestone'}
+          </h1>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 max-w-3xl">
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Type *</label>
-            <select 
-              {...register('type')}
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
-            >
-              <option value="EXPERIENCE">Experience</option>
-              <option value="EDUCATION">Education</option>
-            </select>
-            {errors.type && <p className="text-red-500 text-xs">{errors.type.message}</p>}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+        <div className="bg-surface border border-border rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+          <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-text-primary font-bold border-b border-border pb-4">
+            <History size={15} className="text-primary" />
+            <span>MILESTONE CLASSIFICATION</span>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Category / Institution (EN) *</label>
-            <input 
-              {...register('categoryEn')} 
-              placeholder="e.g. University of Example or Tech Corp"
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
-            />
-            {errors.categoryEn && <p className="text-red-500 text-xs">{errors.categoryEn.message}</p>}
-          </div>
+          <div className="space-y-6 font-sans text-sm">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Milestone Type *</label>
+                <select 
+                  {...register('type')}
+                  className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors font-mono text-xs"
+                >
+                  <option value="EXPERIENCE">Work & Professional Experience</option>
+                  <option value="EDUCATION">Formal Education & Academics</option>
+                </select>
+                {errors.type && <p className="text-rose-500 font-mono text-xs">{errors.type.message}</p>}
+              </div>
 
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Category / Institution (ID) *</label>
-            <input 
-              {...register('categoryId')} 
-              placeholder="e.g. Universitas Contoh atau Perusahaan Teknologi"
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
-            />
-            {errors.categoryId && <p className="text-red-500 text-xs">{errors.categoryId.message}</p>}
-          </div>
-        </div>
+              <div className="space-y-2">
+                <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Institution / Company *</label>
+                <input 
+                  {...register('categoryEn')} 
+                  placeholder="e.g. SMK Telkom Malang / Software Studio"
+                  className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors"
+                />
+                {errors.categoryEn && <p className="text-rose-500 font-mono text-xs">{errors.categoryEn.message}</p>}
+              </div>
+            </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Title / Degree (EN) *</label>
-            <input 
-              {...register('titleEn')} 
-              placeholder="e.g. Bachelor of Science or Senior Developer"
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
-            />
-            {errors.titleEn && <p className="text-red-500 text-xs">{errors.titleEn.message}</p>}
-          </div>
+            <div className="space-y-2">
+              <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Role / Degree Title *</label>
+              <input 
+                {...register('titleEn')} 
+                placeholder="e.g. Software Engineering Lead, Full-Stack Intern"
+                className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors"
+              />
+              {errors.titleEn && <p className="text-rose-500 font-mono text-xs">{errors.titleEn.message}</p>}
+            </div>
 
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Title / Degree (ID) *</label>
-            <input 
-              {...register('titleId')} 
-              placeholder="e.g. Sarjana Sains atau Senior Developer"
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
-            />
-            {errors.titleId && <p className="text-red-500 text-xs">{errors.titleId.message}</p>}
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Description / Details (EN)</label>
-            <textarea 
-              {...register('descriptionEn')} 
-              rows={4}
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors resize-none"
-              placeholder="Brief description of responsibilities or achievements..."
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Description / Details (ID)</label>
-            <textarea 
-              {...register('descriptionId')} 
-              rows={4}
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors resize-none"
-              placeholder="Deskripsi singkat tanggung jawab atau pencapaian..."
-            />
+            <div className="space-y-2">
+              <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Description & Responsibilities</label>
+              <textarea 
+                {...register('descriptionEn')} 
+                rows={4}
+                className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors resize-none leading-relaxed"
+                placeholder="Key responsibilities, architectural focus, achievements..."
+              />
+            </div>
           </div>
         </div>
 
         {error && (
-          <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg">
+          <div className="p-4 bg-rose-500/10 border border-rose-500/30 text-rose-400 rounded-2xl font-mono text-xs">
             {error}
           </div>
         )}
 
-        <div className="pt-4 flex justify-end">
+        <div className="pt-2 flex justify-end">
           <button
             type="submit"
             disabled={isSaving}
-            className="flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-xl transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-8 py-3.5 bg-primary hover:bg-primary/90 text-background rounded-2xl transition-all font-mono text-xs font-bold uppercase tracking-wider disabled:opacity-50 cursor-target shadow-lg shadow-primary/20"
           >
-            {isSaving ? <Loader2 className="animate-spin w-5 h-5" /> : <Save className="w-5 h-5" />}
-            Save Entry
+            {isSaving ? <Loader2 className="animate-spin w-4 h-4" /> : <Save className="w-4 h-4" />}
+            <span>SAVE MILESTONE</span>
           </button>
         </div>
       </form>

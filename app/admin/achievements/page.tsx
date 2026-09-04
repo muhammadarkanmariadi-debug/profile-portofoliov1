@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Plus, Pencil, Trash2, ArrowUp, ArrowDown, Loader2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, ArrowUp, ArrowDown, Loader2, Award } from 'lucide-react';
 import type { Achievement } from '@prisma/client';
 
 export default function AchievementsAdminPage() {
@@ -90,93 +90,118 @@ export default function AchievementsAdminPage() {
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">Achievements Management</h1>
+    <div className="space-y-8">
+      
+      {/* Section Header with Index */}
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-6 font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
+        <div className="flex items-center gap-3">
+          <span className="font-bold text-primary">04</span>
+          <span className="text-text-primary font-bold">CREDENTIALS & HONORS REPOSITORY</span>
+        </div>
         <Link 
           href="/admin/achievements/create"
-          className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-xl transition-colors font-medium"
+          className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-background px-4 py-2 rounded-xl transition-colors font-mono text-xs font-bold cursor-target shadow-md shadow-primary/20"
         >
-          <Plus size={20} />
-          Add Achievement
+          <Plus size={15} />
+          <span>ADD CREDENTIAL</span>
         </Link>
-      </div>
+      </header>
 
-      <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-        <table className="w-full text-left border-collapse min-w-[800px]">
-          <thead>
-            <tr className="bg-white/[0.01] border-b border-white/10 text-gray-400 text-sm">
-              <th className="p-4 font-medium w-24">Order</th>
-              <th className="p-4 font-medium w-32">Image</th>
-              <th className="p-4 font-medium min-w-[200px]">Details</th>
-              <th className="p-4 font-medium">Date</th>
-              <th className="p-4 font-medium text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {achievements.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="p-8 text-center text-gray-500">
-                  No achievements found.
-                </td>
+      {/* Achievements Table */}
+      <div className="bg-surface border border-border rounded-3xl overflow-hidden shadow-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse min-w-[800px]">
+            <thead>
+              <tr className="bg-surface-elevated border-b border-border text-text-muted font-mono text-xs uppercase tracking-wider">
+                <th className="p-4 pl-6 w-24">Rank</th>
+                <th className="p-4 w-32">Document</th>
+                <th className="p-4 min-w-[240px]">Honor & Standing</th>
+                <th className="p-4">Date Conferred</th>
+                <th className="p-4 pr-6 text-right">Actions</th>
               </tr>
-            ) : (
-              achievements.map((item, index) => (
-                <tr key={item.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
-                  <td className="p-4">
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button 
-                        onClick={() => handleMove(index, 'up')}
-                        disabled={index === 0}
-                        className="p-1 text-gray-400 hover:text-white disabled:opacity-30"
-                      >
-                        <ArrowUp size={16} />
-                      </button>
-                      <button 
-                        onClick={() => handleMove(index, 'down')}
-                        disabled={index === achievements.length - 1}
-                        className="p-1 text-gray-400 hover:text-white disabled:opacity-30"
-                      >
-                        <ArrowDown size={16} />
-                      </button>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    {item.imageUrl ? (
-                      <img src={item.imageUrl} alt={item.titleEn} className="w-24 h-16 object-cover rounded-lg border border-white/10" />
-                    ) : (
-                      <div className="w-24 h-16 bg-white/5 border border-dashed border-white/20 rounded-lg flex items-center justify-center text-xs text-gray-500">No Image</div>
-                    )}
-                  </td>
-                  <td className="p-4">
-                    <div className="font-medium text-white mb-1">{item.titleEn}</div>
-                    <div className="text-sm text-primary/80">{item.statusEn}</div>
-                  </td>
-                  <td className="p-4 text-gray-300">
-                    {new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
-                  </td>
-                  <td className="p-4">
-                    <div className="flex justify-end gap-2">
-                      <Link 
-                        href={`/admin/achievements/edit/${item.id}`}
-                        className="p-2 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white rounded-lg transition-colors"
-                      >
-                        <Pencil size={18} />
-                      </Link>
-                      <button 
-                        onClick={() => handleDelete(item.id)}
-                        className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-lg transition-colors"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
+            </thead>
+            <tbody className="divide-y divide-border font-sans text-sm">
+              {achievements.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="p-12 text-center text-text-muted font-mono text-xs">
+                    No achievements or credentials found. Add your hackathon wins and certifications.
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                achievements.map((item, index) => (
+                  <tr key={item.id} className="hover:bg-surface-elevated/60 transition-colors group">
+                    <td className="p-4 pl-6 font-mono text-xs text-text-muted">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold">#{String(index + 1).padStart(2, '0')}</span>
+                        <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button 
+                            onClick={() => handleMove(index, 'up')}
+                            disabled={index === 0}
+                            className="p-1 hover:text-primary disabled:opacity-20 cursor-target"
+                            title="Move Up"
+                          >
+                            <ArrowUp size={14} />
+                          </button>
+                          <button 
+                            onClick={() => handleMove(index, 'down')}
+                            disabled={index === achievements.length - 1}
+                            className="p-1 hover:text-primary disabled:opacity-20 cursor-target"
+                            title="Move Down"
+                          >
+                            <ArrowDown size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      {item.imageUrl ? (
+                        <img 
+                          src={item.imageUrl} 
+                          alt={item.titleEn} 
+                          className="w-20 h-14 object-cover rounded-xl border border-border shadow-sm" 
+                        />
+                      ) : (
+                        <div className="w-20 h-14 bg-surface-elevated border border-dashed border-border rounded-xl flex items-center justify-center font-mono text-[10px] text-text-muted">
+                          NO DOC
+                        </div>
+                      )}
+                    </td>
+                    <td className="p-4">
+                      <div className="font-bold text-text-primary mb-1">{item.titleEn}</div>
+                      <div className="inline-flex items-center gap-1.5 font-mono text-[11px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
+                        <Award size={11} />
+                        <span>{item.statusEn}</span>
+                      </div>
+                    </td>
+                    <td className="p-4 font-mono text-xs text-text-muted">
+                      {new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                    </td>
+                    <td className="p-4 pr-6">
+                      <div className="flex justify-end gap-2">
+                        <Link 
+                          href={`/admin/achievements/edit/${item.id}`}
+                          className="p-2 bg-surface-elevated hover:bg-primary hover:text-background border border-border text-text-muted rounded-xl transition-all cursor-target"
+                          title="Edit achievement"
+                        >
+                          <Pencil size={15} />
+                        </Link>
+                        <button 
+                          onClick={() => handleDelete(item.id)}
+                          className="p-2 bg-surface-elevated hover:bg-rose-500/20 hover:text-rose-400 border border-border text-text-muted rounded-xl transition-all cursor-target"
+                          title="Delete achievement"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
+
     </div>
   );
 }

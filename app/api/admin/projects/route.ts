@@ -34,6 +34,10 @@ export async function POST(request: Request) {
     const newProject = await prisma.project.create({
       data: {
         ...projectData,
+        categoryId: projectData.categoryId || projectData.categoryEn,
+        titleId: projectData.titleId || projectData.titleEn,
+        descriptionId: projectData.descriptionId ?? projectData.descriptionEn,
+        roleId: projectData.roleId ?? projectData.roleEn,
         slug: finalSlug,
         techStack: {
           connect: techStackIds.map((id) => ({ id })),

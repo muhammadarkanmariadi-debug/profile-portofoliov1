@@ -22,19 +22,19 @@ export default function Projects({ projects, isLanding = false }: ProjectsProps)
     : null
 
   return (
-    <section id="work" className="w-full bg-[#0B0B0E] text-[#FAFAFC] py-24 px-6 sm:px-10 border-b border-[#22222D]">
+    <section id="work" className="w-full bg-background text-text-primary py-24 px-6 sm:px-10 border-b border-border transition-colors duration-300">
       <div className="max-w-[1300px] mx-auto">
         
         {/* Section Header with Index (Screenshot 3 Match) */}
-        <header className="w-full flex items-center justify-between border-b border-[#22222D] pb-6 font-mono text-xs uppercase tracking-[0.2em] text-[#8E8E9F] mb-12">
+        <header className="w-full flex items-center justify-between border-b border-border pb-6 font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-12">
           <div className="flex items-center gap-4">
-            <span className="font-bold text-white">02</span>
+            <span className="font-bold text-primary">02</span>
             <span>SELECTED PROJECTS</span>
           </div>
           <div className="flex items-center gap-6">
             <span>{String(displayProjects.length).padStart(2, '0')}</span>
             {isLanding && (
-              <Link href="/projects" className="hidden sm:inline-flex items-center gap-1 hover:text-white transition-colors cursor-target">
+              <Link href="/projects" className="hidden sm:inline-flex items-center gap-1 hover:text-primary transition-colors cursor-target">
                 <span>VIEW ALL</span>
                 <ArrowRight size={13} />
               </Link>
@@ -50,12 +50,12 @@ export default function Projects({ projects, isLanding = false }: ProjectsProps)
               id={project.id}
               slug={project.slug}
               index={String(idx + 1).padStart(2, '0')}
-              title={lang === 'id' ? project.titleId : project.titleEn}
-              description={lang === 'id' ? (project.descriptionId || '') : (project.descriptionEn || '')}
-              role={lang === 'id' ? project.roleId : project.roleEn}
+              title={(lang === 'id' ? project.titleId : project.titleEn) || project.titleEn || project.titleId}
+              description={(lang === 'id' ? project.descriptionId : project.descriptionEn) || project.descriptionEn || project.descriptionId || ''}
+              role={(lang === 'id' ? project.roleId : project.roleEn) || project.roleEn || project.roleId}
               liveUrl={project.liveUrl}
               imageUrl={project.imageUrl}
-              category={lang === 'id' ? project.categoryId : project.categoryEn}
+              category={(lang === 'id' ? project.categoryId : project.categoryEn) || project.categoryEn || project.categoryId}
               techStack={project.techStack}
               onReadMore={() => setSelectedProjectId(project.id)}
             />
@@ -67,7 +67,7 @@ export default function Projects({ projects, isLanding = false }: ProjectsProps)
           <div className="mt-16 text-center">
             <Link 
               href="/projects" 
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full border border-[#2E2E3C] bg-[#121217] text-white font-mono text-xs uppercase tracking-widest font-bold hover:border-white transition-colors cursor-target"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full border border-border bg-surface text-text-primary font-mono text-xs uppercase tracking-widest font-bold hover:border-primary/50 hover:bg-surface-elevated transition-colors cursor-target shadow-sm"
             >
               <span>VIEW ALL REPOSITORIES & PROJECTS</span>
               <ArrowRight size={14} />

@@ -63,7 +63,7 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
           <span 
             className="text-transparent inline-block"
             style={{ 
-              WebkitTextStroke: '2px #121217'
+              WebkitTextStroke: '2px currentColor'
             }}
           >
             to ignore.

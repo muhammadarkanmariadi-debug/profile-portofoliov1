@@ -22,7 +22,12 @@ export async function POST(request: Request) {
     const validatedData = timelineSchema.parse(body);
 
     const newEntry = await prisma.timelineEntry.create({
-      data: validatedData,
+      data: {
+        ...validatedData,
+        categoryId: validatedData.categoryId || validatedData.categoryEn,
+        titleId: validatedData.titleId || validatedData.titleEn,
+        descriptionId: validatedData.descriptionId ?? validatedData.descriptionEn,
+      },
     });
 
     return NextResponse.json(newEntry, { status: 201 });

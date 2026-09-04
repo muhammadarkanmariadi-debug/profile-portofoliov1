@@ -21,6 +21,9 @@ export async function PUT(
       where: { id: params.id },
       data: {
         ...validatedData,
+        titleId: validatedData.titleId || validatedData.titleEn,
+        statusId: validatedData.statusId || validatedData.statusEn,
+        descriptionId: validatedData.descriptionId ?? validatedData.descriptionEn,
         slug: finalSlug,
       },
     });

@@ -13,7 +13,12 @@ export async function PUT(
 
     const updatedEntry = await prisma.timelineEntry.update({
       where: { id: params.id },
-      data: validatedData,
+      data: {
+        ...validatedData,
+        categoryId: validatedData.categoryId || validatedData.categoryEn,
+        titleId: validatedData.titleId || validatedData.titleEn,
+        descriptionId: validatedData.descriptionId ?? validatedData.descriptionEn,
+      },
     });
 
     return NextResponse.json(updatedEntry);

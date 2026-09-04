@@ -26,7 +26,7 @@ const Page = async () => {
   ]);
 
   return (
-    <main className="flex flex-col w-full relative min-h-screen bg-[#0B0B0E]">
+    <main className="flex flex-col w-full relative min-h-screen bg-background transition-colors duration-300">
       {/* 0. Intro Experience Preloader (Screenshot 1 Match) */}
       <SiteLoader />
 

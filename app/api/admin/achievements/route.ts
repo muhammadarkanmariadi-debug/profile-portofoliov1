@@ -30,6 +30,9 @@ export async function POST(request: Request) {
     const newAchievement = await prisma.achievement.create({
       data: {
         ...validatedData,
+        titleId: validatedData.titleId || validatedData.titleEn,
+        statusId: validatedData.statusId || validatedData.statusEn,
+        descriptionId: validatedData.descriptionId ?? validatedData.descriptionEn,
         slug: finalSlug,
       },
     });

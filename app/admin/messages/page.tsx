@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Loader2, Trash2, MailOpen, Mail } from 'lucide-react';
+import { Loader2, Trash2, MailOpen, Mail, Send, Reply, User } from 'lucide-react';
 import type { ContactMessage } from '@prisma/client';
 
 export default function MessagesAdminPage() {
@@ -62,60 +62,100 @@ export default function MessagesAdminPage() {
     );
   }
 
-  return (
-    <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">Contact Messages</h1>
-      </div>
+  const unreadCount = messages.filter(m => !m.isRead).length;
 
-      <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+  return (
+    <div className="space-y-8">
+      {/* Section Header with Index */}
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-6 font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
+        <div className="flex items-center gap-3">
+          <span className="font-bold text-primary">06</span>
+          <span className="text-text-primary font-bold">COMMUNICATIONS & INBOX</span>
+        </div>
+        <div className="flex items-center gap-2 text-[11px] font-mono">
+          <span className="px-3 py-1 rounded-full bg-surface border border-border text-text-muted">
+            TOTAL: {messages.length}
+          </span>
+          <span className={`px-3 py-1 rounded-full border ${unreadCount > 0 ? 'bg-primary/10 border-primary/30 text-primary font-bold' : 'bg-surface border-border text-text-muted'}`}>
+            UNREAD: {unreadCount}
+          </span>
+        </div>
+      </header>
+
+      <div className="space-y-4">
         {messages.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">
-            No messages found.
+          <div className="p-16 text-center text-text-muted bg-surface border border-border rounded-3xl font-mono text-xs">
+            Inbox is empty. When visitors submit contact inquiries, they will appear here in real time.
           </div>
         ) : (
-          <div className="flex flex-col">
-            {messages.map((message) => (
-              <div 
-                key={message.id} 
-                className={`p-6 border-b border-white/5 transition-colors ${!message.isRead ? 'bg-primary/5' : 'hover:bg-white/[0.02]'}`}
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="font-medium text-white flex items-center gap-2">
-                      {message.name}
-                      {!message.isRead && <span className="w-2 h-2 rounded-full bg-primary"></span>}
-                    </h3>
-                    <a href={`mailto:${message.email}`} className="text-sm text-primary hover:underline">{message.email}</a>
+          messages.map((message) => (
+            <div 
+              key={message.id} 
+              className={`p-6 sm:p-7 rounded-3xl border transition-all duration-300 ${
+                !message.isRead 
+                  ? 'bg-surface border-primary/40 shadow-sm' 
+                  : 'bg-surface/70 border-border opacity-85 hover:opacity-100'
+              }`}
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-mono font-bold text-sm ${!message.isRead ? 'bg-primary text-background' : 'bg-surface-elevated border border-border text-text-muted'}`}>
+                    {message.name.charAt(0).toUpperCase()}
                   </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-xs text-gray-500">
-                      {new Date(message.createdAt).toLocaleDateString()} {new Date(message.createdAt).toLocaleTimeString()}
-                    </span>
-                    <div className="flex gap-2">
-                      <button 
-                        onClick={() => handleToggleRead(message.id, message.isRead)}
-                        className="p-2 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white rounded-lg transition-colors"
-                        title={message.isRead ? "Mark as unread" : "Mark as read"}
-                      >
-                        {message.isRead ? <Mail size={16} /> : <MailOpen size={16} />}
-                      </button>
-                      <button 
-                        onClick={() => handleDelete(message.id)}
-                        className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-lg transition-colors"
-                        title="Delete message"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
+                  <div>
+                    <h3 className="font-bold text-base text-text-primary flex items-center gap-2">
+                      <span>{message.name}</span>
+                      {!message.isRead && (
+                        <span className="px-2 py-0.5 rounded-full bg-primary/20 text-primary font-mono text-[10px] tracking-wider uppercase font-bold">
+                          NEW INQUIRY
+                        </span>
+                      )}
+                    </h3>
+                    <a 
+                      href={`mailto:${message.email}`} 
+                      className="font-mono text-xs text-primary hover:underline cursor-target"
+                    >
+                      {message.email}
+                    </a>
                   </div>
                 </div>
-                <div className="text-gray-300 whitespace-pre-wrap text-sm leading-relaxed bg-black/20 p-4 rounded-xl border border-white/5">
-                  {message.message}
+
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-[11px] text-text-muted">
+                    {new Date(message.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} at {new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                  
+                  <div className="flex items-center gap-1.5">
+                    <a
+                      href={`mailto:${message.email}?subject=Re: Inquiry from 4RK4N.DEV Portfolio`}
+                      className="p-2 bg-surface-elevated hover:bg-primary hover:text-background border border-border text-text-muted rounded-xl transition-all cursor-target"
+                      title="Reply via email"
+                    >
+                      <Reply size={15} />
+                    </a>
+                    <button 
+                      onClick={() => handleToggleRead(message.id, message.isRead)}
+                      className="p-2 bg-surface-elevated hover:bg-surface border border-border text-text-muted hover:text-text-primary rounded-xl transition-all cursor-target"
+                      title={message.isRead ? "Mark as unread" : "Mark as read"}
+                    >
+                      {message.isRead ? <Mail size={15} /> : <MailOpen size={15} />}
+                    </button>
+                    <button 
+                      onClick={() => handleDelete(message.id)}
+                      className="p-2 bg-surface-elevated hover:bg-rose-500/20 hover:text-rose-400 border border-border text-text-muted rounded-xl transition-all cursor-target"
+                      title="Delete message"
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
+
+              <div className="font-sans text-sm text-text-primary whitespace-pre-wrap leading-relaxed bg-surface-elevated/80 p-5 rounded-2xl border border-border/80">
+                {message.message}
+              </div>
+            </div>
+          ))
         )}
       </div>
     </div>

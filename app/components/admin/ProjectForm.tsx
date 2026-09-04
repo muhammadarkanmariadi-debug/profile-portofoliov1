@@ -7,12 +7,23 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { projectSchema } from '@/lib/validations/project';
 import FileUpload from '@/app/components/admin/FileUpload';
-import { Loader2, Save, ArrowLeft, Check } from 'lucide-react';
+import { Loader2, Save, ArrowLeft, Check, Layers, ExternalLink, Github, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import type { Project, Skill } from '@prisma/client';
 
 type ProjectFormValues = z.infer<typeof projectSchema>;
 type ProjectWithTech = Project & { techStack: Skill[] };
+
+const CATEGORY_DISPLAY_MAP: Record<string, string> = {
+  FRONTEND: 'FRONTEND',
+  BACKEND: 'BACKEND',
+  DATABASE_ORM: 'DATABASE & ORM',
+  BAHASA_LAINNYA: 'OTHER LANGUAGES',
+  VERSION_CONTROL: 'VERSION CONTROL',
+  CLOUD_DEPLOYMENT: 'CLOUD & DEPLOYMENT',
+  DESIGN_PROTOTYPING: 'DESIGN & PROTOTYPING',
+  SISTEM_OPERASI: 'OPERATING SYSTEMS',
+};
 
 export default function ProjectForm({ initialData }: { initialData?: ProjectWithTech }) {
   const router = useRouter();
@@ -111,168 +122,162 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
   }, {} as Record<string, Skill[]>);
 
   return (
-    <div>
-      <div className="flex items-center gap-4 mb-8">
+    <div className="space-y-8 max-w-4xl">
+      {/* Header with Back button */}
+      <div className="flex items-center gap-4 pb-6 border-b border-border">
         <Link
           href="/admin/projects"
-          className="p-2 bg-white/5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors"
+          className="p-2.5 bg-surface hover:bg-surface-elevated border border-border rounded-xl text-text-muted hover:text-text-primary transition-colors cursor-target"
         >
-          <ArrowLeft size={20} />
+          <ArrowLeft size={18} />
         </Link>
-        <h1 className="text-2xl font-bold">
-          {initialData ? 'Edit Project' : 'Create Project'}
-        </h1>
+        <div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary font-bold">
+            PROJECT ENGINE // 02
+          </div>
+          <h1 className="font-heading font-black text-2xl sm:text-3xl text-text-primary tracking-tight">
+            {initialData ? 'Edit Architecture & Project' : 'Register New Project'}
+          </h1>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 max-w-4xl">
-
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Category (EN) *</label>
-            <input
-              {...register('categoryEn')}
-              placeholder="e.g. Web App, Mobile App, UI/UX"
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
-            />
-            {errors.categoryEn && <p className="text-red-500 text-xs">{errors.categoryEn.message}</p>}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+        
+        {/* Core Attributes Card */}
+        <div className="bg-surface border border-border rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+          <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-text-primary font-bold border-b border-border pb-4">
+            <Sparkles size={15} className="text-primary" />
+            <span>PRIMARY SPECIFICATIONS</span>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Category (ID) *</label>
-            <input
-              {...register('categoryId')}
-              placeholder="e.g. Aplikasi Web, Aplikasi Mobile"
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
-            />
-            {errors.categoryId && <p className="text-red-500 text-xs">{errors.categoryId.message}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Title / Name (EN) *</label>
-            <input
-              {...register('titleEn')}
-              placeholder="e.g. GigTix - Ticketing App"
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
-            />
-            {errors.titleEn && <p className="text-red-500 text-xs">{errors.titleEn.message}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Title / Name (ID) *</label>
-            <input
-              {...register('titleId')}
-              placeholder="e.g. GigTix - Aplikasi Tiket"
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
-            />
-            {errors.titleId && <p className="text-red-500 text-xs">{errors.titleId.message}</p>}
-          </div>
-
-          <div className="space-y-2 md:col-span-2">
-            <label className="text-sm text-gray-400">Custom URL Slug (optional, auto-generated from Title EN if blank)</label>
-            <input
-              {...register('slug')}
-              placeholder="e.g. gigtix-ticketing-app"
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white font-mono text-sm focus:border-primary outline-none transition-colors"
-            />
-            {errors.slug && <p className="text-red-500 text-xs">{errors.slug.message}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Your Role (EN)</label>
-            <input
-              {...register('roleEn')}
-              placeholder="e.g. Fullstack Developer"
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Your Role (ID)</label>
-            <input
-              {...register('roleId')}
-              placeholder="e.g. Pengembang Fullstack"
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
-            />
-          </div>
-
-          <div className="space-y-2 pt-8 md:col-span-2">
-            <label className="flex items-center gap-3 ">
+          <div className="grid md:grid-cols-2 gap-6 font-sans text-sm">
+            <div className="space-y-2">
+              <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Category / Domain *</label>
               <input
-                type="checkbox"
-                {...register('isDeploy')}
-                className="w-5 h-5 accent-primary rounded bg-black/50 border-white/10"
+                {...register('categoryEn')}
+                placeholder="e.g. Real-Time Distributed Systems"
+                className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors"
               />
-              <span className="text-white">Project is deployed (Live)</span>
-            </label>
+              {errors.categoryEn && <p className="text-rose-500 font-mono text-xs">{errors.categoryEn.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Project Title *</label>
+              <input
+                {...register('titleEn')}
+                placeholder="e.g. GigTix - High-Concurrency Ticketing Platform"
+                className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors"
+              />
+              {errors.titleEn && <p className="text-rose-500 font-mono text-xs">{errors.titleEn.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Custom URL Slug (Optional)</label>
+              <input
+                {...register('slug')}
+                placeholder="e.g. gigtix-platform"
+                className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary font-mono text-xs focus:border-primary outline-none transition-colors"
+              />
+              {errors.slug && <p className="text-rose-500 font-mono text-xs">{errors.slug.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Role / Scope of Work</label>
+              <input
+                {...register('roleEn')}
+                placeholder="e.g. Lead Full-Stack Architect"
+                className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors"
+              />
+            </div>
+
+            <div className="space-y-2 md:col-span-2 pt-2">
+              <label className="inline-flex items-center gap-3 cursor-pointer p-3 rounded-xl bg-surface-elevated border border-border">
+                <input
+                  type="checkbox"
+                  {...register('isDeploy')}
+                  className="w-4 h-4 accent-primary rounded bg-surface border-border"
+                />
+                <span className="font-mono text-xs uppercase tracking-wider text-text-primary font-bold">
+                  Deployed Live in Production
+                </span>
+              </label>
+            </div>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 border-t border-white/10 pt-6">
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Description (EN)</label>
-            <textarea
-              {...register('descriptionEn')}
-              rows={5}
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors resize-none"
-              placeholder="Describe the project, its goals, and what you built..."
-            />
+        {/* Narrative & Description */}
+        <div className="bg-surface border border-border rounded-3xl p-6 sm:p-8 space-y-4 shadow-sm">
+          <label className="font-mono text-xs text-text-muted uppercase tracking-wider block font-bold">
+            Architecture Breakdown & System Overview
+          </label>
+          <textarea
+            {...register('descriptionEn')}
+            rows={5}
+            className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors resize-none font-sans text-sm leading-relaxed"
+            placeholder="Describe the technical architecture, problem statement, key bottlenecks resolved, and results..."
+          />
+        </div>
+
+        {/* Endpoints & Links */}
+        <div className="bg-surface border border-border rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+          <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-text-primary font-bold border-b border-border pb-4">
+            <ExternalLink size={15} className="text-secondary" />
+            <span>EXTERNAL ACCESS ENDPOINTS</span>
           </div>
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Description (ID)</label>
-            <textarea
-              {...register('descriptionId')}
-              rows={5}
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors resize-none"
-              placeholder="Jelaskan proyek ini, tujuannya, dan apa yang kamu bangun..."
-            />
+
+          <div className="grid md:grid-cols-2 gap-6 font-sans text-sm">
+            <div className="space-y-2">
+              <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Live Production URL</label>
+              <input
+                {...register('liveUrl')}
+                placeholder="https://app.domain.com"
+                className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors font-mono text-xs"
+              />
+              {errors.liveUrl && <p className="text-rose-500 font-mono text-xs">{errors.liveUrl.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="font-mono text-xs text-text-muted uppercase tracking-wider block">Source Repository (GitHub)</label>
+              <input
+                {...register('sourceCodeUrl')}
+                placeholder="https://github.com/username/repo"
+                className="w-full bg-surface-elevated border border-border rounded-xl p-3.5 text-text-primary focus:border-primary outline-none transition-colors font-mono text-xs"
+              />
+              {errors.sourceCodeUrl && <p className="text-rose-500 font-mono text-xs">{errors.sourceCodeUrl.message}</p>}
+            </div>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 border-t border-white/10 pt-6">
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Live URL {isDeploy && '*'}</label>
-            <input
-              {...register('liveUrl')}
-              placeholder="https://..."
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
-            />
-            {errors.liveUrl && <p className="text-red-500 text-xs">{errors.liveUrl.message}</p>}
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm text-gray-400">Source Code (GitHub) URL</label>
-            <input
-              {...register('sourceCodeUrl')}
-              placeholder="https://github.com/..."
-              className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none transition-colors"
-            />
-            {errors.sourceCodeUrl && <p className="text-red-500 text-xs">{errors.sourceCodeUrl.message}</p>}
-          </div>
-        </div>
-
-        <div className="border-t border-white/10 pt-6">
-          <label className="text-sm text-gray-400 block mb-4">Project Image Thumbnail</label>
+        {/* Visual Asset Thumbnail */}
+        <div className="bg-surface border border-border rounded-3xl p-6 sm:p-8 space-y-4 shadow-sm">
+          <label className="font-mono text-xs text-text-muted uppercase tracking-wider block font-bold">
+            Project Visual Asset / Screenshot
+          </label>
           <FileUpload
             value={imageUrl || ''}
             onChange={(url) => setValue('imageUrl', url)}
-            label="Upload Thumbnail"
+            label="Upload Screenshot"
             folder="portfolio/projects"
           />
         </div>
 
-        {/* Tech Stack Selection */}
-        <div className="border-t border-white/10 pt-6">
-          <label className="text-sm text-gray-400 block mb-4">Select Tech Stack</label>
+        {/* Tech Stack Matrix Selection */}
+        <div className="bg-surface border border-border rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+          <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-text-primary font-bold border-b border-border pb-4">
+            <Layers size={15} className="text-emerald-400" />
+            <span>ASSIGNED TECHNOLOGY STACK ({techStackIds.length} SELECTED)</span>
+          </div>
 
           {Object.keys(groupedSkills).length === 0 ? (
-            <div className="text-sm text-gray-500 italic bg-white/5 p-4 rounded-lg">
-              No skills found. Please add skills first before assigning them to projects.
+            <div className="font-mono text-xs text-text-muted bg-surface-elevated p-6 rounded-2xl text-center">
+              No skills found in registry. Add skills from the Skills section first.
             </div>
           ) : (
             <div className="space-y-6">
               {Object.keys(groupedSkills).sort().map(category => (
-                <div key={category}>
-                  <h4 className="text-xs font-semibold text-primary uppercase tracking-wider mb-3">
-                    {category.replace(/_/g, ' ')}
+                <div key={category} className="space-y-2.5">
+                  <h4 className="font-mono text-[11px] font-bold text-primary tracking-wider uppercase">
+                    {CATEGORY_DISPLAY_MAP[category] || category.replace(/_/g, ' ')}
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {groupedSkills[category].sort((a, b) => a.order - b.order).map(skill => {
@@ -283,15 +288,15 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
                           key={skill.id}
                           onClick={() => toggleSkill(skill.id)}
                           className={`
-                            flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium border transition-all
+                            flex items-center gap-2 px-3.5 py-1.5 rounded-full font-mono text-xs tracking-wider uppercase transition-all cursor-target font-bold
                             ${isSelected
-                              ? 'bg-primary/20 border-primary text-primary'
-                              : 'bg-white/5 border-white/10 text-gray-400 hover:border-white/30 hover:text-white'
+                              ? 'bg-primary text-background shadow-sm shadow-primary/20'
+                              : 'bg-surface-elevated border border-border text-text-muted hover:text-text-primary hover:border-primary/40'
                             }
                           `}
                         >
-                          {isSelected && <Check size={14} />}
-                          {skill.title}
+                          {isSelected && <Check size={13} />}
+                          <span>{skill.title}</span>
                         </button>
                       );
                     })}
@@ -303,19 +308,20 @@ export default function ProjectForm({ initialData }: { initialData?: ProjectWith
         </div>
 
         {error && (
-          <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg">
+          <div className="p-4 bg-rose-500/10 border border-rose-500/30 text-rose-400 rounded-2xl font-mono text-xs">
             {error}
           </div>
         )}
 
-        <div className="pt-4 flex justify-end border-t border-white/10">
+        {/* Submit Button */}
+        <div className="pt-2 flex justify-end">
           <button
             type="submit"
             disabled={isSaving}
-            className="flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-xl transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-8 py-3.5 bg-primary hover:bg-primary/90 text-background rounded-2xl transition-all font-mono text-xs font-bold uppercase tracking-wider disabled:opacity-50 cursor-target shadow-lg shadow-primary/20"
           >
-            {isSaving ? <Loader2 className="animate-spin w-5 h-5" /> : <Save className="w-5 h-5" />}
-            Save Project
+            {isSaving ? <Loader2 className="animate-spin w-4 h-4" /> : <Save className="w-4 h-4" />}
+            <span>SAVE PROJECT SPECIFICATION</span>
           </button>
         </div>
       </form>

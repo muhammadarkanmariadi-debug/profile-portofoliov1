@@ -18,22 +18,35 @@ export default function Skills({ skills }: SkillsProps) {
     return acc;
   }, {} as Record<string, Skill[]>);
 
+  const CATEGORY_DISPLAY_MAP: Record<string, string> = {
+    FRONTEND: 'FRONTEND',
+    BACKEND: 'BACKEND',
+    DATABASE_ORM: 'DATABASE & ORM',
+    BAHASA_LAINNYA: 'OTHER LANGUAGES',
+    VERSION_CONTROL: 'VERSION CONTROL',
+    CLOUD_DEPLOYMENT: 'CLOUD & DEPLOYMENT',
+    DESIGN_PROTOTYPING: 'DESIGN & PROTOTYPING',
+    SISTEM_OPERASI: 'OPERATING SYSTEMS',
+  };
+
+  const getCategoryLabel = (cat: string) => CATEGORY_DISPLAY_MAP[cat] || cat.replace(/_/g, ' ');
+
   const categories = Object.keys(groupedSkills).sort();
   const [activeTab, setActiveTab] = useState(categories.length > 0 ? categories[0] : 'FRONTEND')
 
   if (categories.length === 0) return null;
 
   return (
-    <section id="skills" className="w-full bg-[#0B0B0E] text-[#FAFAFC] py-24 px-6 sm:px-10 border-b border-[#22222D]">
+    <section id="skills" className="w-full bg-background text-text-primary py-24 px-6 sm:px-10 border-b border-border transition-colors duration-300">
       <div className="max-w-[1300px] mx-auto">
         
         {/* Section Header with Index */}
-        <header className="w-full flex items-center justify-between border-b border-[#22222D] pb-6 font-mono text-xs uppercase tracking-[0.2em] text-[#8E8E9F] mb-12">
+        <header className="w-full flex items-center justify-between border-b border-border pb-6 font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-12">
           <div className="flex items-center gap-4">
-            <span className="font-bold text-white">03</span>
+            <span className="font-bold text-primary">03</span>
             <span>TECHNICAL ARCHITECTURE & SKILLS</span>
           </div>
-          <span className="text-[#6C63FF] font-bold">ENGINEERING INDEX</span>
+          <span className="text-primary font-bold">ENGINEERING INDEX</span>
         </header>
 
         <div className="flex flex-col gap-10">
@@ -47,20 +60,20 @@ export default function Skills({ skills }: SkillsProps) {
                   key={category}
                   onClick={() => setActiveTab(category)}
                   className={`relative px-5 py-2.5 rounded-full font-mono text-xs uppercase tracking-wider transition-colors cursor-target font-bold z-10 ${
-                    isActive ? 'text-[#121217]' : 'text-[#8E8E9F] hover:text-white'
+                    isActive ? 'text-background' : 'text-text-muted hover:text-text-primary'
                   }`}
                 >
                   {isActive && (
                     <motion.div
                       layoutId="activeTabPill"
                       transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                      className="absolute inset-0 bg-white rounded-full -z-10 shadow-lg"
+                      className="absolute inset-0 bg-primary rounded-full -z-10 shadow-lg"
                     />
                   )}
                   {!isActive && (
-                    <div className="absolute inset-0 bg-[#121217] border border-[#22222D] rounded-full -z-20" />
+                    <div className="absolute inset-0 bg-surface border border-border rounded-full -z-20 hover:border-primary/40 transition-colors" />
                   )}
-                  <span>{category.replace(/_/g, ' ')}</span>
+                  <span>{getCategoryLabel(category)}</span>
                 </button>
               )
             })}
@@ -83,23 +96,23 @@ export default function Skills({ skills }: SkillsProps) {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.04, duration: 0.3 }}
                   whileHover={{ y: -4, scale: 1.02 }}
-                  className="p-6 rounded-2xl flex flex-col items-center justify-center gap-4 bg-[#14141C] border border-[#22222F] hover:border-[#6C63FF]/60 hover:bg-[#181824] transition-colors cursor-target group transform-gpu"
+                  className="p-6 rounded-2xl flex flex-col items-center justify-center gap-4 bg-surface border border-border hover:border-primary/60 hover:bg-surface-elevated transition-all cursor-target group transform-gpu shadow-sm"
                 >
                   {skill.logoUrl ? (
                     <div className="w-12 h-12 flex items-center justify-center relative">
                       <img 
                         src={skill.logoUrl} 
                         alt={skill.title} 
-                        className="max-w-full max-h-full object-contain filter group-hover:drop-shadow-[0_0_12px_rgba(108,99,255,0.4)] transition-all duration-300"
+                        className="max-w-full max-h-full object-contain filter group-hover:drop-shadow-[0_0_12px_rgba(56,189,248,0.4)] transition-all duration-300"
                       />
                     </div>
                   ) : (
-                    <div className="w-12 h-12 rounded-xl bg-[#1C1C28] flex items-center justify-center font-mono font-bold text-lg text-[#6C63FF] border border-white/5">
+                    <div className="w-12 h-12 rounded-xl bg-surface-elevated flex items-center justify-center font-mono font-bold text-lg text-primary border border-border">
                       {skill.title.charAt(0)}
                     </div>
                   )}
 
-                  <span className="font-mono text-xs uppercase tracking-wider text-center text-[#E0E0EC] group-hover:text-white font-bold transition-colors">
+                  <span className="font-mono text-xs uppercase tracking-wider text-center text-text-primary group-hover:text-primary font-bold transition-colors">
                     {skill.title}
                   </span>
                 </motion.div>
