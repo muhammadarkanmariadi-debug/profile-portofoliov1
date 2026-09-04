@@ -55,41 +55,38 @@ export default function Hero({ profile: _profile }: HeroProps) {
       // Entrance Animation Timeline
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
       
-      tl.from([row1Ref.current, row2Ref.current, row3Ref.current], {
-        y: isDesktop ? 60 : 30,
-        opacity: 0,
-        duration: 1.1,
-        stagger: 0.12,
-        skewY: isDesktop ? 2 : 0
-      })
-      .from(hairlineRef.current, {
-        scaleX: 0,
-        opacity: 0,
-        duration: 1,
-        ease: 'expo.out'
-      }, '-=0.6')
-      .from([headerRef.current, footerRef.current], {
-        opacity: 0,
-        y: 10,
-        duration: 0.8,
-        stagger: 0.1
-      }, '-=0.5')
+      tl.fromTo([row1Ref.current, row2Ref.current, row3Ref.current], 
+        { y: isDesktop ? 60 : 30, opacity: 0, skewY: isDesktop ? 2 : 0 },
+        { y: 0, opacity: 1, skewY: 0, duration: 1.1, stagger: 0.12, ease: 'power3.out' }
+      )
+      .fromTo(hairlineRef.current,
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 0.7, duration: 1, ease: 'expo.out' },
+        '-=0.6'
+      )
+      .fromTo([headerRef.current, footerRef.current],
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out' },
+        '-=0.5'
+      )
 
-      // Scroll-driven Parallax Scrub
+      // Scroll-driven Parallax Scrub with explicit fromTo & immediateRender: false
       const scrollTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
           end: 'bottom top',
-          scrub: 1.2
+          scrub: 1.0,
+          invalidateOnRefresh: true,
         }
       })
 
-      scrollTl.to(row1Ref.current, { xPercent: isDesktop ? -8 : -3, opacity: 0.35 }, 0)
-      scrollTl.to(row2Ref.current, { xPercent: isDesktop ? 8 : 3, opacity: 0.35 }, 0)
-      scrollTl.to(row3Ref.current, { yPercent: isDesktop ? 20 : 10, scale: 0.94, opacity: 0.2 }, 0)
-      scrollTl.to(hairlineRef.current, { scaleX: 1.15, opacity: 0.2 }, 0)
-      scrollTl.to([headerRef.current, footerRef.current], { opacity: 0, y: -20 }, 0)
+      scrollTl
+        .fromTo(row1Ref.current, { xPercent: 0, opacity: 1 }, { xPercent: isDesktop ? -8 : -3, opacity: 0.35, ease: 'none', immediateRender: false }, 0)
+        .fromTo(row2Ref.current, { xPercent: 0, opacity: 1 }, { xPercent: isDesktop ? 8 : 3, opacity: 0.35, ease: 'none', immediateRender: false }, 0)
+        .fromTo(row3Ref.current, { yPercent: 0, scale: 1, opacity: 1 }, { yPercent: isDesktop ? 20 : 10, scale: 0.94, opacity: 0.2, ease: 'none', immediateRender: false }, 0)
+        .fromTo(hairlineRef.current, { scaleX: 1, opacity: 0.7 }, { scaleX: 1.15, opacity: 0.2, ease: 'none', immediateRender: false }, 0)
+        .fromTo([headerRef.current, footerRef.current], { opacity: 1, y: 0 }, { opacity: 0, y: -20, ease: 'none', immediateRender: false }, 0)
     })
 
     return () => mm.revert()

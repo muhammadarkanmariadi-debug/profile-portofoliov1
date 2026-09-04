@@ -117,7 +117,7 @@ export default function ProjectCard({
     <article 
       ref={cardRef}
       style={{ top: stickyTop }}
-      className="sticky w-full text-text-primary pt-8 pb-14 bg-background/95 backdrop-blur-md rounded-3xl border-t border-border shadow-2xl transition-colors duration-300 will-change-transform"
+      className="sticky w-full text-text-primary pt-8 pb-14    border-t border-border  transition-colors duration-300 will-change-transform"
     >
       <div ref={innerCardRef} className="w-full transition-transform duration-200 origin-top">
         {/* Topline: Index + Domain */}
