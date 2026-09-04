@@ -38,7 +38,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=5000
 ENV HOSTNAME="0.0.0.0"
 
-# Create non-root user for security
+ENV PATH="/app/node_modules/.bin:$PATH"
+
+# Copy non-root user for security
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
@@ -55,7 +57,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy node_modules prisma binaries needed for db push at startup
+# Copy node_modules prisma CLI and binaries needed for db push at startup
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.bin ./node_modules/.bin
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/prisma ./node_modules/prisma
