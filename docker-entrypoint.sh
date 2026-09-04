@@ -14,5 +14,6 @@ else
   echo "==> Prisma CLI not found in local modules, skipping initial db push."
 fi
 
+
 echo "==> Starting Next.js server on port ${PORT:-5000}..."
 exec node server.js
