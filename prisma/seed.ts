@@ -3,27 +3,32 @@ import { prisma } from '../lib/prisma';
 async function main() {
   console.log('🚀 Seeding standardized English database for 4RK4N.DEV with all 19 GitHub Repositories...');
 
-  // 1. Profile Seeding
-  await prisma.profile.deleteMany()
-  const profile = await prisma.profile.create({
-    data: {
-      phone: '+62-821-3273-6902',
-      email: 'muhammadarkanmariadi@gmail.com',
-      address: 'Malang, East Java, Indonesia',
-      linkedinUrl: 'https://linkedin.com/in/arkanmariadi',
-      instagramUrl: 'https://instagram.com/arkanmariadi',
-      githubUrl: 'https://github.com/muhammadarkanmariadi-debug',
-      twitterUrl: 'https://twitter.com/arkanmariadi',
-      lanyardImageUrl: 'https://images.unsplash.com/photo-1590402494682-bf34f5ce8c50?w=800&auto=format&fit=crop&q=60',
-      shortDescription: 'Full-Stack Developer & Software Engineering Student at SMK Telkom Malang specializing in Next.js, Nest.js, Laravel, and cloud architectures.',
-      fullBiography: 'I am a Full-Stack Software Engineer currently studying at SMK Telkom Malang. I specialize in designing and shipping production-grade web systems, high-concurrency event platforms, and robust database architectures using Next.js, React, Nest.js, and Laravel.\n\nMy engineering philosophy focuses on system reliability, clean modular architectures, type-safety, and intuitive user experiences. Over the past 2 years, I have architected and deployed multiple live production web applications, including digital event check-in systems and multi-tenant platforms.\n\nI continuously explore agentic workflows, WebGL 3D interaction design, and automated DevOps pipelines with Docker and GitHub Actions.',
-      cvFileUrl: '/assets/CV_Muhammad_Arkan_Mariadi.pdf'
-    }
-  })
-  console.log('✅ Profile seeded:', profile.email)
+  // 1. Profile Seeding (Upsert)
+  const profileData = {
+    phone: '+62-821-3273-6902',
+    email: 'muhammadarkanmariadi@gmail.com',
+    address: 'Malang, East Java, Indonesia',
+    linkedinUrl: 'https://linkedin.com/in/arkanmariadi',
+    instagramUrl: 'https://instagram.com/arkanmariadi',
+    githubUrl: 'https://github.com/muhammadarkanmariadi-debug',
+    twitterUrl: 'https://twitter.com/arkanmariadi',
+    lanyardImageUrl: 'https://images.unsplash.com/photo-1590402494682-bf34f5ce8c50?w=800&auto=format&fit=crop&q=60',
+    shortDescription: 'Full-Stack Developer & Software Engineering Student at SMK Telkom Malang specializing in Next.js, Nest.js, Laravel, and cloud architectures.',
+    fullBiography: 'I am a Full-Stack Software Engineer currently studying at SMK Telkom Malang. I specialize in designing and shipping production-grade web systems, high-concurrency event platforms, and robust database architectures using Next.js, React, Nest.js, and Laravel.\n\nMy engineering philosophy focuses on system reliability, clean modular architectures, type-safety, and intuitive user experiences. Over the past 2 years, I have architected and deployed multiple live production web applications, including digital event check-in systems and multi-tenant platforms.\n\nI continuously explore agentic workflows, WebGL 3D interaction design, and automated DevOps pipelines with Docker and GitHub Actions.',
+    cvFileUrl: '/assets/CV_Muhammad_Arkan_Mariadi.pdf'
+  }
+  const existingProfile = await prisma.profile.findFirst()
+  const profile = existingProfile
+    ? await prisma.profile.update({
+        where: { id: existingProfile.id },
+        data: profileData
+      })
+    : await prisma.profile.create({
+        data: profileData
+      })
+  console.log('✅ Profile upserted:', profile.email)
 
-  // 2. Timeline Seeding (Education & Experience)
-  await prisma.timelineEntry.deleteMany()
+  // 2. Timeline Seeding (Education & Experience - Upsert)
   const timelineData = [
     {
       type: 'EDUCATION' as const,
@@ -55,12 +60,21 @@ async function main() {
     }
   ]
   for (const t of timelineData) {
-    await prisma.timelineEntry.create({ data: t })
+    const existingTimeline = await prisma.timelineEntry.findFirst({
+      where: { title: t.title, category: t.category }
+    })
+    if (existingTimeline) {
+      await prisma.timelineEntry.update({
+        where: { id: existingTimeline.id },
+        data: t
+      })
+    } else {
+      await prisma.timelineEntry.create({ data: t })
+    }
   }
-  console.log('✅ Timeline entries seeded:', timelineData.length)
+  console.log('✅ Timeline entries upserted:', timelineData.length)
 
-  // 3. Technical Skills Matrix Seeding
-  await prisma.skill.deleteMany()
+  // 3. Technical Skills Matrix Seeding (Upsert)
   const skillsData = [
     // FRONTEND
     { title: 'Next.js', category: 'FRONTEND' as const, logoUrl: 'https://img.icons8.com/color/512/nextjs.png', order: 1 },
@@ -103,12 +117,22 @@ async function main() {
   ]
   const createdSkills: any[] = []
   for (const s of skillsData) {
-    createdSkills.push(await prisma.skill.create({ data: s }))
+    const existingSkill = await prisma.skill.findFirst({
+      where: { title: s.title }
+    })
+    const savedSkill = existingSkill
+      ? await prisma.skill.update({
+          where: { id: existingSkill.id },
+          data: s
+        })
+      : await prisma.skill.create({
+          data: s
+        })
+    createdSkills.push(savedSkill)
   }
-  console.log('✅ Skills seeded:', createdSkills.length)
+  console.log('✅ Skills upserted:', createdSkills.length)
 
-  // 4. Projects Seeding (19 Repositories from GitHub)
-  await prisma.project.deleteMany()
+  // 4. Projects Seeding (19 Repositories from GitHub - Upsert)
   const projectsData = [
   {
     "slug": "profile-portofoliov1",
@@ -652,8 +676,16 @@ async function main() {
       .map((name: string) => createdSkills.find(s => s.title.toLowerCase() === name.toLowerCase())?.id)
       .filter(Boolean);
 
-    await prisma.project.create({
-      data: {
+    await prisma.project.upsert({
+      where: { slug: p.slug },
+      update: {
+        ...projectFields,
+        pushedAt: projectFields.pushedAt ? new Date(projectFields.pushedAt) : null,
+        techStack: {
+          set: connectIds.map((id: string) => ({ id }))
+        }
+      },
+      create: {
         ...projectFields,
         pushedAt: projectFields.pushedAt ? new Date(projectFields.pushedAt) : null,
         techStack: {
@@ -662,10 +694,9 @@ async function main() {
       }
     })
   }
-  console.log('✅ Projects seeded from GitHub:', projectsData.length)
+  console.log('✅ Projects upserted from GitHub:', projectsData.length)
 
-  // 5. Achievements & Certifications Seeding
-  await prisma.achievement.deleteMany()
+  // 5. Achievements & Certifications Seeding (Upsert)
   const achievementsData = [
     {
       slug: "fobn-gold-medalist-english",
@@ -876,11 +907,15 @@ async function main() {
     },
   ]
   for (const a of achievementsData) {
-    await prisma.achievement.create({ data: a })
+    await prisma.achievement.upsert({
+      where: { slug: a.slug },
+      update: a,
+      create: a
+    })
   }
-  console.log('✅ Achievements seeded with slugs & badges:', achievementsData.length)
+  console.log('✅ Achievements upserted with slugs & badges:', achievementsData.length)
 
-  console.log('🎉 Standardized English database seeded successfully!')
+  console.log('🎉 Standardized English database seeded successfully with upsert!')
 }
 
 main()
