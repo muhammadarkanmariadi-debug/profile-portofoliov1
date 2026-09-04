@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useSpring } from "motion/react";
-import { FC, JSX, useEffect, useRef, useState } from "react";
+import React, { FC, JSX, useEffect, useRef } from "react";
+import gsap from "gsap";
 
 interface Position {
   x: number;
@@ -10,12 +10,6 @@ interface Position {
 
 export interface SmoothCursorProps {
   cursor?: JSX.Element;
-  springConfig?: {
-    damping: number;
-    stiffness: number;
-    mass: number;
-    restDelta: number;
-  };
 }
 
 const DefaultCursorSVG: FC = () => {
@@ -26,7 +20,7 @@ const DefaultCursorSVG: FC = () => {
       height={54}
       viewBox="0 0 50 54"
       fill="none"
-      style={{ scale: 0.5 }}
+      style={{ transform: "scale(0.5)" }}
     >
       <g filter="url(#filter0_d_91_7928)">
         <path
@@ -82,34 +76,34 @@ const DefaultCursorSVG: FC = () => {
 
 export function SmoothCursor({
   cursor = <DefaultCursorSVG />,
-  springConfig = {
-    damping: 45,
-    stiffness: 400,
-    mass: 1,
-    restDelta: 0.001,
-  },
 }: SmoothCursorProps) {
-  const [isMoving, setIsMoving] = useState(false);
+  const cursorRef = useRef<HTMLDivElement>(null);
   const lastMousePos = useRef<Position>({ x: 0, y: 0 });
   const velocity = useRef<Position>({ x: 0, y: 0 });
   const lastUpdateTime = useRef(Date.now());
   const previousAngle = useRef(0);
   const accumulatedRotation = useRef(0);
 
-  const cursorX = useSpring(0, springConfig);
-  const cursorY = useSpring(0, springConfig);
-  const rotation = useSpring(0, {
-    ...springConfig,
-    damping: 60,
-    stiffness: 300,
-  });
-  const scale = useSpring(1, {
-    ...springConfig,
-    stiffness: 500,
-    damping: 35,
-  });
-
   useEffect(() => {
+    if (!cursorRef.current || typeof window === "undefined") return;
+
+    // Check prefers reduced motion
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    const el = cursorRef.current;
+    
+    // High-performance GSAP quickTo setters for instant hardware-accelerated tracking
+    const xTo = gsap.quickTo(el, "x", { duration: 0.22, ease: "power3.out" });
+    const yTo = gsap.quickTo(el, "y", { duration: 0.22, ease: "power3.out" });
+    const rotTo = gsap.quickTo(el, "rotation", { duration: 0.35, ease: "power2.out" });
+
+    // Initial entrance
+    gsap.set(el, { xPercent: -50, yPercent: -50, opacity: 0, scale: 0 });
+    gsap.to(el, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.7)" });
+
     const updateVelocity = (currentPos: Position) => {
       const currentTime = Date.now();
       const deltaTime = currentTime - lastUpdateTime.current;
@@ -125,84 +119,44 @@ export function SmoothCursor({
       lastMousePos.current = currentPos;
     };
 
-    const smoothMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e: MouseEvent) => {
       const currentPos = { x: e.clientX, y: e.clientY };
       updateVelocity(currentPos);
 
       const speed = Math.sqrt(
-        Math.pow(velocity.current.x, 2) + Math.pow(velocity.current.y, 2),
+        Math.pow(velocity.current.x, 2) + Math.pow(velocity.current.y, 2)
       );
 
-      cursorX.set(currentPos.x);
-      cursorY.set(currentPos.y);
+      xTo(currentPos.x);
+      yTo(currentPos.y);
 
-      if (speed > 0.1) {
+      if (speed > 0.15) {
         const currentAngle =
-          Math.atan2(velocity.current.y, velocity.current.x) * (180 / Math.PI) +
-          90;
+          Math.atan2(velocity.current.y, velocity.current.x) * (180 / Math.PI) + 90;
 
         let angleDiff = currentAngle - previousAngle.current;
         if (angleDiff > 180) angleDiff -= 360;
         if (angleDiff < -180) angleDiff += 360;
         accumulatedRotation.current += angleDiff;
-        rotation.set(accumulatedRotation.current);
+        rotTo(accumulatedRotation.current);
         previousAngle.current = currentAngle;
-
-        scale.set(0.95);
-        setIsMoving(true);
-
-        const timeout = setTimeout(() => {
-          scale.set(1);
-          setIsMoving(false);
-        }, 150);
-
-        return () => clearTimeout(timeout);
       }
     };
 
-    let rafId: number;
-    const throttledMouseMove = (e: MouseEvent) => {
-      if (rafId) return;
-
-      rafId = requestAnimationFrame(() => {
-        smoothMouseMove(e);
-        rafId = 0;
-      });
-    };
-
-    document.body.style.cursor = "none";
-    window.addEventListener("mousemove", throttledMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
     return () => {
-      window.removeEventListener("mousemove", throttledMouseMove);
-      document.body.style.cursor = "auto";
-      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [cursorX, cursorY, rotation, scale]);
+  }, []);
 
   return (
-    <motion.div
-      style={{
-        position: "fixed",
-        left: cursorX,
-        top: cursorY,
-        translateX: "-50%",
-        translateY: "-50%",
-        rotate: rotation,
-        scale: scale,
-        zIndex: 100,
-        pointerEvents: "none",
-        willChange: "transform",
-      }}
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      transition={{
-        type: "spring",
-        stiffness: 400,
-        damping: 30,
-      }}
+    <div
+      ref={cursorRef}
+      className="fixed top-0 left-0 pointer-events-none z-[9999] will-change-transform"
+      style={{ transform: "translate3d(0, 0, 0)" }}
     >
       {cursor}
-    </motion.div>
+    </div>
   );
 }

@@ -1,13 +1,13 @@
-# 🚀 AWS EC2 Deployment Guide — Docker & PostgreSQL
+# 🚀 AWS EC2 Deployment Guide — Docker, PostgreSQL & Redis
 
-This guide walks you through deploying **`4RK4N.DEV`** on an AWS EC2 instance using Docker Compose with an integrated PostgreSQL database container.
+This guide walks you through deploying **`4RK4N.DEV`** on an AWS EC2 instance using Docker Compose with integrated PostgreSQL and Redis in-memory cache containers.
 
 ---
 
 ## 📋 1. AWS EC2 Prerequisites
 
 ### A. Recommended Instance Specs
-- **Instance Type:** `t3.small` or `t3.medium` (minimum 2 GB RAM recommended for Next.js build & PostgreSQL).
+- **Instance Type:** `t3.small` or `t3.medium` (minimum 2 GB RAM recommended for Next.js build, PostgreSQL & Redis).
 - **OS:** Ubuntu 22.04 LTS or 24.04 LTS.
 - **Storage:** 20 GB+ gp3 EBS Volume.
 
@@ -65,6 +65,7 @@ nano .env
 
 ### Fill in your `.env` values:
 - `POSTGRES_PASSWORD`: A strong random password for the PostgreSQL container.
+- `REDIS_PASSWORD`: A strong password for the Redis cache container.
 - `ADMIN_EMAIL`: Your login email for the admin terminal.
 - `ADMIN_PASSWORD_HASH`: Your bcrypt-hashed administrator password.
 - `JWT_SECRET`: A 32+ character random string.
@@ -75,7 +76,7 @@ nano .env
 
 ## 🚀 4. Launch the Containers
 
-Start both the PostgreSQL database and Next.js web application:
+Start the PostgreSQL database, Redis in-memory cache, and Next.js web application:
 
 ```bash
 # Build and run containers in detached mode
@@ -92,6 +93,9 @@ docker compose logs -f app
 
 # View database logs
 docker compose logs -f postgres
+
+# View Redis cache logs
+docker compose logs -f redis
 ```
 
 > [!NOTE]

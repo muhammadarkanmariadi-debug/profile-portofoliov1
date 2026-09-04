@@ -15,6 +15,8 @@
   --color-secondary: var(--secondary);
   --color-text-primary: var(--text-primary);
   --color-text-muted: var(--text-muted);
+  --color-on-surface: var(--text-primary);
+  --color-on-surface-variant: var(--text-muted);
   --color-foreground: var(--text-primary);
   --color-ring: var(--primary);
 
@@ -34,7 +36,7 @@
   --surface-elevated: #1F222A;
   --border: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(56, 189, 248, 0.35);
-  --primary: #38BDF8;
+  --primary: #EDEDEF;
   --secondary: #818CF8;
   --text-primary: #EDEDEF;
   --text-muted: #7A7F8D;
@@ -54,7 +56,7 @@
   --surface-elevated: #F1F3F7;
   --border: rgba(0, 0, 0, 0.08);
   --border-hover: rgba(2, 132, 199, 0.35);
-  --primary: #82D8CE;
+  --primary: #0F172A;
   --secondary: #6366F1;
   --text-primary: #0F172A;
   --text-muted: #64748B;
@@ -66,6 +68,40 @@
   --scrollbar-thumb-hover: #121217;
   --selection-bg: #0284C7;
   --selection-text: #FFFFFF;
+}
+
+/* Inverted Theme Scope:
+   - In Dark mode (default): uses Light palette
+   - In Light mode: uses Dark palette
+*/
+.inverted-theme {
+  --background: #F8F9FA;
+  --surface: #FFFFFF;
+  --surface-elevated: #F1F3F7;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.2);
+  --primary: #0F172A;
+  --secondary: #6366F1;
+  --text-primary: #0F172A;
+  --text-muted: #64748B;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-hover-border: rgba(0, 0, 0, 0.2);
+  --glass-hover-shadow: rgba(0, 0, 0, 0.08);
+}
+
+.light .inverted-theme {
+  --background: #0D0E11;
+  --surface: #16181D;
+  --surface-elevated: #1F222A;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.25);
+  --primary: #EDEDEF;
+  --secondary: #818CF8;
+  --text-primary: #EDEDEF;
+  --text-muted: #7A7F8D;
+  --glass-bg: rgba(22, 24, 29, 0.75);
+  --glass-hover-border: rgba(255, 255, 255, 0.25);
+  --glass-hover-shadow: rgba(255, 255, 255, 0.08);
 }
 
 @layer base {

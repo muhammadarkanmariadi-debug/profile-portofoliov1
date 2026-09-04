@@ -1,8 +1,14 @@
 'use client'
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import React, { useState, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Flip } from 'gsap/all'
+import { useGSAP } from '@gsap/react'
+import { motion } from 'framer-motion'
 import { useLanguage } from '../providers'
 import type { Skill } from '@prisma/client'
+
+gsap.registerPlugin(ScrollTrigger, Flip)
 
 interface SkillsProps {
   skills: Skill[];
@@ -10,6 +16,9 @@ interface SkillsProps {
 
 export default function Skills({ skills }: SkillsProps) {
   const { t } = useLanguage()
+  const sectionRef = useRef<HTMLElement>(null)
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const marqueeRef = useRef<HTMLDivElement>(null)
   
   // Group skills by category
   const groupedSkills = skills.reduce((acc, skill) => {
@@ -34,20 +43,106 @@ export default function Skills({ skills }: SkillsProps) {
   const categories = Object.keys(groupedSkills).sort();
   const [activeTab, setActiveTab] = useState(categories.length > 0 ? categories[0] : 'FRONTEND')
 
+  const gridRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(() => {
+    if (!headingRef.current) return
+
+    // Heading slide-up
+    gsap.fromTo(headingRef.current,
+      { yPercent: 100 },
+      {
+        yPercent: 0,
+        duration: 0.9,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: headingRef.current,
+          start: 'top 90%',
+          toggleActions: 'play none none reverse'
+        }
+      }
+    )
+
+    // Velocity-reactive ambient marquee scrub
+    if (marqueeRef.current) {
+      gsap.to(marqueeRef.current, {
+        xPercent: -20,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.0
+        }
+      })
+    }
+  }, { scope: sectionRef })
+
+  // Stagger grid cards when category changes
+  useGSAP(() => {
+    if (!gridRef.current) return
+    const cards = gridRef.current.querySelectorAll('.skill-card')
+    gsap.fromTo(cards, 
+      { opacity: 0, y: 16, scale: 0.94 },
+      { 
+        opacity: 1, 
+        y: 0, 
+        scale: 1, 
+        duration: 0.35, 
+        stagger: 0.03, 
+        ease: 'power3.out',
+        clearProps: 'transform'
+      }
+    )
+  }, { dependencies: [activeTab], scope: sectionRef })
+
   if (categories.length === 0) return null;
 
   return (
-    <section id="skills" className="w-full bg-background text-text-primary py-24 px-6 sm:px-10 border-b border-border transition-colors duration-300">
+    <section 
+      id="skills" 
+      ref={sectionRef}
+      className="inverted-theme w-full bg-background text-text-primary py-24 px-6 sm:px-10 border-b border-border transition-colors duration-300 overflow-hidden"
+    >
       <div className="max-w-[1300px] mx-auto">
         
         {/* Section Header with Index */}
-        <header className="w-full flex items-center justify-between border-b border-border pb-6 font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-12">
-          <div className="flex items-center gap-4">
-            <span className="font-bold text-primary">03</span>
-            <span>TECHNICAL ARCHITECTURE & SKILLS</span>
+        <header className="w-full border-b border-border pb-10 sm:pb-14 mb-14 sm:mb-20">
+          <div className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-8 sm:mb-12">
+            <div className="flex items-center gap-3">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary" />
+              <span>TECHNICAL ARCHITECTURE</span>
+            </div>
+            <div className="flex items-center gap-6">
+              <span className="font-bold text-primary">03</span>
+              <span className="hidden sm:inline-block font-bold">STACK INDEX</span>
+            </div>
           </div>
-          <span className="text-primary font-bold">ENGINEERING INDEX</span>
+
+          {/* Big Massive Title with Mask Slide-Up Entry */}
+          <div className="overflow-hidden">
+            <h2
+              ref={headingRef}
+              className="font-heading font-black text-5xl sm:text-7xl md:text-8xl lg:text-[7.2vw] tracking-tighter leading-[0.88] uppercase text-text-primary select-none will-change-transform"
+            >
+              TECHNICAL<br />
+              SKILLS
+            </h2>
+          </div>
         </header>
+
+        {/* Ambient Velocity Tech Tape */}
+        <div className="w-full overflow-hidden mb-12 py-3 border-y border-border/60 font-mono text-xs uppercase tracking-widest text-text-muted select-none">
+          <div ref={marqueeRef} className="flex gap-8 whitespace-nowrap will-change-transform">
+            {skills.concat(skills).map((skill, idx) => (
+              <span key={`ticker-${skill.id}-${idx}`} className="flex items-center gap-3">
+                <span className="text-primary font-bold">·</span>
+                <span className="font-semibold text-text-primary">{skill.title}</span>
+                <span className="text-[10px] text-text-muted">({getCategoryLabel(skill.category)})</span>
+              </span>
+            ))}
+          </div>
+        </div>
 
         <div className="flex flex-col gap-10">
           
@@ -79,46 +174,36 @@ export default function Skills({ skills }: SkillsProps) {
             })}
           </div>
 
-          {/* Active Category Skills Grid with Staggered Motion */}
-          <AnimatePresence mode="wait">
-            <motion.div 
-              key={activeTab}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.25 }}
-              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"
-            >
-              {groupedSkills[activeTab]?.sort((a, b) => a.order - b.order).map((skill, index) => (
-                <motion.div 
-                  key={skill.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.04, duration: 0.3 }}
-                  whileHover={{ y: -4, scale: 1.02 }}
-                  className="p-6 rounded-2xl flex flex-col items-center justify-center gap-4 bg-surface border border-border hover:border-primary/60 hover:bg-surface-elevated transition-all cursor-target group transform-gpu shadow-sm"
-                >
-                  {skill.logoUrl ? (
-                    <div className="w-12 h-12 flex items-center justify-center relative">
-                      <img 
-                        src={skill.logoUrl} 
-                        alt={skill.title} 
-                        className="max-w-full max-h-full object-contain filter group-hover:drop-shadow-[0_0_12px_rgba(56,189,248,0.4)] transition-all duration-300"
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-12 h-12 rounded-xl bg-surface-elevated flex items-center justify-center font-mono font-bold text-lg text-primary border border-border">
-                      {skill.title.charAt(0)}
-                    </div>
-                  )}
+          {/* Active Category Skills Grid with GSAP Stagger */}
+          <div 
+            ref={gridRef}
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6"
+          >
+            {groupedSkills[activeTab]?.sort((a, b) => a.order - b.order).map((skill) => (
+              <div 
+                key={skill.id}
+                className="skill-card p-6 rounded-2xl flex flex-col items-center justify-center gap-4 bg-surface border border-border hover:border-primary/60 hover:bg-surface-elevated transition-all duration-200 cursor-target group transform-gpu shadow-sm hover:-translate-y-1 hover:scale-[1.02]"
+              >
+                {skill.logoUrl ? (
+                  <div className="w-12 h-12 flex items-center justify-center relative">
+                    <img 
+                      src={skill.logoUrl} 
+                      alt={skill.title} 
+                      className="max-w-full max-h-full object-contain filter group-hover:drop-shadow-[0_0_12px_rgba(56,189,248,0.4)] transition-all duration-300"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-12 h-12 rounded-xl bg-surface-elevated flex items-center justify-center font-mono font-bold text-lg text-primary border border-border">
+                    {skill.title.charAt(0)}
+                  </div>
+                )}
 
-                  <span className="font-mono text-xs uppercase tracking-wider text-center text-text-primary group-hover:text-primary font-bold transition-colors">
-                    {skill.title}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
+                <span className="font-mono text-xs uppercase tracking-wider text-center text-text-primary group-hover:text-primary font-bold transition-colors">
+                  {skill.title}
+                </span>
+              </div>
+            ))}
+          </div>
 
         </div>
       </div>

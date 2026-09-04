@@ -24,6 +24,40 @@ services:
       - profile_network
 
   # -------------------------------------------------------------
+  # Redis In-Memory Cache Service
+  # -------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: profile_redis
+    restart: always
+    command: >
+      sh -c '
+        if [ -n "${REDIS_PASSWORD}" ]; then
+          exec redis-server --appendonly yes --requirepass "${REDIS_PASSWORD}"
+        else
+          exec redis-server --appendonly yes
+        fi
+      '
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: >
+        sh -c '
+          if [ -n "${REDIS_PASSWORD}" ]; then
+            redis-cli -a "${REDIS_PASSWORD}" ping
+          else
+            redis-cli ping
+          fi
+        '
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - profile_network
+
+  # -------------------------------------------------------------
   # Next.js Application Service
   # -------------------------------------------------------------
   app:
@@ -35,6 +69,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     ports:
       - "5000:5000"
     environment:
@@ -43,6 +79,10 @@ services:
       # Internal Docker Database Connection URL
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres_secure_password}@postgres:5432/${POSTGRES_DB:-profile_db}?schema=public
       DATABASE_SSL: "false"
+
+      # Redis Cache Configuration
+      REDIS_URL: ${REDIS_URL:-redis://:${REDIS_PASSWORD:-redis_secure_password}@redis:6379}
+      REDIS_CACHE_TTL: ${REDIS_CACHE_TTL:-3600}
 
       # Authentication & JWT
       ADMIN_EMAIL: ${ADMIN_EMAIL:-arkan@gmail.com}
@@ -75,6 +115,8 @@ services:
 # -------------------------------------------------------------
 volumes:
   postgres_data:
+    driver: local
+  redis_data:
     driver: local
 
 # -------------------------------------------------------------

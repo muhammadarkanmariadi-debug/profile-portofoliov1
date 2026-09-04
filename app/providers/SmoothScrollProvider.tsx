@@ -4,6 +4,8 @@ import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+import { usePathname } from 'next/navigation'
+
 gsap.registerPlugin(ScrollTrigger)
 
 interface SmoothScrollContextType {
@@ -20,6 +22,7 @@ export const useSmoothScroll = () => useContext(SmoothScrollContext)
 
 export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }) => {
   const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null)
+  const pathname = usePathname()
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -28,14 +31,17 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
     if (prefersReducedMotion) return
 
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.25,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.5,
-      infinite: false
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.6,
+      infinite: false,
+      prevent: (node) => {
+        return node.hasAttribute('data-lenis-prevent') || node.closest('[data-lenis-prevent]') !== null
+      }
     })
 
     setLenisInstance(lenis)
@@ -50,11 +56,42 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
     gsap.ticker.add(updateTicker)
     gsap.ticker.lagSmoothing(0)
 
+    // Intercept internal anchor link clicks for buttery-smooth Lenis glides
+    const handleAnchorClick = (e: MouseEvent) => {
+      const anchor = (e.target as HTMLElement).closest('a[href^="#"]') as HTMLAnchorElement | null
+      if (!anchor) return
+      const href = anchor.getAttribute('href')
+      if (href && href.startsWith('#') && href.length > 1) {
+        const targetElement = document.querySelector(href) as HTMLElement | null
+        if (targetElement) {
+          e.preventDefault()
+          lenis.scrollTo(targetElement, { offset: 0, duration: 1.2 })
+        }
+      }
+    }
+
+    document.addEventListener('click', handleAnchorClick)
+
+    // Initial refresh
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh()
+    }, 400)
+
     return () => {
+      clearTimeout(timer)
+      document.removeEventListener('click', handleAnchorClick)
       gsap.ticker.remove(updateTicker)
       lenis.destroy()
     }
   }, [])
+
+  // Auto-refresh ScrollTrigger whenever route changes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh()
+    }, 200)
+    return () => clearTimeout(timer)
+  }, [pathname])
 
   const scrollTo = (target: string | HTMLElement, options?: Record<string, unknown>) => {
     if (lenisInstance) {

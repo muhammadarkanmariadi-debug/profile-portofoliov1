@@ -43,11 +43,11 @@ const Achievements = ({ achievements }: AchievementsProps) => {
   if (achievements.length === 0) return null;
 
   return (
-    <section className="py-24 px-6 md:px-10 bg-surface/30 relative overflow-hidden" id="achievements">
+    <section className="inverted-theme py-24 px-6 md:px-10 bg-background text-text-primary relative overflow-hidden" id="achievements">
       {/* Background Element */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
       
-      <div className="max-w-[1200px] mx-auto relative z-10">
+      <div className="max-w-[1300px] mx-auto relative z-10">
         <div className="text-center mb-16 space-y-4">
           <motion.span 
             initial={{ opacity: 0, y: 10 }}

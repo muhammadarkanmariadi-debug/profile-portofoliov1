@@ -104,11 +104,17 @@ function StudioEnvironment() {
   return null
 }
 
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
 function TorusMesh() {
   const meshRef = useRef<THREE.Mesh>(null)
   const baseRot = useRef({ x: 0, y: 0 })
   const pointerLerp = useRef({ x: 0, y: 0 })
-  const { width } = useThree((state) => state.viewport)
+  const scrollOffset = useRef({ rotZ: 0, zPos: 0, scaleMult: 1 })
+  const { width, camera } = useThree((state) => ({ width: state.viewport.width, camera: state.camera }))
 
   // Dynamic responsive scale calculated according to screen breakpoints
   const responsiveScale = useMemo(() => {
@@ -117,6 +123,28 @@ function TorusMesh() {
     if (width < 8.8) return 0.70 // Desktop (1024px - 1440px)
     return 1.12                  // Large displays (>1440px)
   }, [width])
+
+  useEffect(() => {
+    const heroEl = document.getElementById('home')
+    if (!heroEl) return
+
+    const trigger = ScrollTrigger.create({
+      trigger: heroEl,
+      start: 'top top',
+      end: 'bottom top',
+      scrub: 1.2,
+      onUpdate: (self) => {
+        const p = self.progress
+        scrollOffset.current.rotZ = p * Math.PI * 1.5
+        scrollOffset.current.zPos = -p * 2.8
+        scrollOffset.current.scaleMult = 1 - p * 0.28
+      }
+    })
+
+    return () => {
+      trigger.kill()
+    }
+  }, [])
 
   useFrame((state, delta) => {
     if (!meshRef.current) return
@@ -134,6 +162,11 @@ function TorusMesh() {
 
     meshRef.current.rotation.x = baseRot.current.x + pointerLerp.current.x
     meshRef.current.rotation.y = baseRot.current.y + pointerLerp.current.y
+    meshRef.current.rotation.z = scrollOffset.current.rotZ
+
+    meshRef.current.position.z = scrollOffset.current.zPos
+    const currentScale = responsiveScale * scrollOffset.current.scaleMult
+    meshRef.current.scale.set(currentScale, currentScale, currentScale)
   })
 
   return (
@@ -181,8 +214,8 @@ export default function ChromeTorus() {
         <StudioEnvironment />
 
         {/* Studio Lighting */}
-        <ambientLight intensity={1.8} color="#FFFFFF" />
-        <directionalLight position={[10, 15, 10]} intensity={4.0} color="#FFFFFF" />
+        <ambientLight intensity={2.8} color="#FFFFFF" />
+        <directionalLight position={[10, 15, 10]} intensity={3.0} color="#FFFFFF" />
         <directionalLight position={[-10, 15, -10]} intensity={2.8} color="#FFFFFF" />
         <directionalLight position={[0, -10, 10]} intensity={2.5} color="#FFFFFF" />
         <pointLight position={[0, 0, 7]} intensity={3.5} color="#FFFFFF" />

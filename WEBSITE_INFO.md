@@ -44,17 +44,20 @@ Comprehensive technical overview, route directory, design system specification, 
 * **Animation & CSS Utilities:** `tw-animate-css`, `clsx`, `tailwind-merge`, `class-variance-authority` (CVA)
 * **Iconography:** [Lucide React](https://lucide.dev/) (`lucide-react`)
 
-### 3D Graphics, WebGL & Canvas Effects
+### 3D Graphics, WebGL, Motion & Smooth Scroll
 * **3D Engine:** [Three.js](https://threejs.org/) (`three`)
 * **React 3D Bridge:** `@react-three/fiber` & `@react-three/drei`
 * **Physics Engine:** `@react-three/rapier` (Simulates dynamic 3D lanyard ID card with rigid-body joints)
+* **Motion Engine:** [GSAP 3](https://gsap.com/) (`gsap` v3.14.2, `@gsap/react` v2.1.2)
+  * ScrollTrigger, Flip plugin, MatchMedia responsive / reduced-motion checks, sticky card stacking, and hardware-accelerated transforms.
+* **Smooth Scrolling:** [Lenis](https://lenis.darkroom.engineering/) (`lenis` v1.3.26) synchronized directly with the GSAP ticker (`lagSmoothing(0)`).
 * **Fluid Dynamics:** [OGL](https://github.com/oframe/ogl) (WebGL-based fluid cursor splash simulation)
-* **Motion & Interactivity:** Framer Motion (`motion` v12), GSAP (`gsap` v3)
 * **Canvas Line Renderer:** `meshline`
 
-### Database & ORM
+### Database, ORM & In-Memory Caching
 * **ORM:** [Prisma ORM 7.8.0](https://www.prisma.io/)
 * **Database Drivers / Adapters:** PostgreSQL (`pg`, `@prisma/adapter-pg`) / MariaDB (`mariadb`, `@prisma/adapter-mariadb`)
+* **In-Memory Cache:** [Redis 7](https://redis.io/) (`ioredis`) with resilient graceful fallback, query caching, and automated mutation invalidation (`invalidateProjectsCache`).
 * **Data Seed & Migration:** TypeScript CLI Runner (`tsx`)
 
 ### Authentication & Forms
@@ -62,11 +65,12 @@ Comprehensive technical overview, route directory, design system specification, 
 * **Form Handling:** `react-hook-form`
 * **Schema Validation:** `zod` (`@hookform/resolvers`)
 
-### Cloud Services & Utilities
+### Cloud Services, Automation & Containerization
 * **Cloud Asset Storage:** Cloudinary (`cloudinary`) for portfolio images and certificate uploads
 * **Email Notification:** `nodemailer` for contact form dispatching
 * **PDF Processing:** `@react-pdf/renderer` & `react-pdf` for live CV preview/download
 * **Cron Scheduling:** `node-cron` for automated GitHub synchronization
+* **Containerization:** Docker & Docker Compose (Multi-stage build with `postgres:16-alpine`, `redis:7-alpine`, and Next.js standalone runner)
 
 ---
 

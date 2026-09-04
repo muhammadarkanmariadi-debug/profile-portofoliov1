@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { projectSchema } from '@/lib/validations/project';
+import { slugify } from '@/lib/utils/slug';
+import { invalidateProjectsCache } from '@/lib/services/project.service';
 
 export async function GET() {
   try {
@@ -18,8 +21,6 @@ export async function GET() {
     return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 });
   }
 }
-
-import { slugify } from '@/lib/utils/slug';
 
 export async function POST(request: Request) {
   try {
@@ -48,6 +49,12 @@ export async function POST(request: Request) {
       },
     });
 
+    // Invalidate Redis Cache & Next.js Server Components
+    await invalidateProjectsCache();
+    revalidatePath('/');
+    revalidatePath('/projects');
+    revalidatePath(`/projects/${finalSlug}`);
+
     return NextResponse.json(newProject, { status: 201 });
   } catch (error: any) {
     console.error('Create project error:', error);
@@ -57,3 +64,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to create project' }, { status: 500 });
   }
 }
+

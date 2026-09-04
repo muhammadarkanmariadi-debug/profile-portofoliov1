@@ -297,7 +297,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
             onClick={() => setSelectedImage(null)}
             className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 "
           >
-            <div className="relative max-w-4xl max-h-[90vh] w-full" onClick={(e) => e.stopPropagation()}>
+            <div data-lenis-prevent className="relative max-w-4xl max-h-[90vh] w-full" onClick={(e) => e.stopPropagation()}>
               <button
                 onClick={() => setSelectedImage(null)}
                 className="absolute -top-10 right-0 text-white/80 hover:text-white font-mono text-xs uppercase flex items-center gap-1"

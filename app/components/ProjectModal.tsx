@@ -60,7 +60,7 @@ const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) => {
             </div>
 
             {/* Right Content Section */}
-            <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-10 overflow-y-auto flex flex-col">
+            <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-10 overflow-y-auto flex flex-col" data-lenis-prevent>
               <div className="flex items-center gap-2 mb-4">
                 <Tag size={16} className="text-secondary" />
                 <span className="font-mono text-xs uppercase tracking-widest text-secondary">{lang === 'id' ? project.categoryId : project.categoryEn}</span>

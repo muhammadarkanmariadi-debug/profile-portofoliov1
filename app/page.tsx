@@ -45,7 +45,7 @@ const Page = async () => {
       {/* 5. Verified Credentials Highlight (Index 04) */}
       <AchievementsStrip achievements={achievements} />
 
-      {/* 6. Mint-Teal Contact CTA & Email Bar (Screenshot 4 Match / Index 05) */}
+      {/* 6. Ultimate Finale Connect & Contact CTA Section (Index 05) */}
       <ContactCTA profile={profile} />
     </main>
   )

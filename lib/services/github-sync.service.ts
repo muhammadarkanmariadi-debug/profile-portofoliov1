@@ -96,6 +96,12 @@ export async function syncGithubRepos() {
 
     const finalStatus = errors.length > 0 ? (reposSynced > 0 ? 'partial' : 'failed') : 'success';
 
+    // Invalidate Redis Cache if any repositories were created or updated
+    if (reposSynced > 0) {
+      const { invalidateProjectsCache } = await import('@/lib/services/project.service');
+      await invalidateProjectsCache();
+    }
+
     await prisma.syncLog.update({
       where: { id: syncLog.id },
       data: {

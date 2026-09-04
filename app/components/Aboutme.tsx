@@ -1,38 +1,26 @@
 'use client'
 import React, { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
 import Link from 'next/link'
 import { ArrowDown, GraduationCap, Briefcase, Download, MapPin, Mail, ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '../providers'
 import type { Profile, TimelineEntry } from '@prisma/client'
+
+gsap.registerPlugin(ScrollTrigger)
 
 interface AboutmeProps {
   profile?: Profile | null;
   timeline?: TimelineEntry[];
 }
 
-function KineticWord({ word, progress, range }: { word: string; progress: any; range: [number, number] }) {
-  const opacity = useTransform(progress, range, [0.25, 1])
-  const y = useTransform(progress, range, ['4px', '0px'])
-
-  return (
-    <motion.span 
-      style={{ opacity, y }} 
-      className="inline-block mr-[0.3em] transition-colors transform-gpu will-change-transform text-text-primary"
-    >
-      {word}
-    </motion.span>
-  )
-}
-
 export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
   const { lang } = useLanguage()
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start 0.8', 'end 0.4']
-  })
+  const containerRef = useRef<HTMLElement>(null)
+  const statementRef = useRef<HTMLHeadingElement>(null)
+  const bioCardRef = useRef<HTMLDivElement>(null)
+  const timelineRef = useRef<HTMLDivElement>(null)
 
   // Dynamic short statement from backend Profile
   const shortBio = profile?.shortDescriptionEn || 
@@ -43,7 +31,73 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
 
   const words1 = shortBio.split(' ')
   const words2 = secondaryBio.split(' ')
-  const totalWords = words1.length + words2.length
+
+  useGSAP(() => {
+    if (!containerRef.current || !statementRef.current) return
+
+    const words = statementRef.current.querySelectorAll('.kinetic-word')
+    
+    // Continuous silky-smooth word illumination scrub with blur transition
+    gsap.fromTo(words, 
+      {
+        opacity: 0.18,
+        y: 6,
+        filter: 'blur(3px)',
+      },
+      {
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        stagger: 0.05,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: statementRef.current,
+          start: 'top 80%',
+          end: 'bottom 45%',
+          scrub: 1.0,
+        }
+      }
+    )
+
+    // Bio Card entrance
+    if (bioCardRef.current) {
+      gsap.fromTo(bioCardRef.current,
+        { opacity: 0, y: 35 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: bioCardRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      )
+    }
+
+    // Timeline entrance
+    if (timelineRef.current) {
+      const items = timelineRef.current.querySelectorAll('.timeline-item')
+      gsap.fromTo(items,
+        { opacity: 0, x: -15 },
+        {
+          opacity: 1,
+          x: 0,
+          stagger: 0.1,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: timelineRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      )
+    }
+
+  }, { scope: containerRef, dependencies: [shortBio, secondaryBio] })
 
   // Full biography paragraphs from backend Profile
   const fullBiography = profile?.fullBiographyEn || 
@@ -80,43 +134,34 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
       <div className="max-w-[1250px] mx-auto my-auto py-16 sm:py-20 w-full">
         
         {/* Kinetic Header Words */}
-        <h2 className="font-heading font-extrabold text-3xl sm:text-5xl md:text-6xl lg:text-[4.6vw] tracking-tight leading-[1.12] text-text-primary mb-12">
+        <h2 ref={statementRef} className="font-heading font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-[3.6vw] tracking-tight leading-[1.12] text-text-primary mb-12">
           {/* First Sentence */}
           <div className="mb-6 flex flex-wrap">
-            {words1.map((word, i) => {
-              const start = i / totalWords
-              const end = (i + 1) / totalWords
-              return (
-                <KineticWord 
-                  key={`s1-${i}`} 
-                  word={word} 
-                  progress={scrollYProgress} 
-                  range={[start, end]} 
-                />
-              )
-            })}
+            {words1.map((word, i) => (
+              <span 
+                key={`s1-${i}`} 
+                className="kinetic-word inline-block mr-[0.3em] text-text-primary will-change-transform will-change-[filter]"
+              >
+                {word}
+              </span>
+            ))}
           </div>
 
           {/* Second Sentence */}
           <div className="flex flex-wrap">
-            {words2.map((word, i) => {
-              const index = words1.length + i
-              const start = index / totalWords
-              const end = (index + 1) / totalWords
-              return (
-                <KineticWord 
-                  key={`s2-${i}`} 
-                  word={word} 
-                  progress={scrollYProgress} 
-                  range={[start, end]} 
-                />
-              )
-            })}
+            {words2.map((word, i) => (
+              <span 
+                key={`s2-${i}`} 
+                className="kinetic-word inline-block mr-[0.3em] text-text-primary will-change-transform will-change-[filter]"
+              >
+                {word}
+              </span>
+            ))}
           </div>
         </h2>
 
         {/* Detailed Biography & Metadata from Backend Profile */}
-        <div className="mt-12 p-8 sm:p-10 rounded-3xl bg-surface/80 backdrop-blur-md border border-border shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div ref={bioCardRef} className="mt-12 p-8 sm:p-10 rounded-3xl bg-surface/80 backdrop-blur-md border border-border shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-start will-change-transform">
           <div className="lg:col-span-8 space-y-4 font-sans text-sm sm:text-base text-text-primary leading-relaxed">
             <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary font-bold block mb-2">
               BIOGRAPHY & ENGINEERING PHILOSOPHY
@@ -175,7 +220,7 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
 
         {/* Structured Credentials & Timeline */}
         {timeline.length > 0 && (
-          <div className="mt-16 pt-10 border-t border-border grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
+          <div ref={timelineRef} className="mt-16 pt-10 border-t border-border grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
             {/* Education */}
             <div className="space-y-4">
               <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-text-muted">
@@ -184,7 +229,7 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
               </div>
               <div className="space-y-4 pl-3 border-l border-border">
                 {educationEntries.map(item => (
-                  <div key={item.id} className="p-3 rounded-xl hover:bg-surface/50 transition-colors">
+                  <div key={item.id} className="timeline-item p-3 rounded-xl hover:bg-surface/50 transition-colors">
                     <h4 className="font-bold text-base text-text-primary">{lang === 'id' ? item.titleId : item.titleEn}</h4>
                     <p className="text-xs font-mono text-text-muted mt-0.5">{lang === 'id' ? item.categoryId : item.categoryEn}</p>
                     <p className="text-sm text-text-muted mt-1">{lang === 'id' ? item.descriptionId : item.descriptionEn}</p>
@@ -201,7 +246,7 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
               </div>
               <div className="space-y-4 pl-3 border-l border-border">
                 {experienceEntries.map(item => (
-                  <div key={item.id} className="p-3 rounded-xl hover:bg-surface/50 transition-colors">
+                  <div key={item.id} className="timeline-item p-3 rounded-xl hover:bg-surface/50 transition-colors">
                     <h4 className="font-bold text-base text-text-primary">{lang === 'id' ? item.titleId : item.titleEn}</h4>
                     <p className="text-xs font-mono text-text-muted mt-0.5">{lang === 'id' ? item.categoryId : item.categoryEn}</p>
                     <p className="text-sm text-text-muted mt-1">{lang === 'id' ? item.descriptionId : item.descriptionEn}</p>
