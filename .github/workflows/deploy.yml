@@ -1,0 +1,52 @@
+name: 🚀 Auto Deploy to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: 📦 Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🌐 SSH and Deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER || 'ubuntu' }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: ${{ secrets.EC2_PORT || 22 }}
+          script_stop: true
+          script: |
+            echo "🚀 Starting deployment on EC2..."
+            
+            # Navigate to project directory (support custom path or default)
+            TARGET_DIR="${{ secrets.PROJECT_PATH || '/home/ubuntu/profile-portofoliov1' }}"
+            if [ ! -d "$TARGET_DIR" ]; then
+              TARGET_DIR="/home/ubuntu/portfolio"
+            fi
+
+            echo "📂 Working directory: $TARGET_DIR"
+            cd "$TARGET_DIR"
+
+            # Pull latest changes from main branch
+            echo "📥 Pulling latest changes from Git..."
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Rebuild and restart containers
+            echo "🐳 Building and restarting Docker containers..."
+            docker compose up -d --build
+
+            # Clean up unused dangling images to free up EBS disk space
+            echo "🧹 Cleaning up dangling Docker images..."
+            docker image prune -f
+
+            # Check container status
+            echo "✅ Container status:"
+            docker compose ps
+
+            echo "🎉 Deployment successfully completed!"
