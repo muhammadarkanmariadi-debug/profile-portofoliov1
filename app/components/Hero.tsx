@@ -157,13 +157,13 @@ export default function Hero({ profile: _profile }: HeroProps) {
         <div className="relative z-10 text-center flex flex-col items-center justify-center pointer-events-none w-full max-w-[1400px]">
           <h1 className="font-heading font-black tracking-tighter leading-[0.88] text-text-primary uppercase w-full flex flex-col items-center justify-center select-none">
             <span ref={row1Ref} className="text-[13vw] sm:text-[12vw] lg:text-[15vw] leading-none block will-change-transform">
-              {lang === 'id' ? 'DIGITAL' : 'DIGITAL'}
+              JUNIOR
             </span>
             <span ref={row2Ref} className="text-[13vw] sm:text-[12vw] lg:text-[15vw] leading-none block will-change-transform">
-              {lang === 'id' ? 'DESIGN' : 'DESIGN'}
+              FULLSTACK
             </span>
             <span ref={row3Ref} className="text-[8.2vw] sm:text-[7.2vw] lg:text-[9.2vw] leading-none block will-change-transform">
-              {lang === 'id' ? 'EXPERIENCE' : 'EXPERIENCE'}
+              DEVELOPER
             </span>
           </h1>
         </div>
