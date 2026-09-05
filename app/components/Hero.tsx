@@ -56,8 +56,8 @@ export default function Hero({ profile: _profile }: HeroProps) {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
       
       tl.fromTo([row1Ref.current, row2Ref.current, row3Ref.current], 
-        { y: isDesktop ? 60 : 30, opacity: 0, skewY: isDesktop ? 2 : 0 },
-        { y: 0, opacity: 1, skewY: 0, duration: 1.1, stagger: 0.12, ease: 'power3.out' }
+        { y: isDesktop ? 60 : 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.1, stagger: 0.12, ease: 'power3.out' }
       )
       .fromTo(hairlineRef.current,
         { scaleX: 0, opacity: 0 },
@@ -155,7 +155,7 @@ export default function Hero({ profile: _profile }: HeroProps) {
 
         {/* 3-Row Giant Typography */}
         <div className="relative z-10 text-center flex flex-col items-center justify-center pointer-events-none w-full max-w-[1400px]">
-          <h1 className="font-heading font-black tracking-tighter leading-[0.88] text-text-primary uppercase w-full flex flex-col items-center justify-center select-none">
+          <h1 className="font-heading font-black tracking-tighter leading-[0.88] text-text-primary uppercase w-full flex flex-col items-center justify-center select-none -skew-y-2 lg:-skew-y-3 transform-gpu">
             <span ref={row1Ref} className="text-[13vw] sm:text-[12vw] lg:text-[15vw] leading-none block will-change-transform">
               JUNIOR
             </span>
