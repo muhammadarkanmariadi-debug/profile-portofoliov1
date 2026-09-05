@@ -154,18 +154,18 @@ export default function ProjectCard({
         </div>
 
         {/* Heading: Big Title (Left) + Summary (Right) */}
-        <div className="w-full flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8 px-2">
+        <div className="w-full flex flex-col md:flex-row md:items-start justify-between gap-4 sm:gap-6 mb-6 sm:mb-8 px-1 sm:px-2">
           <Link href={projectHref} className="group/title">
             <div className="overflow-hidden">
               <h3 
                 ref={titleRef}
-                className="font-heading font-extrabold text-4xl sm:text-6xl lg:text-7xl tracking-tighter text-text-primary group-hover/title:text-primary transition-colors"
+                className="font-heading font-extrabold text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter text-text-primary group-hover/title:text-primary transition-colors"
               >
                 {title}
               </h3>
             </div>
           </Link>
-          <p className="max-w-md text-text-muted text-sm sm:text-base font-sans leading-relaxed">
+          <p className="max-w-md text-text-muted text-xs sm:text-sm md:text-base font-sans leading-relaxed">
             {description}
           </p>
         </div>
@@ -174,26 +174,26 @@ export default function ProjectCard({
         <div className="w-full relative">
           <Link
             href={projectHref}
-            className={`block w-full ${bgClass} rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-12 cursor-target group relative overflow-hidden transform-gpu shadow-xl hover:shadow-2xl transition-[box-shadow] duration-500`}
+            className={`block w-full ${bgClass} rounded-2xl sm:rounded-3xl p-3 sm:p-6 md:p-10 lg:p-12 cursor-target group relative overflow-hidden transform-gpu shadow-xl hover:shadow-2xl transition-[box-shadow] duration-500`}
           >
             {/* Desktop Browser Window */}
             <div className="w-full bg-[#16181D] rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden border border-white/10">
 
               {/* Browser Bar */}
-              <div className="w-full bg-[#111216] px-4 py-3 flex items-center justify-between border-b border-white/10">
+              <div className="w-full bg-[#111216] px-3 sm:px-4 py-2 sm:py-3 flex items-center justify-between border-b border-white/10">
                 {/* 3 Window Control Dots */}
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]"></span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]"></span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]"></span>
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-[#FF5F56]"></span>
+                  <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-[#FFBD2E]"></span>
+                  <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-[#27C93F]"></span>
                 </div>
 
                 {/* Address Bar */}
-                <div className="px-4 py-1 rounded-full bg-[#1C1F26] border border-white/10 text-[11px] font-mono text-[#8E8E9F] max-w-[240px] truncate text-center">
+                <div className="px-3 sm:px-4 py-0.5 sm:py-1 rounded-full bg-[#1C1F26] border border-white/10 text-[10px] sm:text-[11px] font-mono text-[#8E8E9F] max-w-[150px] sm:max-w-[240px] truncate text-center">
                   {displayDomain}
                 </div>
 
-                <div className="w-8"></div>
+                <div className="w-6 sm:w-8"></div>
               </div>
 
               {/* Desktop Screenshot Preview with Parallax */}
@@ -207,8 +207,8 @@ export default function ProjectCard({
                 />
 
                 {/* Floating Action Button on Hover */}
-                <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 opacity-90 group-hover:opacity-100 transition-opacity">
-                  <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#0D0E11]/90 text-white font-mono text-xs uppercase tracking-wider font-bold backdrop-blur-md border border-white/20 shadow-lg group-hover:scale-105 transition-transform">
+                <div className="absolute bottom-3 right-3 sm:bottom-6 sm:right-6 opacity-90 group-hover:opacity-100 transition-opacity">
+                  <span className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-1.5 sm:py-2.5 rounded-full bg-[#0D0E11]/90 text-white font-mono text-[10px] sm:text-xs uppercase tracking-wider font-bold backdrop-blur-md border border-white/20 shadow-lg group-hover:scale-105 transition-transform">
                     <span>View case study</span>
                     <ArrowUpRight size={14} />
                   </span>
@@ -226,8 +226,8 @@ export default function ProjectCard({
         </div>
 
         {/* Scope Deliverables Footer */}
-        <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6 pt-4 font-mono text-xs px-2">
-          <div className="flex flex-wrap items-center gap-2 text-text-muted">
+        <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mt-5 sm:mt-6 pt-3 sm:pt-4 font-mono text-xs px-1 sm:px-2">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-text-muted text-[11px] sm:text-xs">
             <span className="uppercase text-text-primary font-bold">Scope:</span>
             {techStack && techStack.length > 0 ? (
               <span>{techStack.map(s => s.title).join(' · ')}</span>
@@ -238,7 +238,7 @@ export default function ProjectCard({
 
           <Link
             href={projectHref}
-            className="text-text-muted hover:text-primary transition-colors uppercase flex items-center gap-1 font-bold cursor-target"
+            className="text-text-muted hover:text-primary transition-colors uppercase flex items-center gap-1 font-bold cursor-target text-[11px] sm:text-xs"
           >
             <span>EXPLORE ARCHITECTURE</span>
             <ArrowUpRight size={13} />

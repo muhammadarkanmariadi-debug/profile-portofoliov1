@@ -19,37 +19,38 @@ export const cloudProps: Omit<ICloud, "children"> = {
       justifyContent: "center",
       alignItems: "center",
       width: "100%",
-      paddingTop: 20,
+      padding: 0,
     },
   },
   options: {
     reverse: true,
-    depth: 1,
+    depth: 0.82,
     wheelZoom: false,
-    imageScale: 2,
-    activeCursor: "default",
+    imageScale: 2.5,
+    activeCursor: "grab",
     tooltip: "native",
-    initial: [0.1, -0.1],
+    initial: [0.08, -0.08],
     clickToFront: 500,
     tooltipDelay: 0,
     outlineColour: "#0000",
-    maxSpeed: 0.04,
-    minSpeed: 0.02,
-    // dragControl: false,
+    maxSpeed: 0.032,
+    minSpeed: 0.016,
+    decel: 0.95,
   },
 }
 
 export const renderCustomIcon = (icon: SimpleIcon, theme: string) => {
-  const bgHex = theme === "light" ? "#f3f2ef" : "#080510"
-  const fallbackHex = theme === "light" ? "#6e6e73" : "#ffffff"
-  const minContrastRatio = theme === "dark" ? 2 : 1.2
+  const bgHex = theme === "light" ? "#ffffff" : "#08080c"
+  const fallbackHex = theme === "light" ? "#121217" : "#fafafc"
+  // Keep minContrastRatio low (1.0) so SimpleIcons preserves original bright brand colors (React cyan, TypeScript blue, Node green, etc.)
+  const minContrastRatio = 1.0
 
   return renderSimpleIcon({
     icon,
     bgHex,
     fallbackHex,
     minContrastRatio,
-    size: 42,
+    size: 52,
     aProps: {
       href: undefined,
       target: undefined,

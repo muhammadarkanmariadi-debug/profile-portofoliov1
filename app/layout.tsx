@@ -4,6 +4,7 @@ import './globals.css'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import { SmoothCursor } from '@/components/ui/smooth-cursor'
+import ScrollProgressBar from '@/components/ui/scroll-progress-bar'
 import { Providers } from './providers'
 import { getProfile } from '@/lib/services/profile.service'
 
@@ -38,6 +39,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${plusJakartaSans.variable} ${geistMono.variable} font-sans overflow-x-hidden antialiased bg-background text-text-primary min-h-screen flex flex-col`}>
         <Providers>
+          <ScrollProgressBar />
           <SmoothCursor />
           <Navbar />
          

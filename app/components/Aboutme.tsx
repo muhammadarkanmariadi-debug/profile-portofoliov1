@@ -35,67 +35,69 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
     if (!containerRef.current || !statementRef.current) return
 
     const words = statementRef.current.querySelectorAll('.kinetic-word')
-    
-    // Continuous silky-smooth word illumination scrub with blur transition
-    gsap.fromTo(words, 
-      {
-        opacity: 0.18,
-        y: 6,
-        filter: 'blur(3px)',
-      },
-      {
-        opacity: 1,
-        y: 0,
-        filter: 'blur(0px)',
-        stagger: 0.05,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: statementRef.current,
-          start: 'top 80%',
-          end: 'bottom 45%',
-          scrub: 1.0,
-        }
-      }
-    )
 
-    // Bio Card entrance
+    // Silky progressive word illumination scrub on natural scroll
+    if (words && words.length > 0) {
+      gsap.fromTo(
+        words,
+        { opacity: 0.18, y: 6, filter: 'blur(3px)' },
+        {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          stagger: 0.04,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: statementRef.current,
+            start: 'top 80%',
+            end: 'bottom 45%',
+            scrub: 1.0,
+          },
+        }
+      )
+    }
+
+    // Bio Card entrance on scroll
     if (bioCardRef.current) {
-      gsap.fromTo(bioCardRef.current,
+      gsap.fromTo(
+        bioCardRef.current,
         { opacity: 0, y: 35 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.9,
+          duration: 0.85,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: bioCardRef.current,
             start: 'top 85%',
-            toggleActions: 'play none none reverse'
-          }
+            toggleActions: 'play none none reverse',
+          },
         }
       )
     }
 
-    // Timeline entrance
+    // Timeline items staggered entrance
     if (timelineRef.current) {
       const items = timelineRef.current.querySelectorAll('.timeline-item')
-      gsap.fromTo(items,
-        { opacity: 0, x: -15 },
-        {
-          opacity: 1,
-          x: 0,
-          stagger: 0.1,
-          duration: 0.7,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: timelineRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse'
+      if (items && items.length > 0) {
+        gsap.fromTo(
+          items,
+          { opacity: 0, x: -16 },
+          {
+            opacity: 1,
+            x: 0,
+            stagger: 0.1,
+            duration: 0.65,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: timelineRef.current,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
           }
-        }
-      )
+        )
+      }
     }
-
   }, { scope: containerRef, dependencies: [shortBio, secondaryBio] })
 
   // Full biography paragraphs from backend Profile
@@ -111,7 +113,7 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
     <section 
       id="about"
       ref={containerRef}
-      className="relative w-full min-h-screen bg-background text-text-primary flex flex-col justify-between p-6 sm:p-10 select-none border-b border-border transition-colors duration-300"
+      className="relative w-full min-h-screen bg-background text-text-primary flex flex-col justify-between p-5 sm:p-8 md:p-10 select-none border-b border-border transition-colors duration-300"
     >
       {/* Top Section Header with Index */}
       <header className="w-full flex items-center justify-between border-b border-border pb-4 font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
@@ -123,18 +125,19 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
           <Link href="#work" className="hover:text-text-primary hover:text-primary transition-colors cursor-target">WORK</Link>
           <Link href="#about" className="hover:text-text-primary text-text-primary font-bold border-b border-primary pb-0.5 transition-colors cursor-target">ABOUT</Link>
           <Link href="#skills" className="hover:text-text-primary hover:text-primary transition-colors cursor-target">SKILLS</Link>
+          <Link href="#approach" className="hover:text-text-primary hover:text-primary transition-colors cursor-target">APPROACH</Link>
           <Link href="#achievements" className="hidden md:inline-block hover:text-text-primary hover:text-primary transition-colors cursor-target">CREDENTIALS</Link>
           <Link href="#contact" className="hover:text-text-primary hover:text-primary transition-colors cursor-target">CONTACT</Link>
         </div>
       </header>
 
       {/* Kinetic Statement Centerpiece */}
-      <div className="max-w-[1250px] mx-auto my-auto py-16 sm:py-20 w-full">
+      <div className="max-w-[1250px] mx-auto my-auto py-12 sm:py-16 md:py-20 w-full">
         
         {/* Kinetic Header Words */}
-        <h2 ref={statementRef} className="font-heading font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-[3.6vw] tracking-tight leading-[1.12] text-text-primary mb-12">
+        <h2 ref={statementRef} className="font-heading font-extrabold text-xl sm:text-2xl md:text-3xl lg:text-[3.2vw] tracking-tight leading-[1.16] text-text-primary mb-8 sm:mb-12">
           {/* First Sentence */}
-          <div className="mb-6 flex flex-wrap">
+          <div className="mb-4 sm:mb-6 flex flex-wrap">
             {words1.map((word, i) => (
               <span 
                 key={`s1-${i}`} 
@@ -159,7 +162,7 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
         </h2>
 
         {/* Detailed Biography & Metadata from Backend Profile */}
-        <div ref={bioCardRef} className="mt-12 p-8 sm:p-10 rounded-3xl bg-surface/80 backdrop-blur-md border border-border shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-start will-change-transform">
+        <div ref={bioCardRef} className="mt-8 sm:mt-12 p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl bg-surface/80 backdrop-blur-md border border-border shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start will-change-transform">
           <div className="lg:col-span-8 space-y-4 font-sans text-sm sm:text-base text-text-primary leading-relaxed">
             <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary font-bold block mb-2">
               BIOGRAPHY & ENGINEERING PHILOSOPHY

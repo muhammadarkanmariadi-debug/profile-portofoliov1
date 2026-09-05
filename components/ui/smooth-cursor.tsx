@@ -89,17 +89,28 @@ export function SmoothCursor({
   useEffect(() => {
     if (!cursorRef.current || typeof window === "undefined") return;
 
-    // Check prefers reduced motion or touch device
-    const isTouch = window.matchMedia("(pointer: coarse)").matches;
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (isTouch || prefersReducedMotion) {
+    // Strict detection: disable on mobile (<1024px), tablet, touch devices, and reduced motion
+    const checkIsTouchOrSmall = () => {
+      const isTouch =
+        window.matchMedia("(pointer: coarse)").matches ||
+        window.matchMedia("(hover: none)").matches ||
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0;
+      const isSmallScreen = window.innerWidth < 1024;
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      return isTouch || isSmallScreen || prefersReducedMotion;
+    };
+
+    if (checkIsTouchOrSmall()) {
       if (cursorRef.current) cursorRef.current.style.display = "none";
       return;
     }
 
     const el = cursorRef.current;
+    el.style.display = "block";
     
     // High-performance GSAP quickTo setters for instant hardware-accelerated tracking
     const xTo = gsap.quickTo(el, "x", { duration: 0.22, ease: "power3.out" });
@@ -229,6 +240,14 @@ export function SmoothCursor({
       gsap.to(el, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.8)" });
     };
 
+    const handleResize = () => {
+      if (checkIsTouchOrSmall()) {
+        if (cursorRef.current) cursorRef.current.style.display = "none";
+      } else {
+        if (cursorRef.current) cursorRef.current.style.display = "block";
+      }
+    };
+
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseover", handleMouseOver, { passive: true });
     document.addEventListener("mouseout", handleMouseOut, { passive: true });
@@ -236,6 +255,7 @@ export function SmoothCursor({
     window.addEventListener("mouseup", handleMouseUp, { passive: true });
     document.documentElement.addEventListener("mouseleave", handleMouseLeave);
     document.documentElement.addEventListener("mouseenter", handleMouseEnter);
+    window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
@@ -245,13 +265,14 @@ export function SmoothCursor({
       window.removeEventListener("mouseup", handleMouseUp);
       document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
       document.documentElement.removeEventListener("mouseenter", handleMouseEnter);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
   return (
     <div
       ref={cursorRef}
-      className="fixed top-0 left-0 pointer-events-none z-[9999] will-change-transform"
+      className="hidden lg:block fixed top-0 left-0 pointer-events-none z-[9999] will-change-transform select-none"
       style={{ transform: "translate3d(0, 0, 0)" }}
     >
       {cursor}

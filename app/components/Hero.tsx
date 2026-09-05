@@ -8,6 +8,7 @@ import { useGSAP } from '@gsap/react'
 import { useLanguage } from '../providers'
 import type { Profile } from '@prisma/client'
 import ThemeToggle from '@/components/ui/ThemeToggle'
+import { Menu, X, ArrowUpRight } from 'lucide-react'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -22,6 +23,7 @@ interface HeroProps {
 
 export default function Hero({ profile: _profile }: HeroProps) {
   const { lang } = useLanguage()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
   const sectionRef = React.useRef<HTMLElement>(null)
   const centerRef = React.useRef<HTMLDivElement>(null)
   const row1Ref = React.useRef<HTMLSpanElement>(null)
@@ -107,8 +109,9 @@ export default function Hero({ profile: _profile }: HeroProps) {
           <span className="hidden sm:inline font-extrabold tracking-wider group-hover:text-primary transition-colors">4RK4N.DEV</span>
         </Link>
 
-        <div className="flex items-center gap-4 sm:gap-8">
-          <nav className="flex items-center gap-3 sm:gap-7 md:gap-9 text-text-muted text-[11px] sm:text-xs">
+        {/* Desktop Nav Links & Controls */}
+        <div className="hidden md:flex items-center gap-8 lg:gap-10">
+          <nav className="flex items-center gap-7 lg:gap-9 text-text-muted text-xs">
             <Link href="#work" className="hover:text-text-primary hover:text-primary transition-colors cursor-target font-medium">
               WORK
             </Link>
@@ -118,7 +121,10 @@ export default function Hero({ profile: _profile }: HeroProps) {
             <Link href="#skills" className="hover:text-text-primary hover:text-primary transition-colors cursor-target font-medium">
               SKILLS
             </Link>
-            <Link href="#achievements" className="hidden sm:inline-block hover:text-text-primary hover:text-primary transition-colors cursor-target font-medium">
+            <Link href="#approach" className="hover:text-text-primary hover:text-primary transition-colors cursor-target font-medium">
+              APPROACH
+            </Link>
+            <Link href="#achievements" className="hover:text-text-primary hover:text-primary transition-colors cursor-target font-medium">
               CREDENTIALS
             </Link>
             <Link href="#contact" className="hover:text-text-primary hover:text-primary transition-colors cursor-target font-medium">
@@ -128,7 +134,81 @@ export default function Hero({ profile: _profile }: HeroProps) {
 
           <ThemeToggle showLabel={false} />
         </div>
+
+        {/* Mobile Menu Actions */}
+        <div className="md:hidden flex items-center gap-2.5">
+          <ThemeToggle showLabel={false} />
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="text-text-primary hover:opacity-70 transition-opacity p-1.5 rounded-md border border-border bg-surface flex items-center justify-center cursor-target"
+            aria-label="Open mobile menu"
+          >
+            <Menu size={18} />
+          </button>
+        </div>
       </header>
+
+      {/* Mobile Slide-in Drawer Overlay */}
+      <div
+        className={`fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs transition-opacity duration-300 md:hidden ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
+        onClick={() => setIsMobileMenuOpen(false)}
+      />
+
+      {/* Mobile Slide-in Sidebar Panel */}
+      <div
+        className={`fixed top-0 right-0 h-full w-72 sm:w-80 bg-surface border-l border-border shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out md:hidden flex flex-col justify-between p-8 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+      >
+        <div>
+          <div className="flex items-center justify-between mb-10 pb-4 border-b border-border">
+            <span className="font-mono text-xs text-text-muted tracking-widest uppercase">NAVIGATION</span>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-text-primary hover:opacity-70 transition-opacity p-1 cursor-target"
+              aria-label="Close menu"
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          <nav className="flex flex-col gap-6">
+            {[
+              { name: 'WORK', href: '#work' },
+              { name: 'ABOUT', href: '#about' },
+              { name: 'SKILLS', href: '#skills' },
+              { name: 'APPROACH', href: '#approach' },
+              { name: 'CREDENTIALS', href: '#achievements' },
+              { name: 'CONTACT', href: '#contact' },
+            ].map((item, idx) => (
+              <Link
+                key={idx}
+                href={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="font-heading text-2xl font-black text-text-muted hover:text-text-primary transition-colors tracking-tight"
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <div className="pt-6 border-t border-border flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-xs text-text-muted uppercase tracking-wider">THEME</span>
+            <ThemeToggle showLabel={true} />
+          </div>
+
+          <Link
+            href="#contact"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="w-full bg-primary text-background text-center py-3.5 rounded-full font-mono text-xs uppercase tracking-wider font-black flex items-center justify-center gap-1.5 hover:opacity-90 transition-opacity shadow-sm"
+          >
+            <span>GET IN TOUCH</span>
+            <ArrowUpRight size={14} />
+          </Link>
+        </div>
+      </div>
 
       {/* Centerpiece: Huge Typography + 3D Chrome Torus + Hairline Ticks */}
       <div

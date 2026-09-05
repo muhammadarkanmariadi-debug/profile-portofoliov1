@@ -20,9 +20,9 @@ function StudioEnvironment() {
 
       // Function to draw smooth wavy zebra bands with chromatic fringes
       const drawCurvedChromaticBand = (
-        startY: number, 
-        bandHeight: number, 
-        cyanColor: string, 
+        startY: number,
+        bandHeight: number,
+        cyanColor: string,
         amberColor: string
       ) => {
         // --- TOP FRINGE (Cyan / Electric Blue) ---
@@ -202,9 +202,9 @@ export default function ChromeTorus() {
       <Canvas
         dpr={[1, 1.5]}
         camera={{ position: [0, 0, 5.8], fov: 36 }}
-        gl={{ 
-          antialias: true, 
-          alpha: true, 
+        gl={{
+          antialias: true,
+          alpha: true,
           powerPreference: 'high-performance',
           stencil: false,
           depth: true

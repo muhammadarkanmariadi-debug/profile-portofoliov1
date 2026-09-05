@@ -245,13 +245,13 @@ export default function Skills({ skills }: SkillsProps) {
     <section
       id="skills"
       ref={sectionRef}
-      className="inverted-theme w-full bg-background text-text-primary py-24 px-6 sm:px-10 border-b border-border transition-colors duration-300 overflow-hidden"
+      className="inverted-theme w-full bg-background text-text-primary py-20 sm:py-24 px-5 sm:px-8 md:px-10 border-b border-border transition-colors duration-300 overflow-hidden"
     >
       <div className="max-w-[1400px] mx-auto">
 
         {/* Section Header with Index */}
-        <header className="w-full border-b border-border pb-10 sm:pb-14 mb-14 sm:mb-20">
-          <div className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-8 sm:mb-12">
+        <header className="w-full border-b border-border pb-8 sm:pb-12 mb-10 sm:mb-16">
+          <div className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-6 sm:mb-10">
             <div className="flex items-center gap-3">
               <span className="inline-block w-2 h-2 rounded-full bg-primary" />
               <span>TECHNICAL ARCHITECTURE</span>
@@ -266,7 +266,7 @@ export default function Skills({ skills }: SkillsProps) {
           <div className="overflow-hidden">
             <h2
               ref={headingRef}
-              className="font-heading font-black text-5xl sm:text-7xl md:text-8xl lg:text-[7.2vw] tracking-tighter leading-[0.88] uppercase text-text-primary select-none will-change-transform"
+              className="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-[7.2vw] tracking-tighter leading-[0.88] uppercase text-text-primary select-none will-change-transform"
             >
               TECHNICAL<br />
               SKILLS
@@ -275,7 +275,7 @@ export default function Skills({ skills }: SkillsProps) {
         </header>
 
         {/* Ambient Velocity Tech Tape */}
-        <div className="w-full overflow-hidden mb-12 py-3 border-y border-border/60 font-mono text-xs uppercase tracking-widest text-text-muted select-none">
+        <div className="w-full overflow-hidden mb-10 sm:mb-12 py-3 border-y border-border/60 font-mono text-xs uppercase tracking-widest text-text-muted select-none">
           <div ref={marqueeRef} className="flex gap-8 whitespace-nowrap will-change-transform">
             {skills.concat(skills).map((skill, idx) => (
               <span key={`ticker-${skill.id}-${idx}`} className="flex items-center gap-3">
@@ -291,7 +291,7 @@ export default function Skills({ skills }: SkillsProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
 
           {/* Left / Main Section: Category Filter & Grid */}
-          <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-8">
+          <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-6 sm:gap-8">
 
             {/* Category Tabs with spring indicator */}
             <div className="flex flex-wrap gap-2 sm:gap-3">
@@ -301,7 +301,7 @@ export default function Skills({ skills }: SkillsProps) {
                   <button
                     key={category}
                     onClick={() => setActiveTab(category)}
-                    className={`relative px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-mono text-xs uppercase tracking-wider transition-colors cursor-target font-bold z-10 ${isActive ? 'text-background' : 'text-text-muted hover:text-text-primary'
+                    className={`relative px-3.5 sm:px-5 py-1.5 sm:py-2.5 rounded-full font-mono text-[11px] sm:text-xs uppercase tracking-wider transition-colors cursor-target font-bold z-10 ${isActive ? 'text-background' : 'text-text-muted hover:text-text-primary'
                       }`}
                   >
                     {isActive && (
@@ -323,15 +323,15 @@ export default function Skills({ skills }: SkillsProps) {
             {/* Active Category Skills Grid with GSAP Stagger */}
             <div
               ref={gridRef}
-              className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5"
+              className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5"
             >
               {groupedSkills[activeTab]?.sort((a, b) => a.order - b.order).map((skill) => (
                 <div
                   key={skill.id}
-                  className="skill-card p-5 rounded-2xl flex flex-col items-center justify-center gap-3 bg-surface border border-border hover:border-primary/60 hover:bg-surface-elevated transition-all duration-200 cursor-target group transform-gpu shadow-sm hover:-translate-y-1 hover:scale-[1.02]"
+                  className="skill-card p-4 sm:p-5 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center gap-2.5 sm:gap-3 bg-surface border border-border hover:border-primary/60 hover:bg-surface-elevated transition-all duration-200 cursor-target group transform-gpu shadow-sm hover:-translate-y-1 hover:scale-[1.02]"
                 >
                   {skill.logoUrl ? (
-                    <div className="w-10 h-10 flex items-center justify-center relative">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center relative">
                       <img
                         src={skill.logoUrl}
                         alt={skill.title}
@@ -339,12 +339,12 @@ export default function Skills({ skills }: SkillsProps) {
                       />
                     </div>
                   ) : (
-                    <div className="w-10 h-10 rounded-xl bg-surface-elevated flex items-center justify-center font-mono font-bold text-base text-primary border border-border">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-surface-elevated flex items-center justify-center font-mono font-bold text-sm sm:text-base text-primary border border-border">
                       {skill.title.charAt(0)}
                     </div>
                   )}
 
-                  <span className="font-mono text-[11px] sm:text-xs uppercase tracking-wider text-center text-text-primary group-hover:text-primary font-bold transition-colors">
+                  <span className="font-mono text-[10px] sm:text-xs uppercase tracking-wider text-center text-text-primary group-hover:text-primary font-bold transition-colors">
                     {skill.title}
                   </span>
                 </div>
@@ -354,8 +354,8 @@ export default function Skills({ skills }: SkillsProps) {
           </div>
 
           {/* Right Section: Seamless Clean Interactive 3D Tech Orbit */}
-          <div className="lg:col-span-5 xl:col-span-4 flex flex-col items-center justify-center">
-            <div className="sticky top-28 w-full flex items-center justify-center overflow-visible py-2 sm:py-6">
+          <div className="lg:col-span-5 xl:col-span-4 flex flex-col items-center justify-center w-full">
+            <div className="sticky top-28 w-full max-w-[340px] sm:max-w-[400px] lg:max-w-none flex items-center justify-center overflow-visible py-2 sm:py-6 mx-auto">
               <IconCloud iconSlugs={dynamicIconSlugs} />
             </div>
           </div>
