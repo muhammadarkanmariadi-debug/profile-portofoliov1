@@ -11,7 +11,7 @@ import ThemeToggle from '@/components/ui/ThemeToggle'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const ChromeTorus = dynamic(() => import('@/components/ChromeTorus'), { 
+const ChromeTorus = dynamic(() => import('@/components/ChromeTorus'), {
   ssr: false,
   loading: () => <div className="w-full h-full" />
 })
@@ -54,21 +54,21 @@ export default function Hero({ profile: _profile }: HeroProps) {
 
       // Entrance Animation Timeline
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-      
-      tl.fromTo([row1Ref.current, row2Ref.current, row3Ref.current], 
+
+      tl.fromTo([row1Ref.current, row2Ref.current, row3Ref.current],
         { y: isDesktop ? 60 : 30, opacity: 0 },
         { y: 0, opacity: 1, duration: 1.1, stagger: 0.12, ease: 'power3.out' }
       )
-      .fromTo(hairlineRef.current,
-        { scaleX: 0, opacity: 0 },
-        { scaleX: 1, opacity: 0.7, duration: 1, ease: 'expo.out' },
-        '-=0.6'
-      )
-      .fromTo([headerRef.current, footerRef.current],
-        { opacity: 0, y: 10 },
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out' },
-        '-=0.5'
-      )
+        .fromTo(hairlineRef.current,
+          { scaleX: 0, opacity: 0 },
+          { scaleX: 1, opacity: 0.7, duration: 1, ease: 'expo.out' },
+          '-=0.6'
+        )
+        .fromTo([headerRef.current, footerRef.current],
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out' },
+          '-=0.5'
+        )
 
       // Scroll-driven Parallax Scrub with explicit fromTo & immediateRender: false
       const scrollTl = gsap.timeline({
@@ -93,7 +93,7 @@ export default function Hero({ profile: _profile }: HeroProps) {
   }, { scope: sectionRef })
 
   return (
-    <section 
+    <section
       id="home"
       ref={sectionRef}
       className="relative w-full min-h-screen bg-background text-text-primary flex flex-col justify-between p-6 sm:p-10 select-none overflow-hidden border-b border-border transition-colors duration-300"
@@ -131,11 +131,11 @@ export default function Hero({ profile: _profile }: HeroProps) {
       </header>
 
       {/* Centerpiece: Huge Typography + 3D Chrome Torus + Hairline Ticks */}
-      <div 
+      <div
         ref={centerRef}
         className="relative w-full flex-grow flex items-center justify-center my-auto py-8 transform-gpu"
       >
-        
+
         {/* Horizontal Hairline & Ticks */}
         <div ref={hairlineRef} className="absolute top-1/2 left-0 w-full -translate-y-1/2 flex items-center justify-between pointer-events-none z-0 px-4 opacity-70 origin-center">
           <div className="w-1/4 h-[1px] bg-border"></div>
