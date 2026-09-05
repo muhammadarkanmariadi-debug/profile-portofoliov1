@@ -83,6 +83,86 @@ export default function Skills({ skills }: SkillsProps) {
   const headingRef = useRef<HTMLHeadingElement>(null)
   const marqueeRef = useRef<HTMLDivElement>(null)
 
+  // Dynamically derive SimpleIcons slugs from the database skills
+  const dynamicIconSlugs = React.useMemo(() => {
+    if (!skills || skills.length === 0) return ARKAN_TECH_SLUGS;
+
+    const SLUG_MAP: Record<string, string | string[]> = {
+      'next.js': 'nextdotjs',
+      'nextjs': 'nextdotjs',
+      'node.js': 'nodedotjs',
+      'nodejs': 'nodedotjs',
+      'vue.js': 'vuedotjs',
+      'vuejs': 'vuedotjs',
+      'react': 'react',
+      'react.js': 'react',
+      'react native': 'react',
+      'tailwind css': 'tailwindcss',
+      'tailwindcss': 'tailwindcss',
+      'prisma orm': 'prisma',
+      'prisma': 'prisma',
+      'git & github': ['git', 'github'],
+      'git': 'git',
+      'github': 'github',
+      'linux ubuntu': 'ubuntu',
+      'ubuntu': 'ubuntu',
+      'linux mint': 'linuxmint',
+      'linux debian': 'debian',
+      'debian': 'debian',
+      'c++': 'cplusplus',
+      'c#': 'csharp',
+      '.net': 'dotnet',
+      'golang': 'go',
+      'go': 'go',
+      'java': 'openjdk',
+      'aws': 'amazonaws',
+      'amazon web services': 'amazonaws',
+      'vs code': 'visualstudiocode',
+      'visual studio code': 'visualstudiocode',
+      'three.js': 'threedotjs',
+      'threejs': 'threedotjs',
+      'gsap': 'greensock',
+      'bootstrap': 'bootstrap',
+      'flutter': 'flutter',
+      'fastapi': 'fastapi',
+      'nestjs': 'nestjs',
+      'nest.js': 'nestjs',
+      'laravel': 'laravel',
+      'postgresql': 'postgresql',
+      'mysql': 'mysql',
+      'mariadb': 'mariadb',
+      'redis': 'redis',
+      'python': 'python',
+      'php': 'php',
+      'docker': 'docker',
+      'figma': 'figma',
+      'postman': 'postman',
+      'javascript': 'javascript',
+      'typescript': 'typescript',
+      'html5': 'html5',
+      'css3': 'css3',
+    };
+
+    const slugsSet = new Set<string>();
+
+    for (const skill of skills) {
+      const lower = skill.title.toLowerCase().trim();
+      const mapped = SLUG_MAP[lower];
+      if (mapped) {
+        if (Array.isArray(mapped)) {
+          mapped.forEach((s) => slugsSet.add(s));
+        } else {
+          slugsSet.add(mapped);
+        }
+      } else {
+        const clean = lower.replace(/[^a-z0-9]/g, '');
+        if (clean) slugsSet.add(clean);
+      }
+    }
+
+    return Array.from(slugsSet);
+  }, [skills]);
+
   // Group skills by category
   const groupedSkills = skills.reduce((acc, skill) => {
     if (!acc[skill.category]) acc[skill.category] = [];
@@ -273,18 +353,11 @@ export default function Skills({ skills }: SkillsProps) {
 
           </div>
 
-          {/* Right Section: Interactive 3D Tech Orbit Cloud Card */}
-          <div className="lg:col-span-5 xl:col-span-4 flex flex-col">
-
-
-
-            {/* 3D Icon Cloud Sphere */}
-            <div className="w-full flex items-center justify-center py-2 relative overflow-visible min-h-[300px] sm:min-h-[340px]">
-              <IconCloud iconSlugs={ARKAN_TECH_SLUGS} />
+          {/* Right Section: Seamless Clean Interactive 3D Tech Orbit */}
+          <div className="lg:col-span-5 xl:col-span-4 flex flex-col items-center justify-center">
+            <div className="sticky top-28 w-full flex items-center justify-center overflow-visible py-2 sm:py-6">
+              <IconCloud iconSlugs={dynamicIconSlugs} />
             </div>
-
-
-
           </div>
 
         </div>
