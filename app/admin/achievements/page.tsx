@@ -16,6 +16,7 @@ import {
   CheckCircle2 
 } from 'lucide-react';
 import type { Achievement } from '@prisma/client';
+import { getOptimizedImageUrl } from '@/lib/utils/image';
 
 export default function AchievementsAdminPage() {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
@@ -279,7 +280,7 @@ export default function AchievementsAdminPage() {
                   <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-surface-elevated border border-border mb-4">
                     {item.imageUrl ? (
                       <img
-                        src={item.imageUrl}
+                        src={getOptimizedImageUrl(item.imageUrl)}
                         alt={item.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
@@ -386,7 +387,7 @@ export default function AchievementsAdminPage() {
                       <td className="p-4">
                         {item.imageUrl ? (
                           <img 
-                            src={item.imageUrl} 
+                            src={getOptimizedImageUrl(item.imageUrl)} 
                             alt={item.title} 
                             className="w-20 h-14 object-cover rounded-xl border border-border shadow-sm" 
                           />

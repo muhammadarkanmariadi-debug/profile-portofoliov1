@@ -6,6 +6,7 @@ import { useGSAP } from '@gsap/react'
 import { ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
 import type { Skill } from '@prisma/client'
+import { getOptimizedImageUrl } from '@/lib/utils/image'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -199,7 +200,7 @@ export default function ProjectCard({
               <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#0D0E11]">
                 <img
                   ref={imageRef}
-                  src={imageUrl || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop&q=80'}
+                  src={getOptimizedImageUrl(imageUrl) || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop&q=80'}
                   alt={`${title} desktop browser screenshot`}
                   className="w-full h-full object-cover object-top will-change-transform transform-gpu origin-center"
                   loading="lazy"

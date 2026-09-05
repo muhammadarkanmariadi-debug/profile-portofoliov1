@@ -17,6 +17,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import type { Project, Skill } from '@prisma/client';
+import { getOptimizedImageUrl } from '@/lib/utils/image';
 
 type ProjectWithTech = Project & { techStack: Skill[] };
 
@@ -291,7 +292,7 @@ export default function ProjectsAdminPage() {
                   <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-surface-elevated border border-border mb-4">
                     {item.imageUrl ? (
                       <img
-                        src={item.imageUrl}
+                        src={getOptimizedImageUrl(item.imageUrl)}
                         alt={item.title}
                         className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                       />
@@ -441,7 +442,7 @@ export default function ProjectsAdminPage() {
                       <td className="p-4">
                         {item.imageUrl ? (
                           <img 
-                            src={item.imageUrl} 
+                            src={getOptimizedImageUrl(item.imageUrl)} 
                             alt={item.title} 
                             className="w-20 h-14 object-cover rounded-xl border border-border shadow-sm" 
                           />

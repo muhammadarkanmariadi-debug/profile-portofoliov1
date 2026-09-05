@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, ExternalLink, Github, Code2, Tag, Server } from 'lucide-react'
 import Link from 'next/link'
 import { useLanguage } from '../providers'
+import { getOptimizedImageUrl } from '@/lib/utils/image'
 
 import type { Project, Skill } from '@prisma/client'
 
@@ -52,7 +53,7 @@ const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) => {
             {/* Left Image Section */}
             <div className="w-full md:w-1/2 h-64 md:h-auto relative shrink-0">
               <img 
-                src={project.imageUrl || '/images/default-project.jpg'} 
+                src={getOptimizedImageUrl(project.imageUrl) || '/images/default-project.jpg'} 
                 alt={project.title} 
                 className="w-full h-full object-cover"
               />

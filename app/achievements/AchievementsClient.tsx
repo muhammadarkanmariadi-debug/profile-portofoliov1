@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Search, ChevronLeft, ChevronRight, ChevronDown, Award, ExternalLink, X, ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '@/app/providers'
 import type { Achievement } from '@prisma/client'
+import { getOptimizedImageUrl } from '@/lib/utils/image'
 
 interface AchievementsClientProps {
   initialAchievements: Achievement[]
@@ -184,7 +185,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                       className="w-full lg:w-1/2 aspect-[16/10] rounded-2xl overflow-hidden bg-white/60 border border-black/10 shadow-lg  group-hover:scale-[1.02] transition-transform duration-500 relative block"
                     >
                       <img
-                        src={item.imageUrl}
+                        src={getOptimizedImageUrl(item.imageUrl)}
                         alt={item.title}
                         className="w-full h-full object-cover"
                       />
@@ -243,7 +244,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                     className="w-full lg:w-2/5 aspect-[16/10] rounded-2xl overflow-hidden bg-white/70 border border-black/10 shadow-md  group-hover:scale-[1.02] transition-transform duration-500 relative block"
                   >
                     <img
-                      src={item.imageUrl}
+                      src={getOptimizedImageUrl(item.imageUrl)}
                       alt={item.title}
                       className="w-full h-full object-cover"
                     />
@@ -306,7 +307,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                 <X size={16} />
               </button>
               <img
-                src={selectedImage}
+                src={getOptimizedImageUrl(selectedImage)}
                 alt="Document Preview"
                 className="w-full h-auto max-h-[85vh] object-contain rounded-2xl border border-white/20 shadow-2xl"
               />

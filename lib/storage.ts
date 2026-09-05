@@ -113,8 +113,26 @@ export async function uploadAsset(
       );
 
       // Build public URL
-      const rawEndpoint = process.env.MINIO_PUBLIC_URL || process.env.MINIO_ENDPOINT || process.env.S3_ENDPOINT || 'http://127.0.0.1:9005';
-      const publicBase = rawEndpoint.replace(/\/+$/, '');
+      let publicBase = (process.env.MINIO_PUBLIC_URL || '').replace(/\/+$/, '');
+      if (!publicBase) {
+        const rawEndpoint = process.env.MINIO_ENDPOINT || process.env.S3_ENDPOINT || 'http://127.0.0.1:9005';
+        if (rawEndpoint.includes('://minio:') || rawEndpoint.includes('://minio/')) {
+          // If running inside Docker with container name 'minio', rewrite to exposed port 9005
+          const appUrl = process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL || '';
+          if (appUrl) {
+            try {
+              const urlObj = new URL(appUrl);
+              publicBase = `${urlObj.protocol}//${urlObj.hostname}:9005`;
+            } catch {
+              publicBase = 'http://localhost:9005';
+            }
+          } else {
+            publicBase = 'http://localhost:9005';
+          }
+        } else {
+          publicBase = rawEndpoint.replace(/\/+$/, '');
+        }
+      }
       
       // If publicBase already includes bucket name or custom CDN
       const finalUrl = process.env.MINIO_PUBLIC_URL
