@@ -26,7 +26,6 @@ export default function ProfileAdminPage() {
     resolver: zodResolver(profileSchema),
   });
 
-  const lanyardUrl = watch('lanyardImageUrl');
   const cvUrl = watch('cvFileUrl');
 
   useEffect(() => {
@@ -202,31 +201,19 @@ export default function ProfileAdminPage() {
         {/* Media & Files Card */}
         <div className="bg-surface border border-border rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
           <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-text-primary font-bold border-b border-border pb-4">
-            <ImageIcon size={15} className="text-amber-400" />
-            <span>MEDIA ASSETS & CURRICULUM VITAE</span>
+            <FileText size={15} className="text-amber-400" />
+            <span>CURRICULUM VITAE / RESUME DOCUMENT</span>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-2">
-              <label className="font-mono text-xs text-text-muted uppercase tracking-wider block mb-2">Avatar / 3D Lanyard Card</label>
-              <FileUpload 
-                value={lanyardUrl || ''} 
-                onChange={(url) => setValue('lanyardImageUrl', url)}
-                label="Upload Lanyard Photo"
-                folder="portfolio/profile"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="font-mono text-xs text-text-muted uppercase tracking-wider block mb-2">Curriculum Vitae (PDF Document)</label>
-              <FileUpload 
-                value={cvUrl || ''} 
-                onChange={(url) => setValue('cvFileUrl', url)}
-                accept=".pdf"
-                label="Upload CV (PDF)"
-                folder="portfolio/cv"
-              />
-            </div>
+          <div className="space-y-2">
+            <label className="font-mono text-xs text-text-muted uppercase tracking-wider block mb-2">Curriculum Vitae (PDF Document)</label>
+            <FileUpload 
+              value={cvUrl || ''} 
+              onChange={(url) => setValue('cvFileUrl', url)}
+              accept=".pdf"
+              label="Upload CV (PDF)"
+              folder="portfolio/cv"
+            />
           </div>
         </div>
 

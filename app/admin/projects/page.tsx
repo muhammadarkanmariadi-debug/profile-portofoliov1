@@ -23,7 +23,6 @@ type ProjectWithTech = Project & { techStack: Skill[] };
 export default function ProjectsAdminPage() {
   const [projects, setProjects] = useState<ProjectWithTech[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSyncing, setIsSyncing] = useState(false);
   const [isSavingOrder, setIsSavingOrder] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
@@ -31,26 +30,6 @@ export default function ProjectsAdminPage() {
   // Drag and Drop state
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-
-  const handleSyncGithub = async () => {
-    setIsSyncing(true);
-    try {
-      const res = await fetch('/api/admin/projects/sync', { method: 'POST' });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        alert(`Successfully synced ${data.reposSynced} repositories from GitHub!`);
-        fetchProjects();
-      } else {
-        alert(`Sync finished with issues: ${data.details || JSON.stringify(data.errors || 'Unknown error')}`);
-        fetchProjects();
-      }
-    } catch (error) {
-      console.error('Error syncing:', error);
-      alert('Failed to trigger GitHub sync.');
-    } finally {
-      setIsSyncing(false);
-    }
-  };
 
   const fetchProjects = async () => {
     setIsLoading(true);
@@ -230,15 +209,6 @@ export default function ProjectsAdminPage() {
             </button>
           </div>
 
-          <button 
-            onClick={handleSyncGithub}
-            disabled={isSyncing}
-            className="flex items-center gap-2 bg-surface hover:bg-surface-elevated border border-border disabled:opacity-50 text-text-primary px-4 py-2 rounded-xl transition-colors font-mono text-xs cursor-target"
-          >
-            {isSyncing ? <Loader2 size={15} className="animate-spin text-primary" /> : <Github size={15} />}
-            <span>{isSyncing ? 'SYNCING GITHUB...' : 'SYNC GITHUB'}</span>
-          </button>
-          
           <Link 
             href="/admin/projects/create"
             className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-background px-4 py-2 rounded-xl transition-colors font-mono text-xs font-bold cursor-target shadow-md shadow-primary/20"
@@ -255,12 +225,12 @@ export default function ProjectsAdminPage() {
           <GripVertical size={16} className="text-primary" />
           <span>Tip: Drag and drop any project card/row to easily reorder projects for the portfolio landing & work archive.</span>
         </div>
-        <span className="font-bold text-text-primary">{projects.length} Repositories</span>
+        <span className="font-bold text-text-primary">{projects.length} Projects</span>
       </div>
 
       {projects.length === 0 ? (
         <div className="bg-surface border border-border rounded-3xl p-12 text-center text-text-muted font-mono text-xs">
-          No projects found in database. Create your first project or sync with GitHub.
+          No projects found in database. Click &apos;ADD PROJECT&apos; above to create your first project.
         </div>
       ) : viewMode === 'cards' ? (
         /* ------------------------------------------------------------------ */

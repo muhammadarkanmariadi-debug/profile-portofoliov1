@@ -45,10 +45,27 @@ export default function FileUpload({
         body: formData,
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Upload failed');
+      const text = await res.text();
+      let data: any = null;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        if (res.status === 413) {
+          throw new Error('Upload failed: File size too large for web server (Nginx 413). Increase client_max_body_size in Nginx configuration.');
+        } else if (res.status === 401) {
+          throw new Error('Upload failed: Session unauthorized or expired (401). Please re-login.');
+        } else {
+          const match = text.match(/<title>(.*?)<\/title>/i) || text.match(/<h1>(.*?)<\/h1>/i);
+          const errorDetail = match ? match[1] : text.slice(0, 80);
+          throw new Error(`Server returned HTTP ${res.status}: ${errorDetail}`);
+        }
+      }
 
-      onChange(data.secure_url);
+      if (!res.ok) {
+        throw new Error(data?.error || `Upload failed with status ${res.status}`);
+      }
+
+      onChange(data.secure_url || data.url);
     } catch (err: any) {
       setError(err.message || 'Error uploading file');
     } finally {

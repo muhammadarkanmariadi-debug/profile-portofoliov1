@@ -94,39 +94,48 @@ export async function uploadAsset(
 ): Promise<UploadResult> {
   // 1. MinIO Self-Hosted Upload
   if (isMinioConfigured()) {
-    const s3 = getS3Client();
-    const bucket = process.env.MINIO_BUCKET || process.env.S3_BUCKET || 'portfolio';
-    await ensureBucketExists(s3, bucket);
+    try {
+      const s3 = getS3Client();
+      const bucket = process.env.MINIO_BUCKET || process.env.S3_BUCKET || 'portfolio';
+      await ensureBucketExists(s3, bucket);
 
-    const cleanFolder = folder.replace(/^\/+|\/+$/g, '');
-    const cleanFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
-    const key = cleanFolder ? `${cleanFolder}/${Date.now()}-${cleanFileName}` : `${Date.now()}-${cleanFileName}`;
+      const cleanFolder = folder.replace(/^\/+|\/+$/g, '');
+      const cleanFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
+      const key = cleanFolder ? `${cleanFolder}/${Date.now()}-${cleanFileName}` : `${Date.now()}-${cleanFileName}`;
 
-    await s3.send(
-      new PutObjectCommand({
-        Bucket: bucket,
-        Key: key,
-        Body: buffer,
-        ContentType: contentType || 'application/octet-stream',
-      })
-    );
+      await s3.send(
+        new PutObjectCommand({
+          Bucket: bucket,
+          Key: key,
+          Body: buffer,
+          ContentType: contentType || 'application/octet-stream',
+        })
+      );
 
-    // Build public URL
-    const rawEndpoint = process.env.MINIO_PUBLIC_URL || process.env.MINIO_ENDPOINT || process.env.S3_ENDPOINT || 'http://127.0.0.1:9000';
-    const publicBase = rawEndpoint.replace(/\/+$/, '');
-    
-    // If publicBase already includes bucket name or custom CDN
-    const finalUrl = process.env.MINIO_PUBLIC_URL
-      ? `${publicBase}/${key}`
-      : `${publicBase}/${bucket}/${key}`;
+      // Build public URL
+      const rawEndpoint = process.env.MINIO_PUBLIC_URL || process.env.MINIO_ENDPOINT || process.env.S3_ENDPOINT || 'http://127.0.0.1:9005';
+      const publicBase = rawEndpoint.replace(/\/+$/, '');
+      
+      // If publicBase already includes bucket name or custom CDN
+      const finalUrl = process.env.MINIO_PUBLIC_URL
+        ? `${publicBase}/${key}`
+        : `${publicBase}/${bucket}/${key}`;
 
-    return {
-      url: finalUrl,
-      secure_url: finalUrl,
-      public_id: key,
-      bytes: buffer.length,
-      storage: 'minio',
-    };
+      return {
+        url: finalUrl,
+        secure_url: finalUrl,
+        public_id: key,
+        bytes: buffer.length,
+        storage: 'minio',
+      };
+    } catch (minioErr: any) {
+      console.error('MinIO storage error:', minioErr);
+      if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY) {
+        console.warn('Falling back to Cloudinary after MinIO error...');
+      } else {
+        throw new Error(`MinIO Upload Error: ${minioErr.message || minioErr}`);
+      }
+    }
   }
 
   // 2. Cloudinary Upload (Fallback)
