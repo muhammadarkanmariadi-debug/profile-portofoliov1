@@ -49,6 +49,7 @@ export default function ProjectCard({
 }: ProjectCardProps) {
   const cardRef = useRef<HTMLElement>(null)
   const innerCardRef = useRef<HTMLDivElement>(null)
+  const dimOverlayRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
 
@@ -60,66 +61,81 @@ export default function ProjectCard({
     if (!cardRef.current) return
 
     // 1. Entrance reveal
-    gsap.fromTo(titleRef.current,
-      { y: 40, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: cardRef.current,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse'
+    if (titleRef.current) {
+      gsap.fromTo(titleRef.current,
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: cardRef.current,
+            start: 'top 88%',
+            toggleActions: 'play none none reverse'
+          }
         }
-      }
-    )
+      )
+    }
 
     // 2. Parallax internal image glide inside the desktop browser mockup
     if (imageRef.current) {
       gsap.fromTo(imageRef.current,
-        { yPercent: -8, scale: 1.06 },
+        { yPercent: -6, scale: 1.04 },
         {
-          yPercent: 8,
+          yPercent: 6,
           scale: 1,
           ease: 'none',
           scrollTrigger: {
             trigger: cardRef.current,
             start: 'top bottom',
             end: 'bottom top',
-            scrub: 1.0
+            scrub: true
           }
         }
       )
     }
 
-    // 3. Sticky stacking scale & brightness dim effect as the next card overlaps
+    // 3. Hardware-accelerated sticky stacking scale & dim effect as next card overlaps
     if (numericIndex < totalProjects - 1 && innerCardRef.current) {
-      gsap.to(innerCardRef.current, {
-        scale: 0.94,
-        filter: 'brightness(0.7)',
-        yPercent: -4,
-        ease: 'none',
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: cardRef.current,
-          start: 'top top+=100',
-          end: 'bottom top+=100',
+          start: 'top top+=70',
+          end: 'bottom top+=70',
           scrub: true
         }
       })
+
+      tl.to(innerCardRef.current, {
+        scale: 0.94 - numericIndex * 0.015,
+        yPercent: -2,
+        transformOrigin: 'top center',
+        ease: 'none'
+      }, 0)
+
+      if (dimOverlayRef.current) {
+        tl.to(dimOverlayRef.current, {
+          opacity: 0.45,
+          ease: 'none'
+        }, 0)
+      }
     }
 
   }, { scope: cardRef })
 
-  const stickyTop = `calc(5rem + ${numericIndex * 24}px)`
+  const stickyTop = `calc(4.5rem + ${numericIndex * 24}px)`
 
   return (
     <article 
       ref={cardRef}
-      style={{ top: stickyTop }}
-      className="sticky w-full text-text-primary pt-8 pb-14    border-t border-border  transition-colors duration-300 will-change-transform"
+      style={{ top: stickyTop, zIndex: numericIndex + 1 }}
+      className="sticky w-full bg-background text-text-primary pt-8 pb-12 border-t border-border/80 will-change-transform"
     >
-      <div ref={innerCardRef} className="w-full transition-transform duration-200 origin-top">
+      <div 
+        ref={innerCardRef} 
+        className="w-full origin-top will-change-transform transform-gpu"
+      >
         {/* Topline: Index + Domain */}
         <div className="w-full flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-6 px-2">
           <span className="font-bold text-primary">{index}</span>
@@ -154,10 +170,10 @@ export default function ProjectCard({
         </div>
 
         {/* Desktop Browser Mockup in Colored Frame */}
-        <div className="w-full">
+        <div className="w-full relative">
           <Link
             href={projectHref}
-            className={`block w-full ${bgClass} rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-12 cursor-target group relative overflow-hidden transform-gpu shadow-lg hover:shadow-2xl transition-all duration-500`}
+            className={`block w-full ${bgClass} rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-12 cursor-target group relative overflow-hidden transform-gpu shadow-xl hover:shadow-2xl transition-[box-shadow] duration-500`}
           >
             {/* Desktop Browser Window */}
             <div className="w-full bg-[#16181D] rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden border border-white/10">
@@ -199,6 +215,12 @@ export default function ProjectCard({
               </div>
 
             </div>
+
+            {/* Ambient Dark Dim Overlay on Stacking */}
+            <div
+              ref={dimOverlayRef}
+              className="pointer-events-none absolute inset-0 bg-black/60 rounded-2xl sm:rounded-3xl opacity-0 will-change-[opacity]"
+            />
           </Link>
         </div>
 
