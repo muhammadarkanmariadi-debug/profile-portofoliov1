@@ -64,14 +64,14 @@ export default function ContactClient({ profile }: ContactClientProps) {
 
   return (
     <main className="w-full bg-[#82D8CE] text-[#121217] pt-32 pb-32 min-h-screen px-6 sm:px-10 relative select-none overflow-hidden">
-      
+
       {/* Background Watermark 05 */}
       <div className="absolute right-0 bottom-10 font-heading font-black text-[28vw] leading-none text-[#121217] opacity-[0.06] pointer-events-none z-0">
         05
       </div>
 
-      <div className="max-w-[1300px] mx-auto relative z-10">
-        
+      <div className="max-w-[1400px] mx-auto relative z-10">
+
         {/* Top Header Index */}
         <header className="mb-16 border-b border-[#6AC4B9] pb-8 flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-[#2C625B]">
           <div className="flex items-center gap-3">
@@ -82,20 +82,20 @@ export default function ContactClient({ profile }: ContactClientProps) {
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          
+
           {/* Left Column: Huge Headline & Pill Email */}
           <div className="lg:col-span-7 space-y-12">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.25em] text-[#2C625B] font-semibold mb-6">
                 HAVE A PROJECT OR ROLE IN MIND?
               </p>
-              
+
               <h1 className="font-heading font-black text-4xl sm:text-6xl lg:text-[5.5vw] tracking-tighter leading-[0.95] text-[#121217] mb-8">
                 <span>Let&#39;s make</span> <br />
                 <span>something impossible</span> <br />
-                <span 
+                <span
                   className="text-transparent inline-block"
-                  style={{ 
+                  style={{
                     WebkitTextStroke: '2px #121217'
                   }}
                 >
@@ -106,7 +106,7 @@ export default function ContactClient({ profile }: ContactClientProps) {
 
             {/* Full-width Dark Pill Email Bar */}
             <div>
-              <div 
+              <div
                 onClick={handleCopyEmail}
                 className="w-full bg-[#121217] text-[#82D8CE] hover:bg-[#1A1A22] rounded-full p-4 pl-6 sm:pl-8 flex items-center justify-between shadow-2xl transition-all duration-300 group cursor-target border border-black/30"
               >
@@ -163,9 +163,9 @@ export default function ContactClient({ profile }: ContactClientProps) {
                 <label className="block text-xs font-mono uppercase tracking-wider text-[#A0A0B2] mb-2 font-bold">
                   Your Name
                 </label>
-                <input 
+                <input
                   name="name"
-                  type="text" 
+                  type="text"
                   required
                   className="w-full bg-[#1A1A24] border border-[#2B2B3A] rounded-xl py-3 px-4 text-white text-sm focus:outline-none focus:border-[#82D8CE] transition-colors"
                   placeholder="e.g. Jane Doe"
@@ -176,9 +176,9 @@ export default function ContactClient({ profile }: ContactClientProps) {
                 <label className="block text-xs font-mono uppercase tracking-wider text-[#A0A0B2] mb-2 font-bold">
                   Email Address
                 </label>
-                <input 
+                <input
                   name="email"
-                  type="email" 
+                  type="email"
                   required
                   className="w-full bg-[#1A1A24] border border-[#2B2B3A] rounded-xl py-3 px-4 text-white text-sm focus:outline-none focus:border-[#82D8CE] transition-colors"
                   placeholder="jane@company.com"
@@ -189,7 +189,7 @@ export default function ContactClient({ profile }: ContactClientProps) {
                 <label className="block text-xs font-mono uppercase tracking-wider text-[#A0A0B2] mb-2 font-bold">
                   Message / Project Details
                 </label>
-                <textarea 
+                <textarea
                   name="message"
                   required
                   rows={4}
@@ -214,7 +214,7 @@ export default function ContactClient({ profile }: ContactClientProps) {
               </button>
 
               {status === 'success' && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="p-3.5 rounded-xl bg-[#00E599]/20 border border-[#00E599] text-[#00E599] font-mono text-xs text-center font-bold"
@@ -224,7 +224,7 @@ export default function ContactClient({ profile }: ContactClientProps) {
               )}
 
               {status === 'error' && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="p-3.5 rounded-xl bg-red-500/20 border border-red-500 text-red-400 font-mono text-xs text-center"

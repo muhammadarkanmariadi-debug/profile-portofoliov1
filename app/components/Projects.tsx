@@ -46,12 +46,12 @@ export default function Projects({ projects, isLanding = false }: ProjectsProps)
   }, { scope: sectionRef })
 
   return (
-    <section 
-      id="work" 
+    <section
+      id="work"
       ref={sectionRef}
       className="inverted-theme w-full bg-background text-text-primary py-24 px-6 sm:px-10 border-b border-border transition-colors duration-300"
     >
-      <div className="max-w-[1300px] mx-auto">
+      <div className="max-w-[1400px] mx-auto">
 
         {/* Section Header with Index (Screenshot Match) */}
         <header className="w-full border-b border-border pb-10 sm:pb-14 mb-14 sm:mb-20">

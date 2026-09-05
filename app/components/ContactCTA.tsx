@@ -4,13 +4,13 @@ import Link from 'next/link'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
-import { 
-  ArrowUpRight, 
-  Check, 
-  Copy, 
-  Mail, 
-  Github, 
-  Linkedin, 
+import {
+  ArrowUpRight,
+  Check,
+  Copy,
+  Mail,
+  Github,
+  Linkedin,
   FileText,
   Globe,
   Clock
@@ -97,13 +97,13 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
   }, { scope: sectionRef })
 
   return (
-    <section 
+    <section
       id="contact"
       ref={sectionRef}
       className="relative z-20 w-full min-h-screen bg-[#82D8CE] text-[#121217] flex flex-col justify-between p-6 sm:p-10 select-none overflow-hidden shadow-[0_-25px_60px_rgba(0,0,0,0.3)] border-t border-[#6AC4B9]"
     >
       {/* Background Watermark 05 */}
-      <div 
+      <div
         ref={watermarkRef}
         className="absolute right-0 bottom-10 font-heading font-black text-[28vw] leading-none text-[#121217] pointer-events-none z-0 select-none will-change-transform"
       >
@@ -132,8 +132,8 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
       </header>
 
       {/* Center Body: Massive Extrabold WANT TO CONNECT Heading + Interactive Hub */}
-      <div className="w-full max-w-[1300px] mx-auto my-auto py-12 sm:py-20 z-10">
-        
+      <div className="w-full max-w-[1400px] mx-auto my-auto py-12 sm:py-20 z-10">
+
         {/* Massive Extrabold Heading */}
         <div className="mb-8 sm:mb-12">
           <div className="overflow-hidden">
@@ -144,7 +144,7 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
           <div className="overflow-hidden mt-1 sm:mt-2">
             <h2 className="font-heading font-black text-5xl sm:text-7xl md:text-8xl lg:text-[8vw] tracking-tighter leading-[0.88] uppercase text-[#121217] inline-flex items-center select-none">
               <span>CONNECT</span>
-              <span 
+              <span
                 className="text-transparent ml-2 sm:ml-4 inline-block"
                 style={{ WebkitTextStroke: '2.5px #121217' }}
               >
@@ -187,7 +187,7 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
 
         {/* Full-width Dark Pill Email Bar with Magnetic Physics */}
         <div className="w-full">
-          <div 
+          <div
             ref={emailBarRef}
             onClick={handleCopyEmail}
             className="w-full bg-[#121217] text-[#82D8CE] hover:bg-[#1A1A22] rounded-3xl sm:rounded-full p-4 sm:p-5 pl-6 sm:pl-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-2xl transition-colors duration-300 group cursor-target border border-black/30 transform-gpu will-change-transform select-none"
@@ -277,8 +277,8 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
       <footer className="w-full flex items-center justify-between border-t border-[#6AC4B9] pt-4 font-mono text-xs uppercase tracking-[0.2em] text-[#2C625B] z-10">
         <span>4RK4N.DEV</span>
         <span className="hidden sm:inline font-bold">DIGITAL EXPERIENCES</span>
-        <button 
-          onClick={() => scrollTo('#home')} 
+        <button
+          onClick={() => scrollTo('#home')}
           className="hover:text-[#121217] transition-colors cursor-target flex items-center gap-1 font-bold"
         >
           <span>BACK TO TOP</span>

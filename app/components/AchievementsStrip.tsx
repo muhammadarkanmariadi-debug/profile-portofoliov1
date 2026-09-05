@@ -62,7 +62,7 @@ export default function AchievementsStrip({ achievements }: AchievementsStripPro
       // Velocity-based subtle dynamic tilt/skew
       const proxy = { skew: 0 }
       const skewSetter = gsap.quickSetter(gridRef.current, "skewY", "deg")
-      
+
       ScrollTrigger.create({
         trigger: sectionRef.current,
         onUpdate: (self) => {
@@ -87,13 +87,13 @@ export default function AchievementsStrip({ achievements }: AchievementsStripPro
   if (!achievements || achievements.length === 0) return null
 
   return (
-    <section 
-      id="achievements" 
+    <section
+      id="achievements"
       ref={sectionRef}
       className="inverted-theme relative z-10 w-full bg-background text-text-primary py-24 px-6 sm:px-10 border-b border-border transition-colors duration-300 overflow-hidden"
     >
-      <div className="max-w-[1300px] mx-auto">
-        
+      <div className="max-w-[1400px] mx-auto">
+
         {/* Section Header with Index (Matching Concept) */}
         <header className="w-full border-b border-border pb-10 sm:pb-14 mb-14 sm:mb-20">
           <div className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-8 sm:mb-12">
@@ -125,7 +125,7 @@ export default function AchievementsStrip({ achievements }: AchievementsStripPro
         {/* Credentials Grid with Staggered Entrance & Velocity Skew */}
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 will-change-transform">
           {achievements.slice(0, 6).map((item) => (
-            <div 
+            <div
               key={item.id}
               className="achievement-card p-6 rounded-2xl bg-surface border border-border hover:border-primary/60 hover:bg-surface-elevated transition-all flex flex-col justify-between group cursor-target transform-gpu shadow-sm hover:shadow-lg hover:-translate-y-1 duration-300"
             >
@@ -159,8 +159,8 @@ export default function AchievementsStrip({ achievements }: AchievementsStripPro
         </div>
 
         <div className="mt-12 text-center">
-          <Link 
-            href="/achievements" 
+          <Link
+            href="/achievements"
             className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-text-muted hover:text-primary transition-colors cursor-target border-b border-border pb-1"
           >
             <span>{t.achievements.viewAll || 'VIEW ALL VERIFIED AWARDS & CERTIFICATES'}</span>

@@ -15,7 +15,7 @@ import type { DynamicCloudProps } from '@/components/ui/interactive-icon-cloud'
 
 const IconCloud = dynamic<DynamicCloudProps>(
   () => import('@/components/ui/interactive-icon-cloud').then((mod) => mod.IconCloud),
-  { 
+  {
     ssr: false,
     loading: () => (
       <div className="w-full h-[320px] flex items-center justify-center text-text-muted font-mono text-xs">
@@ -82,7 +82,7 @@ export default function Skills({ skills }: SkillsProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const marqueeRef = useRef<HTMLDivElement>(null)
-  
+
   // Group skills by category
   const groupedSkills = skills.reduce((acc, skill) => {
     if (!acc[skill.category]) acc[skill.category] = [];
@@ -145,14 +145,14 @@ export default function Skills({ skills }: SkillsProps) {
   useGSAP(() => {
     if (!gridRef.current) return
     const cards = gridRef.current.querySelectorAll('.skill-card')
-    gsap.fromTo(cards, 
+    gsap.fromTo(cards,
       { opacity: 0, y: 16, scale: 0.94 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        scale: 1, 
-        duration: 0.35, 
-        stagger: 0.03, 
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.35,
+        stagger: 0.03,
         ease: 'power3.out',
         clearProps: 'transform'
       }
@@ -162,13 +162,13 @@ export default function Skills({ skills }: SkillsProps) {
   if (categories.length === 0) return null;
 
   return (
-    <section 
-      id="skills" 
+    <section
+      id="skills"
       ref={sectionRef}
       className="inverted-theme w-full bg-background text-text-primary py-24 px-6 sm:px-10 border-b border-border transition-colors duration-300 overflow-hidden"
     >
-      <div className="max-w-[1300px] mx-auto">
-        
+      <div className="max-w-[1400px] mx-auto">
+
         {/* Section Header with Index */}
         <header className="w-full border-b border-border pb-10 sm:pb-14 mb-14 sm:mb-20">
           <div className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-8 sm:mb-12">
@@ -209,10 +209,10 @@ export default function Skills({ skills }: SkillsProps) {
 
         {/* Dual-Panel Layout: Category Tabs & Skills Grid + 3D Interactive Tech Orbit */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-          
+
           {/* Left / Main Section: Category Filter & Grid */}
           <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-8">
-            
+
             {/* Category Tabs with spring indicator */}
             <div className="flex flex-wrap gap-2 sm:gap-3">
               {categories.map((category) => {
@@ -221,9 +221,8 @@ export default function Skills({ skills }: SkillsProps) {
                   <button
                     key={category}
                     onClick={() => setActiveTab(category)}
-                    className={`relative px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-mono text-xs uppercase tracking-wider transition-colors cursor-target font-bold z-10 ${
-                      isActive ? 'text-background' : 'text-text-muted hover:text-text-primary'
-                    }`}
+                    className={`relative px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-mono text-xs uppercase tracking-wider transition-colors cursor-target font-bold z-10 ${isActive ? 'text-background' : 'text-text-muted hover:text-text-primary'
+                      }`}
                   >
                     {isActive && (
                       <motion.div
@@ -242,20 +241,20 @@ export default function Skills({ skills }: SkillsProps) {
             </div>
 
             {/* Active Category Skills Grid with GSAP Stagger */}
-            <div 
+            <div
               ref={gridRef}
               className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5"
             >
               {groupedSkills[activeTab]?.sort((a, b) => a.order - b.order).map((skill) => (
-                <div 
+                <div
                   key={skill.id}
                   className="skill-card p-5 rounded-2xl flex flex-col items-center justify-center gap-3 bg-surface border border-border hover:border-primary/60 hover:bg-surface-elevated transition-all duration-200 cursor-target group transform-gpu shadow-sm hover:-translate-y-1 hover:scale-[1.02]"
                 >
                   {skill.logoUrl ? (
                     <div className="w-10 h-10 flex items-center justify-center relative">
-                      <img 
-                        src={skill.logoUrl} 
-                        alt={skill.title} 
+                      <img
+                        src={skill.logoUrl}
+                        alt={skill.title}
                         className="max-w-full max-h-full object-contain filter group-hover:drop-shadow-[0_0_12px_rgba(56,189,248,0.4)] transition-all duration-300"
                       />
                     </div>
@@ -276,16 +275,16 @@ export default function Skills({ skills }: SkillsProps) {
 
           {/* Right Section: Interactive 3D Tech Orbit Cloud Card */}
           <div className="lg:col-span-5 xl:col-span-4 flex flex-col">
-         
-        
 
-              {/* 3D Icon Cloud Sphere */}
-              <div className="w-full flex items-center justify-center py-2 relative overflow-visible min-h-[300px] sm:min-h-[340px]">
-                <IconCloud iconSlugs={ARKAN_TECH_SLUGS} />
-              </div>
 
-         
-         
+
+            {/* 3D Icon Cloud Sphere */}
+            <div className="w-full flex items-center justify-center py-2 relative overflow-visible min-h-[300px] sm:min-h-[340px]">
+              <IconCloud iconSlugs={ARKAN_TECH_SLUGS} />
+            </div>
+
+
+
           </div>
 
         </div>
