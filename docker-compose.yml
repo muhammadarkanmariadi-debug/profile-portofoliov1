@@ -59,27 +59,6 @@ services:
       - profile_network
 
   # -------------------------------------------------------------
-  # MinIO Self-Hosted S3 Object Storage Service
-  # -------------------------------------------------------------
-  minio:
-    image: minio/minio:latest
-    container_name: profile_minio
-    restart: always
-    command: server /data --console-address ":9001" --address ":9000"
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minio_secure_password}
-    ports:
-      # S3 API endpoint (mapped from host port 9005 -> container port 9000)
-      - "9005:9000"
-      # MinIO Web Console Dashboard (mapped from host port 9006 -> container port 9001)
-      - "9006:9001"
-    volumes:
-      - minio_data:/data
-    networks:
-      - profile_network
-
-  # -------------------------------------------------------------
   # Next.js Application Service
   # -------------------------------------------------------------
   app:
@@ -112,19 +91,10 @@ services:
       ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-$2a$12$/iw.MaxCyIw2KzCIDwkywO/UJgB7.q6C1vhI/RIyX9qaQrgopMH6u}
       JWT_SECRET: ${JWT_SECRET:-rahasia}
 
-      # Cloudinary Storage (Fallback)
+      # Cloudinary Storage Engine
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-dvpb6z2oj}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-795639345722721}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-XhEZ7PRv0xlESqgBqCkl8R5Edt4}
-
-      # MinIO Self-Hosted S3 Storage Configuration
-      MINIO_ENDPOINT: ${MINIO_ENDPOINT:-http://minio:9000}
-      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
-      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minio_secure_password}
-      MINIO_BUCKET: ${MINIO_BUCKET:-portfolio}
-      MINIO_REGION: ${MINIO_REGION:-us-east-1}
-      MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-}
-      MINIO_USE_SSL: ${MINIO_USE_SSL:-false}
 
       # Email Configuration (Nodemailer)
       EMAIL_USER: ${EMAIL_USER:-muhammadarkanmariadi@gmail.com}
@@ -149,8 +119,6 @@ volumes:
   postgres_data:
     driver: local
   redis_data:
-    driver: local
-  minio_data:
     driver: local
 
 # -------------------------------------------------------------

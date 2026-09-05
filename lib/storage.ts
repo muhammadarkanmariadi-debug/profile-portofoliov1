@@ -1,90 +1,32 @@
-import { S3Client, PutObjectCommand, CreateBucketCommand, HeadBucketCommand, PutBucketPolicyCommand } from '@aws-sdk/client-s3';
 import cloudinary from '@/lib/cloudinary';
-
-// Check if MinIO environment is configured
-export const isMinioConfigured = (): boolean => {
-  return Boolean(
-    (process.env.MINIO_ENDPOINT || process.env.S3_ENDPOINT) &&
-    (process.env.MINIO_ACCESS_KEY || process.env.S3_ACCESS_KEY || process.env.MINIO_ROOT_USER) &&
-    (process.env.MINIO_SECRET_KEY || process.env.S3_SECRET_KEY || process.env.MINIO_ROOT_PASSWORD)
-  );
-};
-
-// Singleton S3 / MinIO client
-let s3ClientInstance: S3Client | null = null;
-
-export function getS3Client(): S3Client {
-  if (s3ClientInstance) return s3ClientInstance;
-
-  const endpoint = process.env.MINIO_ENDPOINT || process.env.S3_ENDPOINT || 'http://127.0.0.1:9000';
-  const accessKeyId = process.env.MINIO_ACCESS_KEY || process.env.S3_ACCESS_KEY || process.env.MINIO_ROOT_USER || '';
-  const secretAccessKey = process.env.MINIO_SECRET_KEY || process.env.S3_SECRET_KEY || process.env.MINIO_ROOT_PASSWORD || '';
-  const region = process.env.MINIO_REGION || process.env.S3_REGION || 'us-east-1';
-  const useSSL = process.env.MINIO_USE_SSL === 'true' || endpoint.startsWith('https');
-
-  s3ClientInstance = new S3Client({
-    endpoint,
-    region,
-    credentials: {
-      accessKeyId,
-      secretAccessKey,
-    },
-    forcePathStyle: true, // Required for MinIO
-    tls: useSSL,
-  });
-
-  return s3ClientInstance;
-}
-
-/**
- * Ensures the target MinIO bucket exists and has public read access policy
- */
-async function ensureBucketExists(s3: S3Client, bucket: string) {
-  try {
-    await s3.send(new HeadBucketCommand({ Bucket: bucket }));
-  } catch (error: any) {
-    if (error.name === 'NotFound' || error.$metadata?.httpStatusCode === 404) {
-      try {
-        await s3.send(new CreateBucketCommand({ Bucket: bucket }));
-        
-        // Set public read bucket policy for direct web display
-        const publicPolicy = {
-          Version: '2012-10-17',
-          Statement: [
-            {
-              Sid: 'PublicRead',
-              Effect: 'Allow',
-              Principal: '*',
-              Action: ['s3:GetObject'],
-              Resource: [`arn:aws:s3:::${bucket}/*`],
-            },
-          ],
-        };
-
-        await s3.send(
-          new PutBucketPolicyCommand({
-            Bucket: bucket,
-            Policy: JSON.stringify(publicPolicy),
-          })
-        );
-      } catch (createErr) {
-        console.warn('Could not auto-create MinIO bucket or policy:', createErr);
-      }
-    }
-  }
-}
 
 export interface UploadResult {
   url: string;
   secure_url: string;
-  public_id?: string;
+  public_id: string;
   bytes?: number;
   format?: string;
-  storage: 'minio' | 'cloudinary';
+  storage: 'cloudinary';
 }
 
 /**
- * Universal upload helper: Uploads to self-hosted MinIO first, or falls back to Cloudinary
+ * Validates that required Cloudinary environment variables are set
+ */
+export function validateCloudinaryConfig(): void {
+  const missing: string[] = [];
+  if (!process.env.CLOUDINARY_CLOUD_NAME) missing.push('CLOUDINARY_CLOUD_NAME');
+  if (!process.env.CLOUDINARY_API_KEY) missing.push('CLOUDINARY_API_KEY');
+  if (!process.env.CLOUDINARY_API_SECRET) missing.push('CLOUDINARY_API_SECRET');
+
+  if (missing.length > 0) {
+    throw new Error(
+      `Cloudinary configuration missing: ${missing.join(', ')}. Please configure these environment variables in your .env or docker-compose.yml.`
+    );
+  }
+}
+
+/**
+ * Uploads an asset (image, document, PDF) directly to Cloudinary with detailed error reporting
  */
 export async function uploadAsset(
   buffer: Buffer,
@@ -92,93 +34,51 @@ export async function uploadAsset(
   contentType: string,
   folder: string = 'portfolio'
 ): Promise<UploadResult> {
-  // 1. MinIO Self-Hosted Upload
-  if (isMinioConfigured()) {
-    try {
-      const s3 = getS3Client();
-      const bucket = process.env.MINIO_BUCKET || process.env.S3_BUCKET || 'portfolio';
-      await ensureBucketExists(s3, bucket);
+  // 1. Verify credentials configuration
+  validateCloudinaryConfig();
 
-      const cleanFolder = folder.replace(/^\/+|\/+$/g, '');
-      const cleanFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
-      const key = cleanFolder ? `${cleanFolder}/${Date.now()}-${cleanFileName}` : `${Date.now()}-${cleanFileName}`;
-
-      await s3.send(
-        new PutObjectCommand({
-          Bucket: bucket,
-          Key: key,
-          Body: buffer,
-          ContentType: contentType || 'application/octet-stream',
-        })
-      );
-
-      // Build public URL
-      let publicBase = (process.env.MINIO_PUBLIC_URL || '').replace(/\/+$/, '');
-      if (!publicBase) {
-        const rawEndpoint = process.env.MINIO_ENDPOINT || process.env.S3_ENDPOINT || 'http://127.0.0.1:9005';
-        if (rawEndpoint.includes('://minio:') || rawEndpoint.includes('://minio/')) {
-          // If running inside Docker with container name 'minio', rewrite to exposed port 9005
-          const appUrl = process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL || '';
-          if (appUrl) {
-            try {
-              const urlObj = new URL(appUrl);
-              publicBase = `${urlObj.protocol}//${urlObj.hostname}:9005`;
-            } catch {
-              publicBase = 'http://localhost:9005';
-            }
-          } else {
-            publicBase = 'http://localhost:9005';
-          }
-        } else {
-          publicBase = rawEndpoint.replace(/\/+$/, '');
-        }
-      }
-      
-      // If publicBase already includes bucket name or custom CDN
-      const finalUrl = process.env.MINIO_PUBLIC_URL
-        ? `${publicBase}/${key}`
-        : `${publicBase}/${bucket}/${key}`;
-
-      return {
-        url: finalUrl,
-        secure_url: finalUrl,
-        public_id: key,
-        bytes: buffer.length,
-        storage: 'minio',
-      };
-    } catch (minioErr: any) {
-      console.error('MinIO storage error:', minioErr);
-      if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY) {
-        console.warn('Falling back to Cloudinary after MinIO error...');
-      } else {
-        throw new Error(`MinIO Upload Error: ${minioErr.message || minioErr}`);
-      }
-    }
+  if (!buffer || buffer.length === 0) {
+    throw new Error('Upload error: File buffer is empty or corrupted (0 bytes).');
   }
 
-  // 2. Cloudinary Upload (Fallback)
-  const isPdf = contentType === 'application/pdf';
-  const uploadResponse = await new Promise<any>((resolve, reject) => {
+  const isPdf = contentType === 'application/pdf' || fileName.toLowerCase().endsWith('.pdf');
+  const cleanFolder = folder.replace(/^\/+|\/+$/g, '');
+
+  return new Promise<UploadResult>((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
-        folder,
+        folder: cleanFolder,
         resource_type: isPdf ? 'raw' : 'auto',
+        use_filename: true,
+        unique_filename: true,
+        overwrite: false,
       },
       (error, result) => {
-        if (error) reject(error);
-        else resolve(result);
+        if (error) {
+          console.error('[Cloudinary Upload Error]', error);
+          const errorMsg = error.message || error.toString();
+          const httpCode = (error as any).http_code ? ` (HTTP ${(error as any).http_code})` : '';
+          reject(new Error(`Cloudinary Upload Failed${httpCode}: ${errorMsg}`));
+        } else if (!result || !result.secure_url) {
+          reject(new Error('Cloudinary response did not contain a valid secure_url.'));
+        } else {
+          resolve({
+            url: result.secure_url || result.url,
+            secure_url: result.secure_url || result.url,
+            public_id: result.public_id,
+            bytes: result.bytes,
+            format: result.format,
+            storage: 'cloudinary',
+          });
+        }
       }
     );
 
+    uploadStream.on('error', (streamErr: any) => {
+      console.error('[Upload Stream Error]', streamErr);
+      reject(new Error(`Upload stream failed: ${streamErr.message || streamErr}`));
+    });
+
     uploadStream.end(buffer);
   });
-
-  return {
-    url: uploadResponse.url,
-    secure_url: uploadResponse.secure_url,
-    public_id: uploadResponse.public_id,
-    bytes: uploadResponse.bytes,
-    format: uploadResponse.format,
-    storage: 'cloudinary',
-  };
 }

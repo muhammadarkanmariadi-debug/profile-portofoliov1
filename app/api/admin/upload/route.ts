@@ -11,7 +11,17 @@ export async function POST(request: Request) {
     const folder = (formData.get('folder') as string) || 'portfolio';
 
     if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: 'No file provided in form data. Please select a file.' },
+        { status: 400 }
+      );
+    }
+
+    if (file.size === 0) {
+      return NextResponse.json(
+        { success: false, error: 'The selected file is empty (0 bytes).' },
+        { status: 400 }
+      );
     }
 
     const bytes = await file.arrayBuffer();
@@ -24,9 +34,21 @@ export async function POST(request: Request) {
       folder
     );
 
-    return NextResponse.json(uploadResponse);
+    return NextResponse.json({
+      success: true,
+      ...uploadResponse,
+    });
   } catch (error: any) {
-    console.error('Upload error:', error);
-    return NextResponse.json({ error: error.message || 'Upload failed' }, { status: 500 });
+    console.error('[API /api/admin/upload] Error:', error);
+    const errorMessage = error?.message || 'Unknown error occurred during asset upload';
+    
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: errorMessage,
+        timestamp: new Date().toISOString()
+      }, 
+      { status: 500 }
+    );
   }
 }
