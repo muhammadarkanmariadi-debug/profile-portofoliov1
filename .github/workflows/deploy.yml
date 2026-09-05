@@ -32,6 +32,10 @@ jobs:
             echo "📂 Working directory: $TARGET_DIR"
             cd "$TARGET_DIR"
 
+            # Fix file ownership and git safe directory if previously modified by root
+            sudo chown -R $USER:$USER "$TARGET_DIR" 2>/dev/null || true
+            git config --global --add safe.directory "$TARGET_DIR" 2>/dev/null || true
+
             # Pull latest changes from main branch
             echo "📥 Pulling latest changes from Git..."
             git fetch origin main
