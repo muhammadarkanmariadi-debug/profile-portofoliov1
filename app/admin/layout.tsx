@@ -12,9 +12,9 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="admin-panel min-h-screen bg-background text-text-primary flex flex-col md:flex-row font-sans transition-colors duration-300">
+    <div data-lenis-prevent className="admin-panel min-h-screen bg-background text-text-primary flex flex-col md:flex-row font-sans transition-colors duration-300">
       <Sidebar />
-      <main className="flex-1 overflow-x-hidden md:h-screen md:overflow-y-auto flex flex-col bg-background">
+      <main data-lenis-prevent className="flex-1 overflow-x-hidden md:h-screen md:overflow-y-auto flex flex-col bg-background scroll-smooth">
         {/* Top Header Bar */}
         <header className="w-full border-b border-border bg-surface/80 backdrop-blur-md px-6 py-3 flex items-center justify-between font-mono text-xs text-text-muted sticky top-0 z-30">
           <div className="flex items-center gap-3">

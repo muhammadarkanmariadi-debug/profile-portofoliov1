@@ -30,6 +30,15 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReducedMotion) return
 
+    // Disable Lenis on Admin panel routes to allow native dashboard scroll & drag-drop
+    if (pathname?.startsWith('/admin')) {
+      if (lenisInstance) {
+        lenisInstance.destroy()
+        setLenisInstance(null)
+      }
+      return
+    }
+
     const lenis = new Lenis({
       duration: 1.25,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -83,7 +92,7 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
       gsap.ticker.remove(updateTicker)
       lenis.destroy()
     }
-  }, [])
+  }, [pathname])
 
   // Auto-refresh ScrollTrigger whenever route changes
   useEffect(() => {

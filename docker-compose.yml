@@ -91,10 +91,19 @@ services:
       ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-$2a$12$/iw.MaxCyIw2KzCIDwkywO/UJgB7.q6C1vhI/RIyX9qaQrgopMH6u}
       JWT_SECRET: ${JWT_SECRET:-rahasia}
 
-      # Cloudinary Storage
+      # Cloudinary Storage (Fallback)
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-dvpb6z2oj}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-795639345722721}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-XhEZ7PRv0xlESqgBqCkl8R5Edt4}
+
+      # MinIO Self-Hosted S3 Storage Configuration
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT:-}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-}
+      MINIO_BUCKET: ${MINIO_BUCKET:-portfolio}
+      MINIO_REGION: ${MINIO_REGION:-us-east-1}
+      MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-}
+      MINIO_USE_SSL: ${MINIO_USE_SSL:-false}
 
       # Email Configuration (Nodemailer)
       EMAIL_USER: ${EMAIL_USER:-muhammadarkanmariadi@gmail.com}

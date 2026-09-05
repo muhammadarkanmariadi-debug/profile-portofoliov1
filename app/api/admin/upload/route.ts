@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import cloudinary from '@/lib/cloudinary';
+import { uploadAsset } from '@/lib/storage';
 
 export async function POST(request: Request) {
   try {
@@ -14,26 +14,16 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const isPdf = file.type === 'application/pdf';
-
-    const uploadResponse = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder,
-          resource_type: isPdf ? 'raw' : 'auto',
-        },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      );
-
-      uploadStream.end(buffer);
-    });
+    const uploadResponse = await uploadAsset(
+      buffer,
+      file.name,
+      file.type,
+      folder
+    );
 
     return NextResponse.json(uploadResponse);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Upload error:', error);
-    return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Upload failed' }, { status: 500 });
   }
 }
