@@ -188,7 +188,7 @@ export default function EngineeringApproachSection({
               <span>{tag || 'ENGINEERING METHODOLOGY'}</span>
             </div>
             <div className="flex items-center gap-6">
-              <span className="font-bold text-white">4</span>
+              <span className="font-bold text-white">04</span>
               <span className="hidden sm:inline-block font-bold">WORKFLOW ARCHITECTURE</span>
             </div>
           </div>
