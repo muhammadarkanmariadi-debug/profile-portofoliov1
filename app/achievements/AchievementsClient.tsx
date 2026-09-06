@@ -16,13 +16,6 @@ interface AchievementsClientProps {
   initialAchievements: Achievement[]
 }
 
-const frameThemes = [
-  'bg-[#DCE7EB] border-[#C2D4DC]', // Ice Blue tint
-  'bg-[#E5DFEC] border-[#D0C5DB]', // Soft Purple tint
-  'bg-[#DBECE6] border-[#C3DDD4]', // Sage Mint tint
-  'bg-[#EFE5DC] border-[#DFCFBF]', // Sand Coral tint
-]
-
 export default function AchievementsClient({ initialAchievements }: AchievementsClientProps) {
   const { lang } = useLanguage()
   const [searchQuery, setSearchQuery] = useState('')
@@ -194,7 +187,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
 
           {/* Giant Typography */}
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-10">
-            <div className="overflow-hidden">
+            <div className="overflow-visible">
               <h1
                 ref={headingRef}
                 className="font-heading font-black text-5xl sm:text-7xl lg:text-[6.5vw] tracking-tighter text-text-primary leading-[0.92] will-change-transform"
@@ -254,7 +247,6 @@ export default function AchievementsClient({ initialAchievements }: Achievements
         {/* Dynamic Layout */}
         <div ref={listRef} className="space-y-12">
           {currentAchievements.map((item, index) => {
-            const themeClass = frameThemes[index % frameThemes.length];
             const isFeaturedHero = index === 0;
             const isAlternate = index % 2 === 1;
 
@@ -264,30 +256,30 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                 <article
                   key={item.id}
                   style={{ transformStyle: 'preserve-3d' }}
-                  className={`achievement-row-card w-full rounded-3xl p-8 sm:p-12 ${themeClass} border shadow-sm flex flex-col lg:flex-row items-center gap-8 lg:gap-12 relative overflow-hidden group will-change-transform transform-gpu`}
+                  className="achievement-row-card w-full rounded-3xl p-8 sm:p-12 bg-surface border border-border shadow-sm flex flex-col lg:flex-row items-center gap-8 lg:gap-12 relative overflow-hidden group will-change-transform transform-gpu"
                 >
                   <div className="w-full lg:w-1/2 space-y-6">
-                    <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-wider text-[#444455]">
-                      <span className="px-3 py-1 rounded-full bg-[#121217] text-white font-bold text-[10px]">
+                    <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-wider text-text-muted">
+                      <span className="px-3 py-1 rounded-full bg-primary text-background font-bold text-[10px]">
                         ★ HIGHLIGHTED
                       </span>
                       <span>{new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</span>
                     </div>
 
                     <Link href={`/achievements/${item.slug || item.id}`} className="group/title">
-                      <h2 className="font-heading font-black text-3xl sm:text-5xl text-[#121217] leading-[1.05] group-hover/title:text-[#707080] transition-colors">
+                      <h2 className="font-heading font-black text-3xl sm:text-5xl text-text-primary leading-[1.05] group-hover/title:text-primary transition-colors">
                         {item.title}
                       </h2>
                     </Link>
 
-                    <p className="text-base text-[#333344] font-sans leading-relaxed">
+                    <p className="text-base text-text-muted font-sans leading-relaxed">
                       {item.description}
                     </p>
 
                     <div className="pt-4 flex flex-wrap items-center gap-4">
                       <Link
                         href={`/achievements/${item.slug || item.id}`}
-                        className="px-6 py-3 rounded-full bg-[#121217] text-white font-mono text-xs uppercase tracking-wider font-bold hover:bg-[#333344] transition-all flex items-center gap-2 cursor-target"
+                        className="px-6 py-3 rounded-full bg-primary text-background font-mono text-xs uppercase tracking-wider font-bold hover:opacity-90 transition-all flex items-center gap-2 cursor-target"
                       >
                         <span>VIEW FULL RECORD</span>
                         <ArrowUpRight size={14} />
@@ -296,7 +288,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                       {item.imageUrl && (
                         <button
                           onClick={() => setSelectedImage(item.imageUrl)}
-                          className="px-5 py-3 rounded-full bg-white/70 border border-black/10 text-[#121217] font-mono text-xs uppercase tracking-wider font-bold hover:bg-white transition-all flex items-center gap-1.5 cursor-target"
+                          className="px-5 py-3 rounded-full bg-surface-elevated border border-border text-text-primary font-mono text-xs uppercase tracking-wider font-bold hover:border-primary/50 transition-all flex items-center gap-1.5 cursor-target"
                         >
                           <span>QUICK PREVIEW</span>
                         </button>
@@ -307,14 +299,14 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                   {item.imageUrl && (
                     <Link
                       href={`/achievements/${item.slug || item.id}`}
-                      className="w-full lg:w-1/2 aspect-[16/10] rounded-2xl overflow-hidden bg-white/60 border border-black/10 shadow-lg group-hover:scale-[1.02] transition-transform duration-500 relative block"
+                      className="w-full lg:w-1/2 aspect-[16/10] rounded-2xl overflow-hidden bg-surface-elevated border border-border shadow-lg group-hover:scale-[1.02] transition-transform duration-500 relative block"
                     >
                       <img
                         src={getOptimizedImageUrl(item.imageUrl)}
                         alt={item.title}
                         className="w-full h-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center font-mono text-xs uppercase font-bold text-white backdrop-blur-xs">
+                      <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center font-mono text-xs uppercase font-bold text-text-primary backdrop-blur-xs">
                         VIEW FULL DETAILS ↗
                       </div>
                     </Link>
@@ -328,12 +320,12 @@ export default function AchievementsClient({ initialAchievements }: Achievements
               <article
                 key={item.id}
                 style={{ transformStyle: 'preserve-3d' }}
-                className={`achievement-row-card w-full rounded-3xl p-6 sm:p-8 ${themeClass} border shadow-sm flex flex-col ${isAlternate ? 'lg:flex-row-reverse' : 'lg:flex-row'
+                className={`achievement-row-card w-full rounded-3xl p-6 sm:p-8 bg-surface border border-border shadow-sm flex flex-col ${isAlternate ? 'lg:flex-row-reverse' : 'lg:flex-row'
                   } items-center gap-8 relative overflow-hidden group will-change-transform transform-gpu`}
               >
                 <div className="w-full lg:w-3/5 space-y-4">
-                  <div className="flex items-center justify-between font-mono text-xs uppercase tracking-wider text-[#555566]">
-                    <span className="font-bold text-[#121217] flex items-center gap-1.5">
+                  <div className="flex items-center justify-between font-mono text-xs uppercase tracking-wider text-text-muted">
+                    <span className="font-bold text-primary flex items-center gap-1.5">
                       <Award size={14} />
                       <span>{item.status}</span>
                     </span>
@@ -341,19 +333,19 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                   </div>
 
                   <Link href={`/achievements/${item.slug || item.id}`} className="group/title block">
-                    <h3 className="font-heading font-black text-2xl sm:text-3xl text-[#121217] leading-tight group-hover/title:text-[#707080] transition-colors">
+                    <h3 className="font-heading font-black text-2xl sm:text-3xl text-text-primary leading-tight group-hover/title:text-primary transition-colors">
                       {item.title}
                     </h3>
                   </Link>
 
-                  <p className="text-sm text-[#444455] font-sans leading-relaxed">
+                  <p className="text-sm text-text-muted font-sans leading-relaxed">
                     {item.description}
                   </p>
 
                   <div className="pt-2 flex items-center gap-4">
                     <Link
                       href={`/achievements/${item.slug || item.id}`}
-                      className="font-mono text-xs uppercase tracking-wider font-bold text-[#121217] hover:underline flex items-center gap-1 cursor-target"
+                      className="font-mono text-xs uppercase tracking-wider font-bold text-text-primary hover:text-primary transition-colors flex items-center gap-1 cursor-target"
                     >
                       <span>VIEW FULL DETAILS</span>
                       <ArrowUpRight size={13} />
@@ -364,7 +356,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
                 {item.imageUrl && (
                   <Link
                     href={`/achievements/${item.slug || item.id}`}
-                    className="w-full lg:w-2/5 aspect-[16/10] rounded-2xl overflow-hidden bg-white/70 border border-black/10 shadow-md group-hover:scale-[1.02] transition-transform duration-500 relative block"
+                    className="w-full lg:w-2/5 aspect-[16/10] rounded-2xl overflow-hidden bg-surface-elevated border border-border shadow-md group-hover:scale-[1.02] transition-transform duration-500 relative block"
                   >
                     <img
                       src={getOptimizedImageUrl(item.imageUrl)}
@@ -378,7 +370,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
           })}
 
           {filteredAchievements.length === 0 && (
-            <div className="py-24 text-center text-[#707080] font-mono text-sm">
+            <div className="py-24 text-center text-text-muted font-mono text-sm">
               No credentials found matching &quot;{searchQuery}&quot;
             </div>
           )}

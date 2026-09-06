@@ -27,13 +27,7 @@ interface ProjectCardProps {
   onReadMore?: () => void
 }
 
-const themeColors = [
-  'bg-[#9CC5D8]', // Ice blue
-  'bg-[#C4B7E5]', // Soft purple
-  'bg-[#8FD3BE]', // Sage mint
-  'bg-[#D8B4A6]', // Muted terra
-  'bg-[#A3C4BC]'  // Cool teal
-]
+
 
 export default function ProjectCard({
   id,
@@ -55,7 +49,7 @@ export default function ProjectCard({
   const titleRef = useRef<HTMLHeadingElement>(null)
 
   const displayDomain = liveUrl ? liveUrl.replace(/^https?:\/\//, '').replace(/\/$/, '') : '4rkan.dev/project'
-  const bgClass = colorTheme || themeColors[parseInt(index, 10) % themeColors.length] || 'bg-[#9CC5D8]'
+ 
   const projectHref = `/projects/${slug || id}`
 
   useGSAP(() => {
@@ -202,7 +196,7 @@ export default function ProjectCard({
         <div className="w-full relative">
           <Link
             href={projectHref}
-            className={`block w-full ${bgClass} rounded-2xl sm:rounded-3xl p-3 sm:p-6 md:p-10 lg:p-12 cursor-target group relative overflow-hidden transform-gpu shadow-xl hover:shadow-2xl transition-[box-shadow] duration-500`}
+            className={`block w-full  rounded-2xl sm:rounded-3xl cursor-target group relative overflow-hidden transform-gpu shadow-xl hover:shadow-2xl transition-[box-shadow] duration-500`}
           >
             {/* Desktop Browser Window */}
             <div className="w-full bg-[#16181D] rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden border border-white/10">

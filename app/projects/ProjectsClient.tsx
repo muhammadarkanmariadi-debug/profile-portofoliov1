@@ -17,7 +17,7 @@ interface ProjectsClientProps {
 }
 
 export default function ProjectsClient({ initialProjects }: ProjectsClientProps) {
-  const { lang } = useLanguage()
+
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
   
@@ -171,7 +171,7 @@ export default function ProjectsClient({ initialProjects }: ProjectsClientProps)
 
           {/* Giant Typography */}
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-10">
-            <div className="overflow-hidden">
+            <div className="overflow-visible">
               <h1
                 ref={headingRef}
                 className="font-heading font-black text-5xl sm:text-7xl lg:text-[6.5vw] tracking-tighter text-text-primary leading-[0.92] will-change-transform"

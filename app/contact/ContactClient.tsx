@@ -185,12 +185,12 @@ export default function ContactClient({ profile }: ContactClientProps) {
   return (
     <main
       ref={containerRef}
-      className="w-full bg-[#82D8CE] text-[#121217] pt-32 pb-32 min-h-screen px-6 sm:px-10 relative select-none overflow-hidden"
+      className="w-full bg-background text-text-primary pt-32 pb-32 min-h-screen px-6 sm:px-10 relative select-none overflow-hidden border-b border-border transition-colors duration-300"
     >
       {/* Background Watermark 05 */}
       <div
         ref={watermarkRef}
-        className="absolute right-0 bottom-10 font-heading font-black text-[28vw] leading-none text-[#121217] opacity-[0.06] pointer-events-none z-0 will-change-transform"
+        className="absolute right-0 bottom-10 font-heading font-black text-[28vw] leading-none text-text-primary opacity-[0.04] pointer-events-none z-0 will-change-transform"
       >
         05
       </div>
@@ -199,10 +199,10 @@ export default function ContactClient({ profile }: ContactClientProps) {
         {/* Top Header Index */}
         <header
           ref={headerRef}
-          className="mb-16 border-b border-[#6AC4B9] pb-8 flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-[#2C625B]"
+          className="mb-16 border-b border-border pb-8 flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-text-muted"
         >
           <div className="flex items-center gap-3">
-            <span className="font-bold text-[#121217]">05</span>
+            <span className="font-bold text-primary">05</span>
             <span>GET IN TOUCH</span>
           </div>
           <span>INITIATE CONTACT</span>
@@ -212,23 +212,23 @@ export default function ContactClient({ profile }: ContactClientProps) {
           {/* Left Column: Huge Headline & Pill Email */}
           <div className="lg:col-span-7 space-y-12">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.25em] text-[#2C625B] font-semibold mb-6">
+              <p className="font-mono text-xs uppercase tracking-[0.25em] text-text-muted font-semibold mb-6">
                 HAVE A PROJECT OR ROLE IN MIND?
               </p>
 
-              <div className="font-heading font-black text-4xl sm:text-6xl lg:text-[5.5vw] tracking-tighter leading-[0.95] text-[#121217] mb-8 select-none">
+              <div className="font-heading font-black text-4xl sm:text-6xl lg:text-[5.5vw] tracking-tighter leading-[0.95] text-text-primary mb-8  select-none">
                 <div className="overflow-hidden">
                   <h1 ref={line1Ref} className="will-change-transform">Let&#39;s make</h1>
                 </div>
                 <div className="overflow-hidden">
                   <h1 ref={line2Ref} className="will-change-transform">something impossible</h1>
                 </div>
-                <div className="overflow-hidden">
+                <div className="overflow-visible">
                   <h1
                     ref={line3Ref}
-                    className="text-transparent inline-block will-change-transform"
+                    className=" text-text-muted inline-block will-change-transform"
                     style={{
-                      WebkitTextStroke: '2.5px #121217'
+                      WebkitTextStroke: '3px currentColor'
                     }}
                   >
                     to ignore.
@@ -237,60 +237,62 @@ export default function ContactClient({ profile }: ContactClientProps) {
               </div>
             </div>
 
-            {/* Full-width Dark Pill Email Bar */}
+            {/* Full-width Email Bar */}
             <div>
               <div
                 ref={emailBarRef}
                 onClick={handleCopyEmail}
-                className={`w-full bg-[#121217] text-[#82D8CE] hover:bg-[#1A1A22] rounded-full p-4 pl-6 sm:pl-8 flex items-center justify-between shadow-2xl transition-[background-color,border-color,box-shadow] duration-200 group cursor-target border ${
-                  copied ? 'border-[#00E599] shadow-[0_0_25px_rgba(0,229,153,0.35)]' : 'border-black/30'
+                className={`w-full bg-surface hover:bg-surface-elevated text-text-primary rounded-2xl sm:rounded-full p-4 pl-6 sm:pl-8 flex items-center justify-between shadow-xl hover:shadow-2xl transition-[background-color,border-color,box-shadow] duration-200 group cursor-target border ${
+                  copied ? 'border-emerald-500 shadow-[0_0_25px_rgba(16,185,129,0.35)]' : 'border-border hover:border-primary/40'
                 } transform-gpu will-change-transform select-none`}
               >
                 <div className="flex flex-col truncate pr-4">
-                  <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.2em] text-[#6AC4B9] font-bold flex items-center gap-1.5">
+                  <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.2em] text-text-muted font-bold flex items-center gap-1.5">
                     {copied ? (
                       <>
-                        <Sparkles size={13} className="text-[#00E599] animate-spin" />
-                        <span className="text-[#00E599]">COPIED TO CLIPBOARD!</span>
+                        <Sparkles size={13} className="text-emerald-500 animate-spin" />
+                        <span className="text-emerald-500">COPIED TO CLIPBOARD!</span>
                       </>
                     ) : (
                       'DIRECT EMAIL ADDRESS'
                     )}
                   </span>
-                  <span className="font-heading font-bold text-lg sm:text-2xl text-white tracking-tight truncate group-hover:text-[#82D8CE] transition-colors mt-0.5">
+                  <span className="font-heading font-bold text-lg sm:text-2xl text-text-primary tracking-tight truncate group-hover:text-primary transition-colors mt-0.5">
                     {email}
                   </span>
                 </div>
 
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-all shadow-md ${
-                  copied ? 'bg-[#00E599] text-[#121217]' : 'bg-[#82D8CE] text-[#121217] group-hover:bg-white'
+                  copied
+                    ? 'bg-emerald-500 text-black'
+                    : 'bg-primary text-background group-hover:opacity-90'
                 }`}>
-                  {copied ? <Check size={20} className="text-[#121217] stroke-[3]" /> : <ArrowUpRight size={22} className="text-[#121217]" />}
+                  {copied ? <Check size={20} className="stroke-[3]" /> : <ArrowUpRight size={22} />}
                 </div>
               </div>
 
-              <div ref={emailSubRef} className="flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-[#2C625B] mt-3 px-4 font-bold">
+              <div ref={emailSubRef} className="flex items-center justify-between text-[11px] font-mono uppercase tracking-wider text-text-muted mt-3 px-4 font-bold">
                 <span>CLICK BAR TO COPY EMAIL</span>
-                <a href={`mailto:${email}`} className="underline hover:text-[#121217] transition-colors cursor-target">
+                <a href={`mailto:${email}`} className="underline hover:text-text-primary transition-colors cursor-target">
                   OPEN IN CLIENT ↗
                 </a>
               </div>
             </div>
 
             {/* Quick Meta Info */}
-            <div ref={metaInfoRef} className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6 border-t border-[#6AC4B9] font-mono text-xs text-[#2C625B]">
+            <div ref={metaInfoRef} className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6 border-t border-border font-mono text-xs text-text-muted">
               <div className="flex items-center gap-3">
-                <MapPin size={16} className="text-[#121217]" />
+                <MapPin size={16} className="text-primary flex-shrink-0" />
                 <div>
-                  <span className="font-bold text-[#121217] block">LOCATION</span>
+                  <span className="font-bold text-text-primary block">LOCATION</span>
                   <span>{profile.address || 'Malang, East Java, Indonesia'}</span>
                 </div>
               </div>
               {profile.phone && (
                 <div className="flex items-center gap-3">
-                  <Phone size={16} className="text-[#121217]" />
+                  <Phone size={16} className="text-primary flex-shrink-0" />
                   <div>
-                    <span className="font-bold text-[#121217] block">TELEPHONE</span>
+                    <span className="font-bold text-text-primary block">TELEPHONE</span>
                     <span>{profile.phone}</span>
                   </div>
                 </div>
@@ -298,50 +300,50 @@ export default function ContactClient({ profile }: ContactClientProps) {
             </div>
           </div>
 
-          {/* Right Column: Dark Form Card */}
+          {/* Right Column: Form Card */}
           <div
             ref={formCardRef}
-            className="lg:col-span-5 bg-[#121217] text-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-black/30 transform-gpu will-change-transform"
+            className="lg:col-span-5 bg-surface text-text-primary p-8 sm:p-10 rounded-3xl shadow-xl border border-border transform-gpu will-change-transform"
           >
-            <h3 className="font-heading font-bold text-2xl mb-2 text-white">Send a Direct Message</h3>
-            <p className="text-xs font-mono text-[#8E8E9F] uppercase tracking-wider mb-8">Direct inquiry inbox</p>
+            <h3 className="font-heading font-bold text-2xl mb-2 text-text-primary">Send a Direct Message</h3>
+            <p className="text-xs font-mono text-text-muted uppercase tracking-wider mb-8">Direct inquiry inbox</p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#A0A0B2] mb-2 font-bold">
+                <label className="block text-xs font-mono uppercase tracking-wider text-text-muted mb-2 font-bold">
                   Your Name
                 </label>
                 <input
                   name="name"
                   type="text"
                   required
-                  className="w-full bg-[#1A1A24] border border-[#2B2B3A] rounded-xl py-3 px-4 text-white text-sm focus:outline-none focus:border-[#82D8CE] transition-colors font-sans"
+                  className="w-full bg-background border border-border rounded-xl py-3 px-4 text-text-primary placeholder:text-text-muted/60 text-sm focus:outline-none focus:border-primary transition-colors font-sans"
                   placeholder="e.g. Jane Doe"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#A0A0B2] mb-2 font-bold">
+                <label className="block text-xs font-mono uppercase tracking-wider text-text-muted mb-2 font-bold">
                   Email Address
                 </label>
                 <input
                   name="email"
                   type="email"
                   required
-                  className="w-full bg-[#1A1A24] border border-[#2B2B3A] rounded-xl py-3 px-4 text-white text-sm focus:outline-none focus:border-[#82D8CE] transition-colors font-sans"
+                  className="w-full bg-background border border-border rounded-xl py-3 px-4 text-text-primary placeholder:text-text-muted/60 text-sm focus:outline-none focus:border-primary transition-colors font-sans"
                   placeholder="jane@company.com"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono uppercase tracking-wider text-[#A0A0B2] mb-2 font-bold">
+                <label className="block text-xs font-mono uppercase tracking-wider text-text-muted mb-2 font-bold">
                   Message / Project Details
                 </label>
                 <textarea
                   name="message"
                   required
                   rows={4}
-                  className="w-full bg-[#1A1A24] border border-[#2B2B3A] rounded-xl py-3 px-4 text-white text-sm focus:outline-none focus:border-[#82D8CE] transition-colors resize-none font-sans"
+                  className="w-full bg-background border border-border rounded-xl py-3 px-4 text-text-primary placeholder:text-text-muted/60 text-sm focus:outline-none focus:border-primary transition-colors resize-none font-sans"
                   placeholder="Tell me about your project, timeline, or inquiry..."
                 ></textarea>
               </div>
@@ -349,7 +351,7 @@ export default function ContactClient({ profile }: ContactClientProps) {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 rounded-full bg-[#82D8CE] text-[#121217] hover:bg-white font-mono text-xs uppercase tracking-widest font-black transition-all flex items-center justify-center gap-2 cursor-target shadow-lg disabled:opacity-50"
+                className="w-full py-4 rounded-full bg-primary text-background hover:opacity-90 font-mono text-xs uppercase tracking-widest font-black transition-all flex items-center justify-center gap-2 cursor-target shadow-lg disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <span>TRANSMITTING MESSAGE...</span>
@@ -365,7 +367,7 @@ export default function ContactClient({ profile }: ContactClientProps) {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-3.5 rounded-xl bg-[#00E599]/20 border border-[#00E599] text-[#00E599] font-mono text-xs text-center font-bold"
+                  className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-mono text-xs text-center font-bold"
                 >
                   ✓ Message transmitted successfully. I will get back to you shortly!
                 </motion.div>
@@ -375,7 +377,7 @@ export default function ContactClient({ profile }: ContactClientProps) {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-3.5 rounded-xl bg-red-500/20 border border-red-500 text-red-400 font-mono text-xs text-center"
+                  className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 font-mono text-xs text-center font-bold"
                 >
                   {errorMessage || 'Failed to transmit message. Please email directly.'}
                 </motion.div>
