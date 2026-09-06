@@ -24,74 +24,56 @@ export default function AchievementsStrip({ achievements }: AchievementsStripPro
   useGSAP(() => {
     if (!sectionRef.current) return
 
-    // 1. Header Meta & Badge slide-in
+    // Master Entrance & Exit Timeline (Bidirectional on scroll down / up)
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top 82%',
+        toggleActions: 'play none none reverse',
+      },
+    })
+
+    // 1. Header Index & Verified Badge
     if (headerMetaRef.current) {
-      gsap.fromTo(
+      tl.fromTo(
         headerMetaRef.current,
-        { opacity: 0, y: 15 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: headerMetaRef.current,
-            start: 'top 92%',
-            toggleActions: 'play none none reverse',
-          },
-        }
+        { opacity: 0, y: -20 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }
       )
     }
 
-    // 2. Heading Masked Slide-Up with kinetic ease
+    // 2. Massive Heading Masked Slide-Up
     if (headingRef.current) {
-      gsap.fromTo(
+      tl.fromTo(
         headingRef.current,
-        { yPercent: 110, rotateZ: 1 },
-        {
-          yPercent: 0,
-          rotateZ: 0,
-          duration: 0.95,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: headingRef.current,
-            start: 'top 90%',
-            toggleActions: 'play none none reverse',
-          },
-        }
+        { yPercent: 100 },
+        { yPercent: 0, duration: 0.8, ease: 'power3.out' },
+        '-=0.4'
       )
     }
 
-    // 3. Grid Cards Choreographed 3D Perspective Reveal
+    // 3. Grid Cards Staggered Reveal
     if (gridRef.current) {
       const cards = gridRef.current.querySelectorAll<HTMLElement>('.achievement-card')
-
-      gsap.fromTo(
+      tl.fromTo(
         cards,
         {
           opacity: 0,
-          y: 60,
-          rotateX: 18,
+          y: 45,
           scale: 0.94,
-          transformPerspective: 1000,
         },
         {
           opacity: 1,
           y: 0,
-          rotateX: 0,
           scale: 1,
-          stagger: 0.08,
-          duration: 0.85,
+          stagger: 0.09,
+          duration: 0.75,
           ease: 'power3.out',
-          scrollTrigger: {
-            trigger: gridRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        }
+        },
+        '-=0.4'
       )
 
-      // 4. Interactive 3D Mouse Tilt on each card
+      // Interactive 3D Mouse Tilt on each card
       cards.forEach((card) => {
         const xTo = gsap.quickTo(card, "rotateY", { duration: 0.35, ease: "power2.out" })
         const yTo = gsap.quickTo(card, "rotateX", { duration: 0.35, ease: "power2.out" })
@@ -111,28 +93,6 @@ export default function AchievementsStrip({ achievements }: AchievementsStripPro
 
         card.addEventListener('mousemove', onMouseMove)
         card.addEventListener('mouseleave', onMouseLeave)
-      })
-
-      // 5. Velocity-based subtle dynamic tilt/skew
-      const proxy = { skew: 0 }
-      const skewSetter = gsap.quickSetter(gridRef.current, "skewY", "deg")
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        onUpdate: (self) => {
-          const rawSkew = self.getVelocity() / -650
-          const clampedSkew = Math.max(-3.5, Math.min(3.5, rawSkew))
-          if (Math.abs(clampedSkew) > Math.abs(proxy.skew)) {
-            proxy.skew = clampedSkew
-            gsap.to(proxy, {
-              skew: 0,
-              duration: 0.75,
-              ease: "power3",
-              overwrite: true,
-              onUpdate: () => skewSetter(proxy.skew),
-            })
-          }
-        },
       })
     }
   }, { scope: sectionRef, dependencies: [achievements] })
@@ -158,7 +118,7 @@ export default function AchievementsStrip({ achievements }: AchievementsStripPro
               <span>VERIFIED RECOGNITION</span>
             </div>
             <div className="flex items-center gap-6">
-              <span className="font-bold text-primary">04</span>
+              <span className="font-bold text-primary">05</span>
               <Link href="/achievements" className="inline-flex items-center gap-1.5 hover:text-primary transition-colors cursor-target font-bold">
                 <span>FULL ARCHIVE</span>
                 <ArrowUpRight size={13} />

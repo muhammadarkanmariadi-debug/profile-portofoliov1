@@ -70,14 +70,12 @@ export function useScrollStack(containerRef: RefObject<HTMLElement | null>) {
             scrollTrigger: {
               trigger: containerRef.current,
               start: 'top top',
-              end: () => `+=${cards.length * 650}`,
+              end: () => `+=${cards.length * 600}`,
               scrub: 0.8,
               pin: true,
               pinSpacing: true,
               anticipatePin: 1,
               invalidateOnRefresh: true,
-              fastScrollEnd: true,
-              preventOverlaps: true,
               onUpdate: (self) => {
                 if (progressBar) {
                   gsap.set(progressBar, { scaleX: self.progress })

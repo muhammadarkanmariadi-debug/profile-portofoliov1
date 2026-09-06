@@ -1,9 +1,15 @@
 'use client'
-import React from 'react'
+import React, { useRef } from 'react'
 import Link from 'next/link'
 import { ArrowUpRight, ArrowUp } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import type { Profile } from '@prisma/client'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
+import { useSmoothScroll } from '../providers/SmoothScrollProvider'
+
+gsap.registerPlugin(ScrollTrigger)
 
 interface FooterProps {
   profile?: Profile | null;
@@ -11,6 +17,28 @@ interface FooterProps {
 
 const Footer = ({ profile }: FooterProps) => {
   const pathname = usePathname()
+  const footerRef = useRef<HTMLElement>(null)
+  const { scrollTo } = useSmoothScroll()
+
+  useGSAP(() => {
+    if (!footerRef.current) return
+
+    gsap.fromTo(
+      footerRef.current,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: footerRef.current,
+          start: 'top 95%',
+          toggleActions: 'play none none reverse'
+        }
+      }
+    )
+  }, { scope: footerRef, dependencies: [pathname] })
 
   if (pathname.startsWith('/admin') || pathname === '/') {
     return null;
@@ -18,14 +46,15 @@ const Footer = ({ profile }: FooterProps) => {
 
   const email = profile?.email || 'muhammadarkanmariadi@gmail.com'
 
-  const scrollToTop = () => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
+  const handleScrollToTop = () => {
+    scrollTo(0, { duration: 1.2 })
   }
 
   return (
-    <footer className="w-full bg-background text-text-primary border-t border-border select-none transition-colors duration-300">
+    <footer
+      ref={footerRef}
+      className="w-full bg-background text-text-primary border-t border-border select-none transition-colors duration-300"
+    >
       <div className="max-w-[1400px] mx-auto px-6 sm:px-10 py-16 flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
         
         {/* Left Column: Brand & Bio */}
@@ -85,7 +114,7 @@ const Footer = ({ profile }: FooterProps) => {
           </div>
 
           <button 
-            onClick={scrollToTop}
+            onClick={handleScrollToTop}
             className="px-4 py-2 rounded-full border border-border bg-surface text-text-primary font-bold hover:border-primary/50 hover:bg-surface-elevated transition-all flex items-center gap-1.5 cursor-target shadow-xs"
           >
             <span>TOP</span>
@@ -100,3 +129,4 @@ const Footer = ({ profile }: FooterProps) => {
 }
 
 export default Footer
+

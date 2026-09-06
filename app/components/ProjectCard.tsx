@@ -64,11 +64,11 @@ export default function ProjectCard({
     // 1. Entrance reveal
     if (titleRef.current) {
       gsap.fromTo(titleRef.current,
-        { y: 30, opacity: 0 },
+        { y: 35, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.7,
+          duration: 0.75,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: cardRef.current,
@@ -82,9 +82,9 @@ export default function ProjectCard({
     // 2. Parallax internal image glide inside the desktop browser mockup
     if (imageRef.current) {
       gsap.fromTo(imageRef.current,
-        { yPercent: -6, scale: 1.04 },
+        { yPercent: -8, scale: 1.05 },
         {
-          yPercent: 6,
+          yPercent: 8,
           scale: 1,
           ease: 'none',
           scrollTrigger: {
@@ -120,6 +120,34 @@ export default function ProjectCard({
           opacity: 0.45,
           ease: 'none'
         }, 0)
+      }
+    }
+
+    // 4. Interactive 3D Card Hover Tilt (fine pointer only)
+    if (innerCardRef.current && typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      const el = innerCardRef.current
+      const xTo = gsap.quickTo(el, "rotateY", { duration: 0.35, ease: "power2.out" })
+      const yTo = gsap.quickTo(el, "rotateX", { duration: 0.35, ease: "power2.out" })
+
+      const handleMouseMove = (e: MouseEvent) => {
+        const rect = el.getBoundingClientRect()
+        const x = e.clientX - rect.left - rect.width / 2
+        const y = e.clientY - rect.top - rect.height / 2
+        xTo(x / 35)
+        yTo(-y / 35)
+      }
+
+      const handleMouseLeave = () => {
+        xTo(0)
+        yTo(0)
+      }
+
+      el.addEventListener('mousemove', handleMouseMove)
+      el.addEventListener('mouseleave', handleMouseLeave)
+
+      return () => {
+        el.removeEventListener('mousemove', handleMouseMove)
+        el.removeEventListener('mouseleave', handleMouseLeave)
       }
     }
 

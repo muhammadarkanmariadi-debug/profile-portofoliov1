@@ -36,7 +36,9 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
   const qMarkRef = useRef<HTMLSpanElement>(null)
   const editorialRef = useRef<HTMLDivElement>(null)
   const emailBarRef = useRef<HTMLDivElement>(null)
+  const emailSubRef = useRef<HTMLDivElement>(null)
   const socialsRef = useRef<HTMLDivElement>(null)
+  const footerRef = useRef<HTMLElement>(null)
 
   const email = profile?.email || 'muhammadarkanmariadi@gmail.com'
   const github = profile?.githubUrl || 'https://github.com/MuhammadArkanMariadi'
@@ -46,7 +48,7 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(email)
       setCopied(true)
-      
+
       // Pulse animation on the check circle
       if (emailBarRef.current) {
         gsap.fromTo(
@@ -60,109 +62,166 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
     }
   }
 
-  useGSAP(() => {
+  useGSAP((context, contextSafe) => {
     if (!sectionRef.current) return
 
-    // 1. Watermark dynamic parallax scrub
-    if (watermarkRef.current) {
-      gsap.fromTo(
-        watermarkRef.current,
-        { yPercent: 20, opacity: 0.03 },
-        {
-          yPercent: -20,
-          opacity: 0.08,
-          ease: 'none',
+    const mm = gsap.matchMedia(sectionRef)
+
+    mm.add(
+      {
+        isDesktop: '(min-width: 1024px)',
+        isMobile: '(max-width: 1023px)',
+        reduceMotion: '(prefers-reduced-motion: reduce)',
+      },
+      (ctx) => {
+        const { isDesktop, reduceMotion } = ctx.conditions as {
+          isDesktop: boolean
+          isMobile: boolean
+          reduceMotion: boolean
+        }
+
+        if (reduceMotion) {
+          gsap.set(
+            [
+              watermarkRef.current,
+              headerRef.current,
+              line1Ref.current,
+              line2Ref.current,
+              qMarkRef.current,
+              editorialRef.current,
+              emailBarRef.current,
+              emailSubRef.current,
+              footerRef.current,
+              ...(socialsRef.current ? socialsRef.current.querySelectorAll('.social-pill-btn') : []),
+            ],
+            { opacity: 1, y: 0, yPercent: 0, scale: 1, rotate: 0 }
+          )
+          return
+        }
+
+        // 1. Watermark dynamic parallax scrub
+        if (watermarkRef.current) {
+          gsap.fromTo(
+            watermarkRef.current,
+            { yPercent: 20, opacity: 0.03 },
+            {
+              yPercent: -20,
+              opacity: 0.08,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true,
+              },
+            }
+          )
+        }
+
+        // 2. Choreographed Grand Entrance & Reverse Timeline
+        const mainTl = gsap.timeline({
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+            invalidateOnRefresh: true,
           },
+        })
+
+        // Header Meta Bar
+        if (headerRef.current) {
+          mainTl.fromTo(
+            headerRef.current,
+            { opacity: 0, y: -20 },
+            { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }
+          )
         }
-      )
-    }
 
-    // 2. Choreographed Grand Entrance Timeline
-    const mainTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: 'top 75%',
-        toggleActions: 'play none none reverse',
-      },
-    })
+        // Split Headline Lines Masked Reveal
+        if (line1Ref.current && line2Ref.current) {
+          mainTl.fromTo(
+            [line1Ref.current, line2Ref.current],
+            { yPercent: 110 },
+            { yPercent: 0, duration: 0.85, stagger: 0.1, ease: 'power4.out' },
+            '-=0.4'
+          )
+        }
 
-    // Header Meta Bar
-    if (headerRef.current) {
-      mainTl.fromTo(
-        headerRef.current,
-        { opacity: 0, y: -15 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }
-      )
-    }
+        // Elastic Bounce on Question Mark "?"
+        if (qMarkRef.current) {
+          mainTl.fromTo(
+            qMarkRef.current,
+            { scale: 0, y: -35, rotate: -25, opacity: 0 },
+            { scale: 1, y: 0, rotate: 0, opacity: 1, duration: 0.95, ease: 'back.out(2.4)' },
+            '-=0.5'
+          )
+        }
 
-    // Split Headline Lines Masked Reveal
-    if (line1Ref.current && line2Ref.current) {
-      mainTl.fromTo(
-        [line1Ref.current, line2Ref.current],
-        { yPercent: 115 },
-        { yPercent: 0, duration: 0.9, stagger: 0.12, ease: 'power4.out' },
-        '-=0.4'
-      )
-    }
+        // Editorial Narrative & Timezone Badges
+        if (editorialRef.current) {
+          mainTl.fromTo(
+            editorialRef.current,
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out' },
+            '-=0.5'
+          )
+        }
 
-    // Elastic Bounce on Question Mark "?"
-    if (qMarkRef.current) {
-      mainTl.fromTo(
-        qMarkRef.current,
-        { scale: 0, y: -45, rotate: -25, opacity: 0 },
-        { scale: 1, y: 0, rotate: 0, opacity: 1, duration: 1.1, ease: 'back.out(2.4)' },
-        '-=0.6'
-      )
-    }
+        // Magnetic Email Pill Entrance
+        if (emailBarRef.current) {
+          mainTl.fromTo(
+            emailBarRef.current,
+            { opacity: 0, y: 40, scale: 0.95 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.85, ease: 'power3.out' },
+            '-=0.45'
+          )
+        }
 
-    // Editorial Narrative & Timezone Badges
-    if (editorialRef.current) {
-      mainTl.fromTo(
-        editorialRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
-        '-=0.6'
-      )
-    }
+        // Email helper sub-bar
+        if (emailSubRef.current) {
+          mainTl.fromTo(
+            emailSubRef.current,
+            { opacity: 0, y: 12 },
+            { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' },
+            '-=0.4'
+          )
+        }
 
-    // Magnetic Email Pill Entrance
-    if (emailBarRef.current) {
-      mainTl.fromTo(
-        emailBarRef.current,
-        { opacity: 0, y: 40, scale: 0.95 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.85, ease: 'power3.out' },
-        '-=0.5'
-      )
-    }
+        // Quick Social Channel Pills Stagger Pop-in
+        if (socialsRef.current) {
+          const buttons = socialsRef.current.querySelectorAll('.social-pill-btn')
+          mainTl.fromTo(
+            buttons,
+            { opacity: 0, y: 25, scale: 0.9 },
+            { opacity: 1, y: 0, scale: 1, stagger: 0.08, duration: 0.65, ease: 'back.out(1.8)' },
+            '-=0.4'
+          )
+        }
 
-    // Quick Social Channel Pills Stagger Pop-in
-    if (socialsRef.current) {
-      const buttons = socialsRef.current.querySelectorAll('.social-pill-btn')
-      mainTl.fromTo(
-        buttons,
-        { opacity: 0, y: 25, scale: 0.9 },
-        { opacity: 1, y: 0, scale: 1, stagger: 0.08, duration: 0.65, ease: 'back.out(1.8)' },
-        '-=0.4'
-      )
-    }
+        // Bottom Footer Meta Bar
+        if (footerRef.current) {
+          mainTl.fromTo(
+            footerRef.current,
+            { opacity: 0, y: 15 },
+            { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
+            '-=0.35'
+          )
+        }
+      }
+    )
 
-    // 3. Magnetic Physics on Dark Email Pill
+    // 3. Fast, Snappy Magnetic Physics on Dark Email Pill & Copy Button (Desktop fine pointer only)
     const el = emailBarRef.current
-    if (el) {
-      const xTo = gsap.quickTo(el, 'x', { duration: 0.4, ease: 'power3.out' })
-      const yTo = gsap.quickTo(el, 'y', { duration: 0.4, ease: 'power3.out' })
+    if (el && typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      const xTo = gsap.quickTo(el, 'x', { duration: 0.18, ease: 'power2.out' })
+      const yTo = gsap.quickTo(el, 'y', { duration: 0.18, ease: 'power2.out' })
 
       const handleMouseMove = (e: MouseEvent) => {
         const rect = el.getBoundingClientRect()
         const centerX = rect.left + rect.width / 2
         const centerY = rect.top + rect.height / 2
-        const deltaX = (e.clientX - centerX) * 0.16
-        const deltaY = (e.clientY - centerY) * 0.22
+        const deltaX = (e.clientX - centerX) * 0.22
+        const deltaY = (e.clientY - centerY) * 0.35
         xTo(deltaX)
         yTo(deltaY)
       }
@@ -172,9 +231,17 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
         yTo(0)
       }
 
-      el.addEventListener('mousemove', handleMouseMove)
+      el.addEventListener('mousemove', handleMouseMove, { passive: true })
       el.addEventListener('mouseleave', handleMouseLeave)
+
+      return () => {
+        el.removeEventListener('mousemove', handleMouseMove)
+        el.removeEventListener('mouseleave', handleMouseLeave)
+        mm.revert()
+      }
     }
+
+    return () => mm.revert()
   }, { scope: sectionRef })
 
   return (
@@ -188,7 +255,7 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
         ref={watermarkRef}
         className="absolute right-0 bottom-10 font-heading font-black text-[28vw] leading-none text-[#121217] pointer-events-none z-0 select-none will-change-transform"
       >
-        05
+        06
       </div>
 
       {/* Top Section Header with Index */}
@@ -274,12 +341,12 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
           </div>
         </div>
 
-        {/* Full-width Dark Pill Email Bar with Magnetic Physics & Glowing Feedback */}
+        {/* Full-width Dark Pill Email Bar with Snappy Magnetic Physics & Glowing Feedback */}
         <div className="w-full">
           <div
             ref={emailBarRef}
             onClick={handleCopyEmail}
-            className={`w-full bg-[#121217] text-[#82D8CE] hover:bg-[#1A1A22] rounded-2xl sm:rounded-full p-4 sm:p-5 pl-5 sm:pl-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 shadow-2xl transition-all duration-300 group cursor-target border ${
+            className={`w-full bg-[#121217] text-[#82D8CE] hover:bg-[#1A1A22] rounded-2xl sm:rounded-full p-4 sm:p-5 pl-5 sm:pl-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 shadow-2xl transition-[background-color,border-color,box-shadow] duration-200 group cursor-target border ${
               copied ? 'border-[#00E599] shadow-[0_0_25px_rgba(0,229,153,0.35)]' : 'border-black/30'
             } transform-gpu will-change-transform select-none`}
           >
@@ -312,7 +379,7 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-[#2C625B] mt-2.5 sm:mt-3 px-2 sm:px-4 font-bold">
+          <div ref={emailSubRef} className="flex items-center justify-between text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-[#2C625B] mt-2.5 sm:mt-3 px-2 sm:px-4 font-bold will-change-transform">
             <span>COPY EMAIL ADDRESS</span>
             <a href={`mailto:${email}`} className="underline hover:text-[#121217] transition-colors cursor-target">
               OPEN EMAIL CLIENT ↗
@@ -374,7 +441,7 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
       </div>
 
       {/* Bottom Footer Line */}
-      <footer className="w-full flex items-center justify-between border-t border-[#6AC4B9] pt-4 font-mono text-xs uppercase tracking-[0.2em] text-[#2C625B] z-10">
+      <footer ref={footerRef} className="w-full flex items-center justify-between border-t border-[#6AC4B9] pt-4 font-mono text-xs uppercase tracking-[0.2em] text-[#2C625B] z-10 will-change-transform">
         <span>4RK4N.DEV</span>
         <span className="hidden sm:inline font-bold">DIGITAL EXPERIENCES</span>
         <button

@@ -6,6 +6,7 @@ import { useGSAP } from '@gsap/react'
 import Link from 'next/link'
 import { ArrowDown, GraduationCap, Briefcase, Download, MapPin, Mail, ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '../providers'
+import { useSmoothScroll } from '../providers/SmoothScrollProvider'
 import type { Profile, TimelineEntry } from '@prisma/client'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -17,10 +18,13 @@ interface AboutmeProps {
 
 export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
   const { lang } = useLanguage()
+  const { scrollTo } = useSmoothScroll()
   const containerRef = useRef<HTMLElement>(null)
+  const headerRef = useRef<HTMLElement>(null)
   const statementRef = useRef<HTMLHeadingElement>(null)
   const bioCardRef = useRef<HTMLDivElement>(null)
   const timelineRef = useRef<HTMLDivElement>(null)
+  const footerRef = useRef<HTMLElement>(null)
 
   // Dynamic short statement from backend Profile
   const shortBio = profile?.shortDescription || 
@@ -32,39 +36,60 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
   const words2 = secondaryBio.split(' ')
 
   useGSAP(() => {
-    if (!containerRef.current || !statementRef.current) return
+    if (!containerRef.current) return
 
-    const words = statementRef.current.querySelectorAll('.kinetic-word')
-
-    // Silky progressive word illumination scrub on natural scroll
-    if (words && words.length > 0) {
+    // 1. Header entrance
+    if (headerRef.current) {
       gsap.fromTo(
-        words,
-        { opacity: 0.18, y: 6, filter: 'blur(3px)' },
+        headerRef.current,
+        { opacity: 0, y: -20 },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
-          stagger: 0.04,
-          ease: 'power2.out',
+          duration: 0.65,
+          ease: 'power3.out',
           scrollTrigger: {
-            trigger: statementRef.current,
-            start: 'top 80%',
-            end: 'bottom 45%',
-            scrub: 1.0,
+            trigger: containerRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
           },
         }
       )
     }
 
-    // Bio Card entrance on scroll
+    // 2. Silky progressive word illumination scrub on natural scroll
+    if (statementRef.current) {
+      const words = statementRef.current.querySelectorAll('.kinetic-word')
+      if (words && words.length > 0) {
+        gsap.fromTo(
+          words,
+          { opacity: 0.18, y: 8, filter: 'blur(3px)' },
+          {
+            opacity: 1,
+            y: 0,
+            filter: 'blur(0px)',
+            stagger: 0.04,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: statementRef.current,
+              start: 'top 80%',
+              end: 'bottom 45%',
+              scrub: 1.0,
+            },
+          }
+        )
+      }
+    }
+
+    // 3. Bio Card entrance on scroll
     if (bioCardRef.current) {
       gsap.fromTo(
         bioCardRef.current,
-        { opacity: 0, y: 35 },
+        { opacity: 0, y: 40, scale: 0.97 },
         {
           opacity: 1,
           y: 0,
+          scale: 1,
           duration: 0.85,
           ease: 'power3.out',
           scrollTrigger: {
@@ -76,13 +101,13 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
       )
     }
 
-    // Timeline items staggered entrance
+    // 4. Timeline items staggered entrance
     if (timelineRef.current) {
       const items = timelineRef.current.querySelectorAll('.timeline-item')
       if (items && items.length > 0) {
         gsap.fromTo(
           items,
-          { opacity: 0, x: -16 },
+          { opacity: 0, x: -20 },
           {
             opacity: 1,
             x: 0,
@@ -97,6 +122,25 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
           }
         )
       }
+    }
+
+    // 5. Footer entrance
+    if (footerRef.current) {
+      gsap.fromTo(
+        footerRef.current,
+        { opacity: 0, y: 15 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: 'top 95%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      )
     }
   }, { scope: containerRef, dependencies: [shortBio, secondaryBio] })
 
@@ -116,7 +160,7 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
       className="relative w-full min-h-screen bg-background text-text-primary flex flex-col justify-between p-5 sm:p-8 md:p-10 select-none border-b border-border transition-colors duration-300"
     >
       {/* Top Section Header with Index */}
-      <header className="w-full flex items-center justify-between border-b border-border pb-4 font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
+      <header ref={headerRef} className="w-full flex items-center justify-between border-b border-border pb-4 font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
         <div className="flex items-center gap-4">
           <span className="font-bold text-primary">01</span>
           <span>ABOUT 4RK4N.DEV</span>
@@ -260,15 +304,15 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
       </div>
 
       {/* Footer Line & Next Section Jump Arrow */}
-      <footer className="w-full flex items-center justify-between border-t border-border pt-4">
+      <footer ref={footerRef} className="w-full flex items-center justify-between border-t border-border pt-4">
         <span className="font-mono text-xs uppercase tracking-[0.2em] text-text-muted">CAPABILITIES & BACKGROUND</span>
-        <Link 
-          href="#work" 
+        <button 
+          onClick={() => scrollTo('#work')} 
           aria-label="Continue to projects"
           className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-text-primary hover:bg-primary hover:text-background hover:border-primary transition-all cursor-target"
         >
           <ArrowDown size={18} />
-        </Link>
+        </button>
       </footer>
     </section>
   )

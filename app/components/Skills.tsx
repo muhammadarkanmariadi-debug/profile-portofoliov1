@@ -187,29 +187,40 @@ export default function Skills({ skills }: SkillsProps) {
   const [activeTab, setActiveTab] = useState(categories.length > 0 ? categories[0] : 'FRONTEND')
 
   const gridRef = useRef<HTMLDivElement>(null)
+  const headerMetaRef = useRef<HTMLDivElement>(null)
 
   useGSAP(() => {
-    if (!headingRef.current) return
+    if (!sectionRef.current) return
 
-    // Heading slide-up
-    gsap.fromTo(headingRef.current,
-      { yPercent: 100 },
-      {
-        yPercent: 0,
-        duration: 0.9,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: headingRef.current,
-          start: 'top 90%',
-          toggleActions: 'play none none reverse'
-        }
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top 85%',
+        toggleActions: 'play none none reverse'
       }
-    )
+    })
 
-    // Velocity-reactive ambient marquee scrub
+    if (headerMetaRef.current) {
+      tl.fromTo(
+        headerMetaRef.current,
+        { opacity: 0, y: -20 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }
+      )
+    }
+
+    if (headingRef.current) {
+      tl.fromTo(
+        headingRef.current,
+        { yPercent: 100 },
+        { yPercent: 0, duration: 0.85, ease: 'power3.out' },
+        '-=0.3'
+      )
+    }
+
+    // Velocity-reactive ambient marquee scrub with Lenis scroll
     if (marqueeRef.current) {
       gsap.to(marqueeRef.current, {
-        xPercent: -20,
+        xPercent: -25,
         ease: 'none',
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -226,14 +237,14 @@ export default function Skills({ skills }: SkillsProps) {
     if (!gridRef.current) return
     const cards = gridRef.current.querySelectorAll('.skill-card')
     gsap.fromTo(cards,
-      { opacity: 0, y: 16, scale: 0.94 },
+      { opacity: 0, y: 20, scale: 0.92 },
       {
         opacity: 1,
         y: 0,
         scale: 1,
-        duration: 0.35,
-        stagger: 0.03,
-        ease: 'power3.out',
+        duration: 0.4,
+        stagger: 0.035,
+        ease: 'back.out(1.6)',
         clearProps: 'transform'
       }
     )
@@ -251,7 +262,7 @@ export default function Skills({ skills }: SkillsProps) {
 
         {/* Section Header with Index */}
         <header className="w-full border-b border-border pb-8 sm:pb-12 mb-10 sm:mb-16">
-          <div className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-6 sm:mb-10">
+          <div ref={headerMetaRef} className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-6 sm:mb-10">
             <div className="flex items-center gap-3">
               <span className="inline-block w-2 h-2 rounded-full bg-primary" />
               <span>TECHNICAL ARCHITECTURE</span>

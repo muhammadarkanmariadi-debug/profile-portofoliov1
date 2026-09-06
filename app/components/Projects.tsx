@@ -21,6 +21,7 @@ export default function Projects({ projects, isLanding = false }: ProjectsProps)
   const { lang } = useLanguage()
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
   const sectionRef = React.useRef<HTMLElement>(null)
+  const headerMetaRef = React.useRef<HTMLDivElement>(null)
   const headingRef = React.useRef<HTMLHeadingElement>(null)
 
   const displayProjects = isLanding ? projects.slice(0, 3) : projects
@@ -29,20 +30,32 @@ export default function Projects({ projects, isLanding = false }: ProjectsProps)
     : null
 
   useGSAP(() => {
-    if (!headingRef.current) return
-    gsap.fromTo(headingRef.current,
-      { yPercent: 100 },
-      {
-        yPercent: 0,
-        duration: 0.9,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: headingRef.current,
-          start: 'top 90%',
-          toggleActions: 'play none none reverse'
-        }
+    if (!sectionRef.current) return
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top 85%',
+        toggleActions: 'play none none reverse'
       }
-    )
+    })
+
+    if (headerMetaRef.current) {
+      tl.fromTo(
+        headerMetaRef.current,
+        { opacity: 0, y: -20 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }
+      )
+    }
+
+    if (headingRef.current) {
+      tl.fromTo(
+        headingRef.current,
+        { yPercent: 100 },
+        { yPercent: 0, duration: 0.85, ease: 'power3.out' },
+        '-=0.3'
+      )
+    }
   }, { scope: sectionRef })
 
   return (
@@ -53,9 +66,9 @@ export default function Projects({ projects, isLanding = false }: ProjectsProps)
     >
       <div className="max-w-[1400px] mx-auto">
 
-        {/* Section Header with Index (Screenshot Match) */}
+        {/* Section Header with Index */}
         <header className="w-full border-b border-border pb-10 sm:pb-14 mb-14 sm:mb-20">
-          <div className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-8 sm:mb-12">
+          <div ref={headerMetaRef} className="flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-8 sm:mb-12">
             <div className="flex items-center gap-3">
               <span className="inline-block w-2 h-2 rounded-full bg-primary" />
               <span>SELECTED WORK</span>

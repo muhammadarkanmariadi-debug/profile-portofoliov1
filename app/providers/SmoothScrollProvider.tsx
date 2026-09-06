@@ -3,14 +3,13 @@ import React, { useEffect, createContext, useContext, useState } from 'react'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
 import { usePathname } from 'next/navigation'
 
 gsap.registerPlugin(ScrollTrigger)
 
 interface SmoothScrollContextType {
   lenis: Lenis | null;
-  scrollTo: (target: string | HTMLElement, options?: Record<string, unknown>) => void;
+  scrollTo: (target: string | HTMLElement | number, options?: Record<string, unknown>) => void;
 }
 
 const SmoothScrollContext = createContext<SmoothScrollContextType>({
@@ -40,7 +39,7 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
     }
 
     const lenis = new Lenis({
-      duration: 1.25,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
@@ -81,13 +80,22 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
 
     document.addEventListener('click', handleAnchorClick)
 
+    // Dynamic resize observer for layout shifts
+    const resizeObserver = new ResizeObserver(() => {
+      ScrollTrigger.refresh()
+    })
+    if (document.body) {
+      resizeObserver.observe(document.body)
+    }
+
     // Initial refresh
     const timer = setTimeout(() => {
       ScrollTrigger.refresh()
-    }, 400)
+    }, 300)
 
     return () => {
       clearTimeout(timer)
+      resizeObserver.disconnect()
       document.removeEventListener('click', handleAnchorClick)
       gsap.ticker.remove(updateTicker)
       lenis.destroy()
@@ -102,11 +110,13 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
     return () => clearTimeout(timer)
   }, [pathname])
 
-  const scrollTo = (target: string | HTMLElement, options?: Record<string, unknown>) => {
+  const scrollTo = (target: string | HTMLElement | number, options?: Record<string, unknown>) => {
     if (lenisInstance) {
-      lenisInstance.scrollTo(target, options)
+      lenisInstance.scrollTo(target, { duration: 1.2, ...options })
     } else if (typeof window !== 'undefined') {
-      if (typeof target === 'string') {
+      if (typeof target === 'number') {
+        window.scrollTo({ top: target, behavior: 'smooth' })
+      } else if (typeof target === 'string') {
         const el = document.querySelector(target)
         el?.scrollIntoView({ behavior: 'smooth' })
       } else if (target) {
@@ -121,3 +131,4 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
     </SmoothScrollContext.Provider>
   )
 }
+

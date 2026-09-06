@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, useRef } from "react"
 import { useTheme } from "next-themes"
 import { useTheme as useAppTheme } from "@/app/providers"
 import {
@@ -42,7 +42,6 @@ export const cloudProps: Omit<ICloud, "children"> = {
 export const renderCustomIcon = (icon: SimpleIcon, theme: string) => {
   const bgHex = theme === "light" ? "#ffffff" : "#08080c"
   const fallbackHex = theme === "light" ? "#121217" : "#fafafc"
-  // Keep minContrastRatio low (1.0) so SimpleIcons preserves original bright brand colors (React cyan, TypeScript blue, Node green, etc.)
   const minContrastRatio = 1.0
 
   return renderSimpleIcon({
@@ -68,6 +67,8 @@ type IconData = Awaited<ReturnType<typeof fetchSimpleIcons>>
 
 export function IconCloud({ iconSlugs }: DynamicCloudProps) {
   const [data, setData] = useState<IconData | null>(null)
+  const [isVisible, setIsVisible] = useState(true)
+  const wrapperRef = useRef<HTMLDivElement>(null)
   const nextTheme = useTheme()
   let appTheme: any = null
   try {
@@ -81,6 +82,20 @@ export function IconCloud({ iconSlugs }: DynamicCloudProps) {
     fetchSimpleIcons({ slugs: iconSlugs }).then(setData)
   }, [iconSlugs])
 
+  useEffect(() => {
+    if (!wrapperRef.current || typeof IntersectionObserver === "undefined") return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting)
+      },
+      { threshold: 0.05 }
+    )
+
+    observer.observe(wrapperRef.current)
+    return () => observer.disconnect()
+  }, [])
+
   const renderedIcons = useMemo(() => {
     if (!data) return null
 
@@ -90,9 +105,16 @@ export function IconCloud({ iconSlugs }: DynamicCloudProps) {
   }, [data, activeTheme])
 
   return (
-    // @ts-ignore
-    <Cloud {...cloudProps}>
-      <>{renderedIcons}</>
-    </Cloud>
+    <div ref={wrapperRef} className="w-full flex items-center justify-center">
+      {isVisible && renderedIcons ? (
+        // @ts-ignore
+        <Cloud {...cloudProps}>
+          <>{renderedIcons}</>
+        </Cloud>
+      ) : (
+        <div className="w-full h-[320px] flex items-center justify-center" />
+      )}
+    </div>
   )
 }
+

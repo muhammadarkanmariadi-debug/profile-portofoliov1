@@ -1,13 +1,25 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import ThemeToggle from '@/components/ui/ThemeToggle'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
+  const headerRef = useRef<HTMLElement>(null)
+
+  useGSAP(() => {
+    if (!headerRef.current) return
+    gsap.fromTo(
+      headerRef.current,
+      { y: -30, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
+    )
+  }, { scope: headerRef, dependencies: [pathname] })
 
   if (pathname.startsWith('/admin') || pathname === '/') {
     return null;
@@ -24,7 +36,10 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 w-full bg-background/90 backdrop-blur-md border-b border-border px-6 sm:px-10 py-4 transition-all duration-300">
+      <header
+        ref={headerRef}
+        className="fixed top-0 left-0 right-0 z-50 w-full bg-background/90 backdrop-blur-md border-b border-border px-6 sm:px-10 py-4 transition-all duration-300"
+      >
         <div className="w-full flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em]">
           
           {/* Brand Monogram */}
@@ -128,3 +143,4 @@ const Navbar = () => {
 }
 
 export default Navbar
+
