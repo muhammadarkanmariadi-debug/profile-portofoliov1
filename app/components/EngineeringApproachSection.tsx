@@ -69,10 +69,12 @@ export default function EngineeringApproachSection({
   steps = APPROACH_STEPS,
 }: EngineeringApproachSectionProps) {
   const containerRef = useRef<HTMLElement>(null)
+  const leftColRef = useRef<HTMLDivElement>(null)
+  const rightColRef = useRef<HTMLDivElement>(null)
   const progressBarRef = useRef<HTMLDivElement>(null)
   const progressTextRef = useRef<HTMLSpanElement>(null)
 
-  // GSAP ScrollTrigger Pinning & Ultra-Smooth Sequential Fanning Animation
+  // GSAP ScrollTrigger Soft-Entry Pinning & Sequential Fanning Animation (Option 1)
   useGSAP(() => {
     if (!containerRef.current) return
 
@@ -95,14 +97,14 @@ export default function EngineeringApproachSection({
         if (cards.length === 0) return
 
         if (isDesktop) {
-          // Generous fanning offsets for clear separation between cards
-          const offsetX = isLargeDesktop ? 78 : 64
+          // Generous fanning offsets for clear visual separation
+          const offsetX = isLargeDesktop ? 80 : 66
           const offsetY = isLargeDesktop ? 16 : 12
 
           const getTargetX = (i: number) => i * offsetX
           const getTargetY = (i: number) => i * offsetY
 
-          // Set Initial State: Card 0 in position, Cards 1..N offset smoothly to right
+          // Set Initial State: Card 0 settled, Cards 1..N poised to enter from right
           gsap.set(cards[0], {
             x: getTargetX(0),
             y: getTargetY(0),
@@ -120,13 +122,13 @@ export default function EngineeringApproachSection({
             })
           })
 
-          // Pin container & scrub butter-smoothly with Lenis / scroll
+          // Pin container with extended scrub distance & anticipated pin
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: containerRef.current,
               start: 'top top',
-              end: () => `+=${cards.length * 750}`,
-              scrub: 1.2,
+              end: () => `+=${cards.length * 800 + 400}`,
+              scrub: 1.4,
               pin: true,
               pinSpacing: true,
               anticipatePin: 1,
@@ -147,10 +149,20 @@ export default function EngineeringApproachSection({
             },
           })
 
-          // Sequentially slide in Card 02, Card 03, Card 04 with smooth easing & depth
+          // PHASE 1: Soft-Entry Lead-In Buffer (Absorbs pin arrival smoothly from Skills)
+          if (rightColRef.current && leftColRef.current) {
+            tl.fromTo(
+              [rightColRef.current, leftColRef.current],
+              { y: 25, opacity: 0.82 },
+              { y: 0, opacity: 1, duration: 1.0, ease: 'power2.out' },
+              0
+            )
+          }
+
+          // PHASE 2: Sequentially slide in Card 02, Card 03, Card 04 with depth & fanning
           cards.slice(1).forEach((card, idx) => {
             const actualIdx = idx + 1
-            const startTime = idx * 1.8
+            const startTime = 1.0 + idx * 1.8
 
             tl.to(
               card,
@@ -166,8 +178,8 @@ export default function EngineeringApproachSection({
             )
           })
 
-          // Buffer pause before releasing pin for comfortable reading
-          tl.to({}, { duration: 0.8 })
+          // PHASE 3: Settle & Reading Buffer before releasing pin smoothly
+          tl.to({}, { duration: 1.0 })
         } else {
           // Mobile (< 1024px): Natural vertical stack with individual entrance reveals
           gsap.set(cards, { clearProps: 'all' })
@@ -200,13 +212,16 @@ export default function EngineeringApproachSection({
       id="approach"
       className="relative w-full min-h-screen bg-background text-text-primary flex items-center justify-center py-20 lg:py-0 px-5 sm:px-8 md:px-12 lg:px-16 border-b border-border transition-colors duration-300 overflow-hidden select-none"
     >
-      {/* Background ambient lighting */}
+      {/* Top Atmospheric Gradient Bridge from Skills Section */}
+      <div className="absolute top-0 left-0 right-0 h-28 bg-gradient-to-b from-background via-background/60 to-transparent pointer-events-none z-20" />
+
+      {/* Subtle monochrome ambient lighting */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-white/[0.02] rounded-full blur-[140px] pointer-events-none -z-10" />
 
-      <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-        
-        {/* LEFT COLUMN: FANNED / CASCADING PINNED CARDS STACK WITH SPACIOUS GEOMETRY */}
-        <div className="lg:col-span-7 xl:col-span-7 flex justify-center lg:justify-start items-center">
+      <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
+
+        {/* LEFT COLUMN: FANNED / CASCADING PINNED CARDS STACK */}
+        <div ref={leftColRef} className="lg:col-span-7 xl:col-span-7 flex justify-center lg:justify-start items-center">
           <div className="relative w-full max-w-[620px] h-auto lg:h-[560px] flex flex-col lg:block gap-8 sm:gap-10">
             {steps.map((step, idx) => {
               const StepIcon = step.icon
@@ -266,8 +281,8 @@ export default function EngineeringApproachSection({
         </div>
 
         {/* RIGHT COLUMN: PROJECT APPROACH HEADLINE, NARRATIVE & PROGRESS */}
-        <div className="lg:col-span-5 xl:col-span-5 flex flex-col justify-center gap-6 lg:pl-4">
-          
+        <div ref={rightColRef} className="lg:col-span-5 xl:col-span-5 flex flex-col justify-center gap-6 lg:pl-4">
+
           {/* Headline Matching Exact Screenshot */}
           <div className="flex flex-col">
             <h2 className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-[5.5vw] tracking-tighter leading-[0.88] uppercase select-none">
@@ -294,10 +309,10 @@ export default function EngineeringApproachSection({
             </div>
 
             {/* Visual Scroll Progress Bar */}
-            <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+            <div className="w-full h-1 bg-black  bg-white/10 rounded-full overflow-hidden">
               <div
                 ref={progressBarRef}
-                className="h-full w-full bg-white origin-left transform-gpu scale-x-0 transition-transform duration-75"
+                className="h-full w-full dark:bg-white bg-black  origin-left transform-gpu scale-x-0 transition-transform duration-75"
               />
             </div>
           </div>
