@@ -72,7 +72,7 @@ export default function EngineeringApproachSection({
   const progressBarRef = useRef<HTMLDivElement>(null)
   const progressTextRef = useRef<HTMLSpanElement>(null)
 
-  // GSAP ScrollTrigger Pinning & Sequential Fanning Animation
+  // GSAP ScrollTrigger Pinning & Ultra-Smooth Sequential Fanning Animation
   useGSAP(() => {
     if (!containerRef.current) return
 
@@ -81,24 +81,28 @@ export default function EngineeringApproachSection({
     mm.add(
       {
         isDesktop: '(min-width: 1024px)',
+        isLargeDesktop: '(min-width: 1280px)',
         isMobile: '(max-width: 1023px)',
       },
       (context) => {
-        const { isDesktop } = context.conditions as { isDesktop: boolean }
+        const { isDesktop, isLargeDesktop } = context.conditions as {
+          isDesktop: boolean
+          isLargeDesktop: boolean
+        }
         if (!containerRef.current) return
 
         const cards = gsap.utils.toArray<HTMLElement>('.fanned-stack-card', containerRef.current)
         if (cards.length === 0) return
 
         if (isDesktop) {
-          // Dynamic fanning horizontal & vertical offsets
-          const offsetX = 55
-          const offsetY = 12
+          // Generous fanning offsets for clear separation between cards
+          const offsetX = isLargeDesktop ? 78 : 64
+          const offsetY = isLargeDesktop ? 16 : 12
 
           const getTargetX = (i: number) => i * offsetX
           const getTargetY = (i: number) => i * offsetY
 
-          // Set Initial State: Card 0 in position, Cards 1..N offset to right
+          // Set Initial State: Card 0 in position, Cards 1..N offset smoothly to right
           gsap.set(cards[0], {
             x: getTargetX(0),
             y: getTargetY(0),
@@ -109,23 +113,24 @@ export default function EngineeringApproachSection({
           cards.slice(1).forEach((card, idx) => {
             const actualIdx = idx + 1
             gsap.set(card, {
-              x: getTargetX(actualIdx) + 160,
-              y: getTargetY(actualIdx) + 20,
+              x: getTargetX(actualIdx) + (isLargeDesktop ? 220 : 180),
+              y: getTargetY(actualIdx) + 24,
               autoAlpha: 0,
-              scale: 0.95,
+              scale: 0.94,
             })
           })
 
-          // Pin container & scrub smoothly with Lenis / scroll
+          // Pin container & scrub butter-smoothly with Lenis / scroll
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: containerRef.current,
               start: 'top top',
-              end: () => `+=${cards.length * 600}`,
-              scrub: 0.8,
+              end: () => `+=${cards.length * 750}`,
+              scrub: 1.2,
               pin: true,
               pinSpacing: true,
               anticipatePin: 1,
+              fastScrollEnd: true,
               invalidateOnRefresh: true,
               onUpdate: (self) => {
                 if (progressBarRef.current) {
@@ -142,10 +147,10 @@ export default function EngineeringApproachSection({
             },
           })
 
-          // Sequentially slide in Card 02, Card 03, Card 04 into their fanned slot
+          // Sequentially slide in Card 02, Card 03, Card 04 with smooth easing & depth
           cards.slice(1).forEach((card, idx) => {
             const actualIdx = idx + 1
-            const startTime = idx * 1.5
+            const startTime = idx * 1.8
 
             tl.to(
               card,
@@ -154,15 +159,15 @@ export default function EngineeringApproachSection({
                 y: getTargetY(actualIdx),
                 autoAlpha: 1,
                 scale: 1,
-                duration: 1.4,
+                duration: 1.8,
                 ease: 'power2.out',
               },
               startTime
             )
           })
 
-          // Buffer pause before releasing pin
-          tl.to({}, { duration: 0.6 })
+          // Buffer pause before releasing pin for comfortable reading
+          tl.to({}, { duration: 0.8 })
         } else {
           // Mobile (< 1024px): Natural vertical stack with individual entrance reveals
           gsap.set(cards, { clearProps: 'all' })
@@ -170,12 +175,12 @@ export default function EngineeringApproachSection({
           cards.forEach((card) => {
             gsap.fromTo(
               card,
-              { autoAlpha: 0, y: 25 },
+              { autoAlpha: 0, y: 35 },
               {
                 autoAlpha: 1,
                 y: 0,
-                duration: 0.6,
-                ease: 'power2.out',
+                duration: 0.75,
+                ease: 'power3.out',
                 scrollTrigger: {
                   trigger: card,
                   start: 'top 88%',
@@ -196,13 +201,13 @@ export default function EngineeringApproachSection({
       className="relative w-full min-h-screen bg-background text-text-primary flex items-center justify-center py-20 lg:py-0 px-5 sm:px-8 md:px-12 lg:px-16 border-b border-border transition-colors duration-300 overflow-hidden select-none"
     >
       {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[450px] h-[450px] bg-white/[0.02] rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-white/[0.02] rounded-full blur-[140px] pointer-events-none -z-10" />
 
       <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         
-        {/* LEFT COLUMN: FANNED / CASCADING PINNED CARDS STACK */}
+        {/* LEFT COLUMN: FANNED / CASCADING PINNED CARDS STACK WITH SPACIOUS GEOMETRY */}
         <div className="lg:col-span-7 xl:col-span-7 flex justify-center lg:justify-start items-center">
-          <div className="relative w-full max-w-[540px] h-auto lg:h-[540px] flex flex-col lg:block gap-6">
+          <div className="relative w-full max-w-[620px] h-auto lg:h-[560px] flex flex-col lg:block gap-8 sm:gap-10">
             {steps.map((step, idx) => {
               const StepIcon = step.icon
               const zIndex = idx + 1
@@ -211,7 +216,7 @@ export default function EngineeringApproachSection({
                 <div
                   key={step.number}
                   style={{ zIndex }}
-                  className="fanned-stack-card lg:absolute lg:top-0 lg:left-0 w-full sm:w-[360px] md:w-[400px] lg:w-[420px] min-h-[460px] sm:min-h-[500px] rounded-3xl bg-white text-[#0D0E11] border border-black/10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] p-6 sm:p-8 flex flex-col justify-between transform-gpu"
+                  className="fanned-stack-card lg:absolute lg:top-0 lg:left-0 w-full sm:w-[360px] md:w-[390px] lg:w-[410px] xl:w-[430px] min-h-[460px] sm:min-h-[490px] rounded-3xl bg-white text-[#0D0E11] border border-black/10 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.35)] p-6 sm:p-8 flex flex-col justify-between transform-gpu"
                 >
                   {/* Top Row: Big Number & Circular Icon */}
                   <div className="flex items-start justify-between">
