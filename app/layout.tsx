@@ -25,7 +25,16 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Muhammad Arkan Mariadi — Full-Stack Developer (4RK4N.DEV)',
-  description: 'Full-stack developer building production web applications with Next.js, React, Nest.js, and Laravel.'
+  description: 'Full-stack developer building production web applications with Next.js, React, Nest.js, and Laravel.',
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icon', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon', sizes: '180x180', type: 'image/png' },
+    ],
+  },
 }
 
 export default async function RootLayout({
