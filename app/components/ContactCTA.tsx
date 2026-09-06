@@ -302,7 +302,7 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
               <span
                 ref={qMarkRef}
                 className="text-transparent text-text-primary ml-2 sm:ml-4 inline-block will-change-transform"
-                style={{ WebkitTextStroke: '2.8px currentColor' }}
+                style={{ WebkitTextStroke: '2.8px var(--text-primary)' }}
               >
                 ?
               </span>
