@@ -167,7 +167,7 @@ export default function ContactClient({ profile }: ContactClientProps) {
 
       if (!res.ok) {
         const errorData = await res.json()
-        throw new Error(errorData.error || 'Failed to send message')
+        throw new Error(errorData.error[0].message || 'Failed to send message')
       }
 
       setStatus('success')

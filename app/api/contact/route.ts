@@ -21,30 +21,34 @@ export async function POST(req: Request) {
 
     // Send email notification if env vars are configured
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
-        },
-      });
+      try {
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+          },
+        });
 
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: process.env.EMAIL_USER, // Send to self
-        subject: `New Contact Message from ${validatedData.name}`,
-        text: `Name: ${validatedData.name}\nEmail: ${validatedData.email}\n\nMessage:\n${validatedData.message}`,
-        html: `
-          <div style="font-family: sans-serif; padding: 20px;">
-            <h3 style="color: #6C63FF;">New Contact Message from Portfolio</h3>
-            <p><strong>Name:</strong> ${validatedData.name}</p>
-            <p><strong>Email:</strong> ${validatedData.email}</p>
-            <hr />
-            <p><strong>Message:</strong></p>
-            <p style="white-space: pre-wrap;">${validatedData.message}</p>
-          </div>
-        `,
-      });
+        await transporter.sendMail({
+          from: process.env.EMAIL_USER,
+          to: process.env.EMAIL_USER, // Send to self
+          subject: `New Contact Message from ${validatedData.name}`,
+          text: `Name: ${validatedData.name}\nEmail: ${validatedData.email}\n\nMessage:\n${validatedData.message}`,
+          html: `
+            <div style="font-family: sans-serif; padding: 20px;">
+              <h3 style="color: #6C63FF;">New Contact Message from Portfolio</h3>
+              <p><strong>Name:</strong> ${validatedData.name}</p>
+              <p><strong>Email:</strong> ${validatedData.email}</p>
+              <hr />
+              <p><strong>Message:</strong></p>
+              <p style="white-space: pre-wrap;">${validatedData.message}</p>
+            </div>
+          `,
+        });
+      } catch (emailErr) {
+        console.error("Nodemailer notification error (Message still saved to database):", emailErr);
+      }
     }
 
     return NextResponse.json({ success: true, data: contactMessage }, { status: 201 });
