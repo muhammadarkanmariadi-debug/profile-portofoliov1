@@ -97,9 +97,9 @@ export default function EngineeringApproachSection({
         if (cards.length === 0) return
 
         if (isDesktop) {
-          // Generous fanning offsets for clear visual separation
-          const offsetX = isLargeDesktop ? 80 : 66
-          const offsetY = isLargeDesktop ? 16 : 12
+          // Responsive fanning offsets ensuring 1024px-1280px laptops never overflow
+          const offsetX = isLargeDesktop ? 64 : 44
+          const offsetY = isLargeDesktop ? 14 : 10
 
           const getTargetX = (i: number) => i * offsetX
           const getTargetY = (i: number) => i * offsetY
@@ -115,20 +115,20 @@ export default function EngineeringApproachSection({
           cards.slice(1).forEach((card, idx) => {
             const actualIdx = idx + 1
             gsap.set(card, {
-              x: getTargetX(actualIdx) + (isLargeDesktop ? 220 : 180),
-              y: getTargetY(actualIdx) + 24,
+              x: getTargetX(actualIdx) + (isLargeDesktop ? 160 : 120),
+              y: getTargetY(actualIdx) + 16,
               autoAlpha: 0,
-              scale: 0.94,
+              scale: 0.95,
             })
           })
 
-          // Pin container with extended scrub distance & anticipated pin
+          // Pin container with snappier scrub distance & anticipated pin
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: containerRef.current,
               start: 'top top',
-              end: () => `+=${cards.length * 800 + 400}`,
-              scrub: 1.4,
+              end: () => `+=${cards.length * 480 + 200}`,
+              scrub: 1.2,
               pin: true,
               pinSpacing: true,
               anticipatePin: 1,
@@ -149,12 +149,12 @@ export default function EngineeringApproachSection({
             },
           })
 
-          // PHASE 1: Soft-Entry Lead-In Buffer (Absorbs pin arrival smoothly from Skills)
+          // PHASE 1: Soft-Entry Lead-In Buffer
           if (rightColRef.current && leftColRef.current) {
             tl.fromTo(
               [rightColRef.current, leftColRef.current],
-              { y: 25, opacity: 0.82 },
-              { y: 0, opacity: 1, duration: 1.0, ease: 'power2.out' },
+              { y: 20, opacity: 0.85 },
+              { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out' },
               0
             )
           }
@@ -162,7 +162,7 @@ export default function EngineeringApproachSection({
           // PHASE 2: Sequentially slide in Card 02, Card 03, Card 04 with depth & fanning
           cards.slice(1).forEach((card, idx) => {
             const actualIdx = idx + 1
-            const startTime = 1.0 + idx * 1.8
+            const startTime = 0.8 + idx * 1.5
 
             tl.to(
               card,
@@ -171,15 +171,15 @@ export default function EngineeringApproachSection({
                 y: getTargetY(actualIdx),
                 autoAlpha: 1,
                 scale: 1,
-                duration: 1.8,
+                duration: 1.5,
                 ease: 'power2.out',
               },
               startTime
             )
           })
 
-          // PHASE 3: Settle & Reading Buffer before releasing pin smoothly
-          tl.to({}, { duration: 1.0 })
+          // PHASE 3: Reading Buffer before releasing pin smoothly
+          tl.to({}, { duration: 0.8 })
         } else {
           // Mobile (< 1024px): Natural vertical stack with individual entrance reveals
           gsap.set(cards, { clearProps: 'all' })
@@ -187,11 +187,11 @@ export default function EngineeringApproachSection({
           cards.forEach((card) => {
             gsap.fromTo(
               card,
-              { autoAlpha: 0, y: 35 },
+              { autoAlpha: 0, y: 30 },
               {
                 autoAlpha: 1,
                 y: 0,
-                duration: 0.75,
+                duration: 0.65,
                 ease: 'power3.out',
                 scrollTrigger: {
                   trigger: card,
@@ -218,11 +218,11 @@ export default function EngineeringApproachSection({
       {/* Subtle monochrome ambient lighting */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-white/[0.02] rounded-full blur-[140px] pointer-events-none -z-10" />
 
-      <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
+      <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 xl:gap-16 items-center relative z-10">
 
         {/* LEFT COLUMN: FANNED / CASCADING PINNED CARDS STACK */}
-        <div ref={leftColRef} className="lg:col-span-7 xl:col-span-7 flex justify-center lg:justify-start items-center">
-          <div className="relative w-full max-w-[620px] h-auto lg:h-[560px] flex flex-col lg:block gap-8 sm:gap-10">
+        <div ref={leftColRef} className="order-2 lg:order-1 lg:col-span-7 xl:col-span-7 flex justify-center lg:justify-start items-center">
+          <div className="relative w-full max-w-xl md:max-w-2xl lg:max-w-[620px] h-auto lg:h-[540px] flex flex-col lg:block gap-6 sm:gap-8 items-center lg:items-start">
             {steps.map((step, idx) => {
               const StepIcon = step.icon
               const zIndex = idx + 1
@@ -231,43 +231,43 @@ export default function EngineeringApproachSection({
                 <div
                   key={step.number}
                   style={{ zIndex }}
-                  className="fanned-stack-card lg:absolute lg:top-0 lg:left-0 w-full sm:w-[360px] md:w-[390px] lg:w-[410px] xl:w-[430px] min-h-[460px] sm:min-h-[490px] rounded-3xl bg-white text-[#0D0E11] border border-black/10 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.35)] p-6 sm:p-8 flex flex-col justify-between transform-gpu"
+                  className="fanned-stack-card lg:absolute lg:top-0 lg:left-0 w-full max-w-lg md:max-w-xl lg:w-[350px] xl:w-[410px] min-h-[440px] sm:min-h-[470px] rounded-3xl bg-surface text-text-primary border border-border shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] p-6 sm:p-7 flex flex-col justify-between transform-gpu"
                 >
                   {/* Top Row: Big Number & Circular Icon */}
                   <div className="flex items-start justify-between">
                     <div className="flex items-baseline">
-                      <span className="font-heading font-black text-5xl sm:text-6xl text-[#0D0E11] tracking-tighter">
+                      <span className="font-heading font-black text-5xl sm:text-6xl text-text-primary tracking-tighter">
                         {step.number}
                       </span>
-                      <span className="font-mono text-xs text-[#7A7F8D] font-bold ml-2">
+                      <span className="font-mono text-xs text-text-muted font-bold ml-2">
                         / 04
                       </span>
                     </div>
 
-                    <div className="w-10 h-10 rounded-full border border-black/10 flex items-center justify-center text-[#0D0E11] bg-black/[0.03]">
+                    <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-primary bg-surface-elevated shadow-xs">
                       <StepIcon className="size-4.5" />
                     </div>
                   </div>
 
                   {/* Middle: Tag, Title & Description */}
-                  <div className="flex flex-col gap-2 my-auto py-4">
-                    <span className="font-mono text-[10px] sm:text-xs uppercase tracking-wider text-[#7A7F8D] font-bold">
+                  <div className="flex flex-col gap-2 my-auto py-3">
+                    <span className="font-mono text-[10px] sm:text-xs uppercase tracking-wider text-text-muted font-bold">
                       {step.tag}
                     </span>
-                    <h3 className="font-heading font-black text-xl sm:text-2xl text-[#0D0E11] uppercase tracking-tight leading-tight">
+                    <h3 className="font-heading font-black text-lg sm:text-xl xl:text-2xl text-text-primary uppercase tracking-tight leading-tight">
                       {step.title}
                     </h3>
-                    <p className="font-sans text-xs sm:text-sm text-[#4A4D57] leading-relaxed mt-1">
+                    <p className="font-sans text-xs sm:text-sm text-text-muted leading-relaxed mt-1">
                       {step.description}
                     </p>
                   </div>
 
                   {/* Bottom: Deliverable Chips */}
-                  <div className="flex flex-wrap gap-2 pt-3 border-t border-black/10">
+                  <div className="flex flex-wrap gap-2 pt-3 border-t border-border">
                     {step.deliverables.map((item, dIdx) => (
                       <span
                         key={dIdx}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-black/10 bg-black/[0.03] text-[#16181D] font-mono text-[11px] font-medium"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-surface-elevated text-text-primary font-mono text-[10px] sm:text-[11px] font-medium"
                       >
                         <span className="text-[10px] opacity-60">⊚</span>
                         <span>{item}</span>
@@ -281,11 +281,11 @@ export default function EngineeringApproachSection({
         </div>
 
         {/* RIGHT COLUMN: PROJECT APPROACH HEADLINE, NARRATIVE & PROGRESS */}
-        <div ref={rightColRef} className="lg:col-span-5 xl:col-span-5 flex flex-col justify-center gap-6 lg:pl-4">
+        <div ref={rightColRef} className="order-1 lg:order-2 lg:col-span-5 flex flex-col justify-center gap-6 lg:pl-4">
 
           {/* Headline Matching Exact Screenshot */}
           <div className="flex flex-col">
-            <h2 className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-[5.5vw] tracking-tighter leading-[0.88] uppercase select-none">
+            <h2 className="font-heading font-black text-4xl sm:text-6xl md:text-7xl lg:text-[4.8vw] xl:text-[5.5vw] tracking-tighter leading-[0.88] uppercase select-none">
               <span className="block text-text-primary">PROJECT</span>
               <span className="block text-text-muted/40">APPROACH</span>
             </h2>
@@ -297,10 +297,10 @@ export default function EngineeringApproachSection({
           </p>
 
           {/* Connected Stages Status & Live Scroll Progress */}
-          <div className="flex flex-col gap-3 pt-2">
+          <div className="hidden xl:flex flex-col gap-3 pt-2">
             <div className="flex items-center justify-between font-mono text-xs uppercase tracking-widest text-text-muted font-bold">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                 <span>• 4 CONNECTED STAGES</span>
               </div>
               <span ref={progressTextRef} className="text-text-primary text-[11px]">
@@ -309,10 +309,10 @@ export default function EngineeringApproachSection({
             </div>
 
             {/* Visual Scroll Progress Bar */}
-            <div className="w-full h-1 bg-black  bg-white/10 rounded-full overflow-hidden">
+            <div className="w-full h-1 bg-surface-elevated rounded-full overflow-hidden border border-border">
               <div
                 ref={progressBarRef}
-                className="h-full w-full dark:bg-white bg-black  origin-left transform-gpu scale-x-0 transition-transform duration-75"
+                className="h-full w-full bg-primary origin-left transform-gpu scale-x-0 transition-transform duration-75"
               />
             </div>
           </div>

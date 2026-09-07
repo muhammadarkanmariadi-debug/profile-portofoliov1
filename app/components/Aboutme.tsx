@@ -165,12 +165,12 @@ export default function Aboutme({ profile, timeline = [] }: AboutmeProps) {
           <span className="font-bold text-primary">01</span>
           <span>ABOUT 4RK4N.DEV</span>
         </div>
-        <div className="hidden sm:flex items-center gap-6 sm:gap-8 text-[11px] sm:text-xs">
+        <div className="hidden md:flex items-center gap-4 lg:gap-7 text-[11px] sm:text-xs">
           <Link href="#work" className="hover:text-text-primary hover:text-primary transition-colors cursor-target">WORK</Link>
           <Link href="#about" className="hover:text-text-primary text-text-primary font-bold border-b border-primary pb-0.5 transition-colors cursor-target">ABOUT</Link>
           <Link href="#skills" className="hover:text-text-primary hover:text-primary transition-colors cursor-target">SKILLS</Link>
           <Link href="#approach" className="hover:text-text-primary hover:text-primary transition-colors cursor-target">APPROACH</Link>
-          <Link href="#achievements" className="hidden md:inline-block hover:text-text-primary hover:text-primary transition-colors cursor-target">CREDENTIALS</Link>
+          <Link href="#achievements" className="hidden lg:inline-block hover:text-text-primary hover:text-primary transition-colors cursor-target">CREDENTIALS</Link>
           <Link href="#contact" className="hover:text-text-primary hover:text-primary transition-colors cursor-target">CONTACT</Link>
         </div>
       </header>

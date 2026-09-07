@@ -136,6 +136,7 @@ export default function AchievementsClient({ initialAchievements }: Achievements
       )
 
       if (typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        const cleanups: (() => void)[] = []
         cards.forEach((card) => {
           const xTo = gsap.quickTo(card, "rotateY", { duration: 0.35, ease: "power2.out" })
           const yTo = gsap.quickTo(card, "rotateX", { duration: 0.35, ease: "power2.out" })
@@ -155,7 +156,16 @@ export default function AchievementsClient({ initialAchievements }: Achievements
 
           card.addEventListener('mousemove', onMouseMove)
           card.addEventListener('mouseleave', onMouseLeave)
+
+          cleanups.push(() => {
+            card.removeEventListener('mousemove', onMouseMove)
+            card.removeEventListener('mouseleave', onMouseLeave)
+          })
         })
+
+        return () => {
+          cleanups.forEach((fn) => fn())
+        }
       }
     }
   }, { dependencies: [currentPage, searchQuery, itemsPerPage], scope: containerRef })

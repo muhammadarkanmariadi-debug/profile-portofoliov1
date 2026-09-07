@@ -51,8 +51,8 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Nav Links & Controls */}
-          <div className="hidden md:flex items-center gap-8 sm:gap-10">
-            <nav className="flex items-center gap-8 sm:gap-10 text-text-muted text-xs">
+          <div className="hidden lg:flex items-center gap-8 sm:gap-10">
+            <nav className="flex items-center gap-7 lg:gap-9 text-text-muted text-xs">
               {links.map((item, index) => {
                 const isActive = pathname === item.href
                 return (
@@ -72,11 +72,11 @@ const Navbar = () => {
             <ThemeToggle showLabel={false} />
           </div>
 
-          {/* Mobile Menu Actions */}
-          <div className="md:hidden flex items-center gap-3">
+          {/* Mobile & Tablet Menu Actions */}
+          <div className="lg:hidden flex items-center gap-3">
             <ThemeToggle showLabel={false} />
             <button 
-              className="text-text-primary hover:opacity-70 transition-opacity focus:outline-none cursor-target p-1 rounded-md border border-border"
+              className="text-text-primary hover:opacity-70 transition-opacity focus:outline-none cursor-target p-1.5 rounded-md border border-border"
               onClick={() => setIsOpen(true)}
               aria-label="Open menu"
             >
@@ -87,14 +87,14 @@ const Navbar = () => {
         </div>
       </header>
 
-      {/* Mobile Menu Slide-in Panel */}
+      {/* Mobile & Tablet Menu Slide-in Panel */}
       <div 
-        className={`fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs transition-opacity duration-300 md:hidden ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs transition-opacity duration-300 lg:hidden ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setIsOpen(false)}
       />
       
       <div 
-        className={`fixed top-0 right-0 h-full w-72 bg-surface border-l border-border shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out md:hidden flex flex-col justify-between p-8 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 h-full w-72 sm:w-80 bg-surface border-l border-border shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out lg:hidden flex flex-col justify-between p-8 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div>
           <div className="flex items-center justify-between mb-10 pb-4 border-b border-border">

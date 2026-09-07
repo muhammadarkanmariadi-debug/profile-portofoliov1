@@ -270,12 +270,12 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
             <span>AVAILABLE FOR WORK</span>
           </span>
         </div>
-        <div className="hidden sm:flex items-center gap-4 sm:gap-6 md:gap-8 text-[11px] sm:text-xs font-bold text-text-muted">
+        <div className="hidden md:flex items-center gap-4 lg:gap-7 text-[11px] sm:text-xs font-bold text-text-muted">
           <Link href="#work" className="hover:text-text-primary transition-colors cursor-target">WORK</Link>
           <Link href="#about" className="hover:text-text-primary transition-colors cursor-target">ABOUT</Link>
           <Link href="#skills" className="hover:text-text-primary transition-colors cursor-target">SKILLS</Link>
           <Link href="#approach" className="hover:text-text-primary transition-colors cursor-target">APPROACH</Link>
-          <Link href="#achievements" className="hidden md:inline-block hover:text-text-primary transition-colors cursor-target">CREDENTIALS</Link>
+          <Link href="#achievements" className="hidden lg:inline-block hover:text-text-primary transition-colors cursor-target">CREDENTIALS</Link>
           <Link href="#contact" className="hover:text-text-primary font-black text-text-primary border-b border-primary pb-0.5 transition-colors cursor-target">CONTACT</Link>
         </div>
       </header>
@@ -346,11 +346,11 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
           <div
             ref={emailBarRef}
             onClick={handleCopyEmail}
-            className={`w-full bg-surface hover:bg-surface-elevated text-text-primary rounded-2xl sm:rounded-full p-4 sm:p-5 pl-5 sm:pl-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 shadow-xl hover:shadow-2xl transition-[background-color,border-color,box-shadow] duration-200 group cursor-target border ${
+            className={`w-full bg-surface hover:bg-surface-elevated text-text-primary rounded-2xl sm:rounded-full p-4 sm:p-5 pl-4 sm:pl-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-6 shadow-xl hover:shadow-2xl transition-[background-color,border-color,box-shadow] duration-200 group cursor-target border ${
               copied ? 'border-emerald-500 shadow-[0_0_25px_rgba(16,185,129,0.35)]' : 'border-border hover:border-primary/40'
             } transform-gpu will-change-transform select-none`}
           >
-            <div className="flex flex-col truncate pr-2 sm:pr-4">
+            <div className="flex flex-col min-w-0 pr-2 sm:pr-4">
               <span className="font-mono text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.2em] text-text-muted font-bold flex items-center gap-1.5">
                 {copied ? (
                   <>
@@ -361,22 +361,22 @@ export default function ContactCTA({ profile }: ContactCTAProps) {
                   'CLICK BAR TO COPY DIRECT EMAIL'
                 )}
               </span>
-              <span className="font-heading font-extrabold text-base sm:text-2xl md:text-3xl lg:text-4xl text-text-primary tracking-tight truncate group-hover:text-primary transition-colors mt-1">
+              <span className="font-heading font-extrabold text-sm sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-text-primary tracking-tight truncate group-hover:text-primary transition-colors mt-1">
                 {email}
               </span>
             </div>
 
             {/* Right Action Circle */}
-            <div className="flex items-center gap-3 self-end sm:self-center">
+            <div className="flex items-center gap-3 self-end sm:self-center flex-shrink-0">
               <span className="hidden md:inline-flex items-center font-mono text-xs uppercase tracking-wider text-text-muted group-hover:text-text-primary transition-colors font-bold">
                 {copied ? 'COPIED' : 'COPY'}
               </span>
-              <div className={`w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-all shadow-md ${
+              <div className={`w-9 h-9 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-all shadow-md ${
                 copied
                   ? 'bg-emerald-500 text-black'
                   : 'bg-primary text-background group-hover:opacity-90'
               }`}>
-                {copied ? <Check size={20} className="stroke-[3]" /> : <Copy size={18} />}
+                {copied ? <Check size={18} className="stroke-[3]" /> : <Copy size={16} />}
               </div>
             </div>
           </div>

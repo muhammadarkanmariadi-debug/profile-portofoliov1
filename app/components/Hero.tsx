@@ -110,7 +110,7 @@ export default function Hero({ profile: _profile }: HeroProps) {
         </Link>
 
         {/* Desktop Nav Links & Controls */}
-        <div className="hidden md:flex items-center gap-8 lg:gap-10">
+        <div className="hidden lg:flex items-center gap-8 lg:gap-10">
           <nav className="flex items-center gap-7 lg:gap-9 text-text-muted text-xs">
             <Link href="#work" className="hover:text-text-primary hover:text-primary transition-colors cursor-target font-medium">
               WORK
@@ -135,8 +135,8 @@ export default function Hero({ profile: _profile }: HeroProps) {
           <ThemeToggle showLabel={false} />
         </div>
 
-        {/* Mobile Menu Actions */}
-        <div className="md:hidden flex items-center gap-2.5">
+        {/* Mobile & Tablet Menu Actions */}
+        <div className="lg:hidden flex items-center gap-2.5">
           <ThemeToggle showLabel={false} />
           <button
             onClick={() => setIsMobileMenuOpen(true)}
@@ -148,16 +148,16 @@ export default function Hero({ profile: _profile }: HeroProps) {
         </div>
       </header>
 
-      {/* Mobile Slide-in Drawer Overlay */}
+      {/* Mobile & Tablet Slide-in Drawer Overlay */}
       <div
-        className={`fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs transition-opacity duration-300 md:hidden ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs transition-opacity duration-300 lg:hidden ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
           }`}
         onClick={() => setIsMobileMenuOpen(false)}
       />
 
-      {/* Mobile Slide-in Sidebar Panel */}
+      {/* Mobile & Tablet Slide-in Sidebar Panel */}
       <div
-        className={`fixed top-0 right-0 h-full w-72 sm:w-80 bg-surface border-l border-border shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out md:hidden flex flex-col justify-between p-8 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed top-0 right-0 h-full w-72 sm:w-80 bg-surface border-l border-border shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out lg:hidden flex flex-col justify-between p-8 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
       >
         <div>

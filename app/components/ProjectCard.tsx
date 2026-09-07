@@ -147,20 +147,20 @@ export default function ProjectCard({
 
   }, { scope: cardRef })
 
-  const stickyTop = `calc(4.5rem + ${numericIndex * 24}px)`
+  const stickyTop = `calc(var(--sticky-base-top, 4.5rem) + ${numericIndex * 18}px)`
 
   return (
     <article 
       ref={cardRef}
       style={{ top: stickyTop, zIndex: numericIndex + 1 }}
-      className="sticky w-full bg-background text-text-primary pt-8 pb-12 border-t border-border/80 will-change-transform"
+      className="sticky w-full bg-background text-text-primary pt-6 sm:pt-8 pb-10 sm:pb-12 border-t border-border/80 will-change-transform"
     >
       <div 
         ref={innerCardRef} 
         className="w-full origin-top will-change-transform transform-gpu"
       >
         {/* Topline: Index + Domain */}
-        <div className="w-full flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-6 px-2">
+        <div className="w-full flex items-center justify-between font-mono text-xs uppercase tracking-[0.2em] text-text-muted mb-4 sm:mb-6 px-1 sm:px-2">
           <span className="font-bold text-primary">{index}</span>
           {liveUrl && (
             <a
@@ -176,12 +176,12 @@ export default function ProjectCard({
         </div>
 
         {/* Heading: Big Title (Left) + Summary (Right) */}
-        <div className="w-full flex flex-col md:flex-row md:items-start justify-between gap-4 sm:gap-6 mb-6 sm:mb-8 px-1 sm:px-2">
+        <div className="w-full flex flex-col lg:flex-row lg:items-start justify-between gap-3 sm:gap-6 mb-6 sm:mb-8 px-1 sm:px-2">
           <Link href={projectHref} className="group/title">
             <div className="overflow-hidden">
               <h3 
                 ref={titleRef}
-                className="font-heading font-extrabold text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter text-text-primary group-hover/title:text-primary transition-colors"
+                className="font-heading font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-tighter text-text-primary group-hover/title:text-primary transition-colors"
               >
                 {title}
               </h3>
@@ -196,7 +196,7 @@ export default function ProjectCard({
         <div className="w-full relative">
           <Link
             href={projectHref}
-            className={`block w-full  rounded-2xl sm:rounded-3xl cursor-target group relative overflow-hidden transform-gpu shadow-xl hover:shadow-2xl transition-[box-shadow] duration-500`}
+            className={`block w-full rounded-2xl sm:rounded-3xl cursor-target group relative overflow-hidden transform-gpu shadow-xl hover:shadow-2xl transition-[box-shadow] duration-500`}
           >
             {/* Desktop Browser Window */}
             <div className="w-full bg-[#16181D] rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden border border-white/10">
@@ -226,6 +226,8 @@ export default function ProjectCard({
                   alt={`${title} desktop browser screenshot`}
                   className="w-full h-full object-cover object-top will-change-transform transform-gpu origin-center"
                   loading="lazy"
+                  decoding="async"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
                 />
 
                 {/* Floating Action Button on Hover */}

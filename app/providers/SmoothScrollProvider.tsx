@@ -45,7 +45,8 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 1.0,
-      touchMultiplier: 1.6,
+      touchMultiplier: 1.0,
+      syncTouch: true,
       infinite: false,
       prevent: (node) => {
         return node.hasAttribute('data-lenis-prevent') || node.closest('[data-lenis-prevent]') !== null
@@ -80,9 +81,13 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
 
     document.addEventListener('click', handleAnchorClick)
 
-    // Dynamic resize observer for layout shifts
+    // Debounced dynamic resize observer for layout shifts to prevent layout thrashing
+    let resizeTimer: ReturnType<typeof setTimeout> | null = null
     const resizeObserver = new ResizeObserver(() => {
-      ScrollTrigger.refresh()
+      if (resizeTimer) clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(() => {
+        ScrollTrigger.refresh()
+      }, 150)
     })
     if (document.body) {
       resizeObserver.observe(document.body)
@@ -94,6 +99,7 @@ export const SmoothScrollProvider = ({ children }: { children: React.ReactNode }
     }, 300)
 
     return () => {
+      if (resizeTimer) clearTimeout(resizeTimer)
       clearTimeout(timer)
       resizeObserver.disconnect()
       document.removeEventListener('click', handleAnchorClick)

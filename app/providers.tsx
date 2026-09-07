@@ -91,11 +91,6 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem('lang', newLang)
   }
   
-  // Prevent hydration mismatch by not rendering until mounted
-  if (!mounted) {
-    return <div className="min-h-screen bg-background opacity-0"></div>
-  }
-
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
       <LanguageContext.Provider value={{ lang, t: translations[lang], toggleLanguage }}>

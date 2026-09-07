@@ -116,24 +116,23 @@
   }
 }
 
-/* Completely hide default cursor across all elements on devices with a mouse/fine pointer */
+/* Hide default cursor only when custom cursor is active on fine pointer devices */
 @media (pointer: fine) {
-  *,
-  *::before,
-  *::after,
-  html,
-  body,
-  a,
-  button,
-  input,
-  textarea,
-  select,
-  label,
-  [role="button"],
-  [role="link"],
-  .cursor-pointer,
-  .cursor-text,
-  .cursor-default {
+  html.has-custom-cursor,
+  html.has-custom-cursor *,
+  html.has-custom-cursor *::before,
+  html.has-custom-cursor *::after,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button,
+  html.has-custom-cursor input,
+  html.has-custom-cursor textarea,
+  html.has-custom-cursor select,
+  html.has-custom-cursor label,
+  html.has-custom-cursor [role="button"],
+  html.has-custom-cursor [role="link"],
+  html.has-custom-cursor .cursor-pointer,
+  html.has-custom-cursor .cursor-text,
+  html.has-custom-cursor .cursor-default {
     cursor: none !important;
   }
 }

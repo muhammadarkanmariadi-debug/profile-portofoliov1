@@ -106,11 +106,13 @@ export function SmoothCursor({
 
     if (checkIsTouchOrSmall()) {
       if (cursorRef.current) cursorRef.current.style.display = "none";
+      document.documentElement.classList.remove('has-custom-cursor');
       return;
     }
 
     const el = cursorRef.current;
     el.style.display = "block";
+    document.documentElement.classList.add('has-custom-cursor');
     
     // High-performance GSAP quickTo setters for instant hardware-accelerated tracking
     const xTo = gsap.quickTo(el, "x", { duration: 0.22, ease: "power3.out" });
@@ -243,8 +245,10 @@ export function SmoothCursor({
     const handleResize = () => {
       if (checkIsTouchOrSmall()) {
         if (cursorRef.current) cursorRef.current.style.display = "none";
+        document.documentElement.classList.remove('has-custom-cursor');
       } else {
         if (cursorRef.current) cursorRef.current.style.display = "block";
+        document.documentElement.classList.add('has-custom-cursor');
       }
     };
 
@@ -258,6 +262,7 @@ export function SmoothCursor({
     window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
+      document.documentElement.classList.remove('has-custom-cursor');
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseover", handleMouseOver);
       document.removeEventListener("mouseout", handleMouseOut);

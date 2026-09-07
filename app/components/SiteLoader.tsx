@@ -58,12 +58,12 @@ export default function SiteLoader({ onComplete }: { onComplete?: () => void }) 
           </div>
 
           {/* Center Giant Wordmark */}
-          <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center py-8">
+          <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 py-8">
             <motion.div 
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="font-heading font-black text-6xl sm:text-8xl md:text-9xl lg:text-[13vw] tracking-tighter leading-none text-[#FAFAFC]"
+              className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[11vw] 2xl:text-[13vw] tracking-tighter leading-none text-[#FAFAFC]"
             >
               4RK4N
             </motion.div>
@@ -72,7 +72,7 @@ export default function SiteLoader({ onComplete }: { onComplete?: () => void }) 
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="font-heading font-black text-6xl sm:text-8xl md:text-9xl lg:text-[13vw] tracking-tighter leading-none text-[#FAFAFC] self-end sm:self-auto"
+              className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[11vw] 2xl:text-[13vw] tracking-tighter leading-none text-[#FAFAFC] self-end sm:self-auto"
             >
               STUDIO
             </motion.div>
